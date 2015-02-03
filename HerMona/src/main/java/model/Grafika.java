@@ -39,8 +39,8 @@ public class Grafika {
 	private String rytownik;
 	private String wydawca;
 	private String sygnatury;
-	private int rokOd;
-	private int rokDo;
+	private Integer rokOd;
+	private Integer rokDo;
 	private String miejsceWydania;
 	private String opis;
 	private String inskrypcje;
@@ -58,7 +58,7 @@ public class Grafika {
 	public Grafika(int grafikaId, Teka teka, String numerInwentarza,
 			String tytul, String seria, Technika technika, String wymiary,
 			String projektant, String rytownik, String wydawca,
-			String sygnatury, int rokOd, int rokDo, String miejsceWydania,
+			String sygnatury, Integer rokOd, Integer rokDo, String miejsceWydania,
 			String opis, String inskrypcje, String bibliografia, String uwagi,
 			Set<Kategoria> kategorie, String ilustracjaPath) {
 		this.grafikaId = grafikaId;
@@ -171,19 +171,19 @@ public class Grafika {
 		this.sygnatury = sygnatury;
 	}
 
-	public int getRokOd() {
+	public Integer getRokOd() {
 		return rokOd;
 	}
 
-	public void setRokOd(int rokOd) {
+	public void setRokOd(Integer rokOd) {
 		this.rokOd = rokOd;
 	}
 
-	public int getRokDo() {
+	public Integer getRokDo() {
 		return rokDo;
 	}
 
-	public void setRokDo(int rokDo) {
+	public void setRokDo(Integer rokDo) {
 		this.rokDo = rokDo;
 	}
 

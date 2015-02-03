@@ -17,20 +17,20 @@ public class Teka {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int tekaId;
 	@Column(unique = true)
-	private int numer;
+	private Integer numer;
 	private String tytul;
 	private Date data;
 
 	public Teka() { }
 	
-	public Teka(int tekaId, int numer, String tytul, Date data) {
+	public Teka(int tekaId, Integer numer, String tytul, Date data) {
 		this.tekaId = tekaId;
 		this.numer = numer;
 		this.tytul = tytul;
 		this.data = data;
 	}
 
-	public Teka(int numer, String tytul, Date data) {
+	public Teka(Integer numer, String tytul, Date data) {
 		this.numer = numer;
 		this.tytul = tytul;
 		this.data = data;
@@ -44,11 +44,11 @@ public class Teka {
 		this.tekaId = tekaId;
 	}
 
-	public int getNumer() {
+	public Integer getNumer() {
 		return numer;
 	}
 
-	public void setNumer(int numer) {
+	public void setNumer(Integer numer) {
 		this.numer = numer;
 	}
 
