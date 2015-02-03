@@ -1,5 +1,6 @@
 package model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,10 +14,17 @@ public class Kategoria {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int kategoriaId;
+	@Column(unique = true)
 	private String nazwa;
+	
+	public Kategoria() { }
 
 	public Kategoria(int kategoriaId, String nazwa) {
 		this.kategoriaId = kategoriaId;
+		this.nazwa = nazwa;
+	}
+	
+	public Kategoria (String nazwa) {
 		this.nazwa = nazwa;
 	}
 
@@ -34,6 +42,11 @@ public class Kategoria {
 
 	public void setNazwa(String nazwa) {
 		this.nazwa = nazwa;
+	}
+
+	@Override
+	public String toString() {
+		return "Kategoria [nazwa=" + nazwa + "]";
 	}
 
 }

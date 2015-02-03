@@ -3,6 +3,7 @@ package model;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,17 +14,20 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "grafika")
+@Table(name = "grafika",
+	uniqueConstraints = {@UniqueConstraint(columnNames = {"tekaID", "numerInwentarza"})})
 public class Grafika {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int grafikaId;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "tekaID", nullable = true)
+	@JoinColumn(name = "tekaID", nullable = false)
 	private Teka teka;
+	@Column(nullable = false)
 	private String numerInwentarza;
 	private String tytul;
 	private String seria;
@@ -49,6 +53,8 @@ public class Grafika {
 	private Set<Kategoria> kategorie;
 	private String ilustracjaPath;
 
+	public Grafika () { }
+	
 	public Grafika(int grafikaId, Teka teka, String numerInwentarza,
 			String tytul, String seria, Technika technika, String wymiary,
 			String projektant, String rytownik, String wydawca,
@@ -237,4 +243,17 @@ public class Grafika {
 		this.ilustracjaPath = ilustracjaPath;
 	}
 
+	@Override
+	public String toString() {
+		return "Grafika [teka=" + teka + ", numerInwentarza=" + numerInwentarza
+				+ ", tytul=" + tytul + ", seria=" + seria + ", technika="
+				+ technika + ", wymiary=" + wymiary + ", projektant="
+				+ projektant + ", rytownik=" + rytownik + ", wydawca="
+				+ wydawca + ", sygnatury=" + sygnatury + ", rokOd=" + rokOd
+				+ ", rokDo=" + rokDo + ", miejsceWydania=" + miejsceWydania
+				+ ", opis=" + opis + ", inskrypcje=" + inskrypcje
+				+ ", bibliografia=" + bibliografia + ", uwagi=" + uwagi
+				+ ", kategorie=" + kategorie + ", ilustracjaPath="
+				+ ilustracjaPath + "]";
+	}
 }

@@ -1,5 +1,6 @@
 package model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,10 +14,17 @@ public class Technika {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int technikaId;
+	@Column(unique = true)
 	private String nazwa;
+	
+	public Technika() { }
 
 	public Technika(int technikaId, String nazwa) {
 		this.technikaId = technikaId;
+		this.nazwa = nazwa;
+	}
+	
+	public Technika(String nazwa) {
 		this.nazwa = nazwa;
 	}
 
@@ -36,4 +44,8 @@ public class Technika {
 		this.nazwa = nazwa;
 	}
 
+	@Override
+	public String toString() {
+		return "Technika [nazwa=" + nazwa + "]";
+	}
 }
