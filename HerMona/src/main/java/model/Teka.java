@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import util.ToString;
+
 @Entity
 @Table(name = "teka")
 public class Teka {
@@ -70,5 +72,22 @@ public class Teka {
 	public String toString() {
 		return "Teka [numer=" + numer + ", tytul=" + tytul + ", data=" + rok
 				+ "]";
+	}
+	
+	public static ToString getStringRenderer() {
+		return new ToString() {
+		    public String toString(final Object object) {
+		        final Teka value = (Teka) object;
+		        if (value == null) {
+		        	return "";
+		        } else {
+		        	if (value.getTytul() == null || value.getTytul().isEmpty()) {
+		        		return value.getNumer().toString();
+		        	} else {
+		        		return value.getNumer() + " - " + value.getTytul();
+		        	}
+		        }
+		    }
+		};
 	}
 }

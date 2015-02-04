@@ -130,7 +130,7 @@ public class DBUtil {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Technika> getTekas() {
+	public List<Teka> getTekas() {
 		String hql = "From Teka T";
 		Query query = session.createQuery(hql);
 		return query.list();
