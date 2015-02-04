@@ -4,6 +4,7 @@ package util;
 import java.sql.Date;
 import java.util.List;
 
+import model.Grafika;
 import model.Kategoria;
 import model.Technika;
 import model.Teka;
@@ -40,6 +41,7 @@ public class DBUtil {
 	public Kategoria saveCategory(String nazwa) {
 		Kategoria kat = new Kategoria(nazwa);
 		session.save(kat);
+		session.flush();
 		return kat;
 	}
 	
@@ -69,6 +71,7 @@ public class DBUtil {
 	public Technika saveTechnique(String nazwa) {
 		Technika tech = new Technika(nazwa);
 		session.save(tech);
+		session.flush();
 		return tech;
 	}
 	
@@ -98,12 +101,51 @@ public class DBUtil {
 	public Teka saveTeka(Integer numer, String tytul, Date data) {
 		Teka teka = new Teka(numer, tytul, data);
 		session.save(teka);
+		session.flush();
 		return teka;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Technika> getTekas() {
 		String hql = "From Teka T";
+		Query query = session.createQuery(hql);
+		return query.list();
+	}
+	
+	/**
+	 * Pobiera Grafikê.
+	 * 
+	 * @param nazwa
+	 * @return
+	 */
+	public Grafika getGrafika(Integer numerTeki, String numerInwentarza) {
+		String hql = "select G"
+				+ " from Grafika G "
+				+ " join G.teka T"
+				+ " where G.numerInwentarza = '" + numerInwentarza + "'"
+				+ " and T.numer = " + numerTeki;
+		Query query = session.createQuery(hql);
+		if (query.list().isEmpty()) {
+			return null;
+		} else {
+			return (Grafika)query.list().get(0);
+		}
+	}
+	
+	public Grafika saveGrafika(Grafika g) {
+		session.save(g);
+		session.flush();
+		return g;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Grafika> getGrafikas(String predicate) {
+		String hql = "select G from Grafika G";
+		if (predicate != null && predicate.length() > 0) {
+			hql += " join G.teka T"
+					+ " join G.kategorie K"
+					+ " where " + predicate;
+		}
 		Query query = session.createQuery(hql);
 		return query.list();
 	}

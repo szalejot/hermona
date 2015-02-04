@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -18,21 +18,21 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "grafika",
-	uniqueConstraints = {@UniqueConstraint(columnNames = {"tekaID", "numerInwentarza"})})
+	uniqueConstraints = {@UniqueConstraint(columnNames = {"teka", "numerInwentarza"})})
 public class Grafika {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int grafikaId;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "tekaID", nullable = false)
+	@JoinColumn(name = "teka", nullable = false)
 	private Teka teka;
 	@Column(nullable = false)
 	private String numerInwentarza;
 	private String tytul;
 	private String seria;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "technikaID", nullable = true)
+	@JoinColumn(name = "technika", nullable = true)
 	private Technika technika;
 	private String wymiary;
 	private String projektant;
@@ -46,11 +46,8 @@ public class Grafika {
 	private String inskrypcje;
 	private String bibliografia;
 	private String uwagi;
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "grafika_kategoria", 
-		joinColumns = { @JoinColumn(name = "grafikaId", nullable = false, updatable = false) }, 
-		inverseJoinColumns = { @JoinColumn(name = "kategoriaId", nullable = false, updatable = false) })
-	private Set<Kategoria> kategorie;
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	private Set<Kategoria> kategorie = new HashSet<Kategoria>(0);
 	private String ilustracjaPath;
 
 	public Grafika () { }
