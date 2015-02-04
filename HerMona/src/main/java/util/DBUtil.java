@@ -51,7 +51,7 @@ public class DBUtil {
 	
 	@SuppressWarnings("unchecked")
 	public List<Kategoria> getCategories() {
-		String hql = "From Kategoria K";
+		String hql = "From Kategoria K order by nazwa";
 		Query query = session.createQuery(hql);
 		return query.list();
 	}
@@ -86,7 +86,7 @@ public class DBUtil {
 	
 	@SuppressWarnings("unchecked")
 	public List<Technika> getTechniques() {
-		String hql = "From Technika T";
+		String hql = "From Technika T order by nazwa";
 		Query query = session.createQuery(hql);
 		return query.list();
 	}
@@ -131,7 +131,7 @@ public class DBUtil {
 	
 	@SuppressWarnings("unchecked")
 	public List<Teka> getTekas() {
-		String hql = "From Teka T";
+		String hql = "From Teka T order by numer";
 		Query query = session.createQuery(hql);
 		return query.list();
 	}
@@ -175,6 +175,7 @@ public class DBUtil {
 					+ " join G.kategorie K"
 					+ " where " + predicate;
 		}
+		hql+= " order by G.numerInwentarza";
 		Query query = session.createQuery(hql);
 		return query.list();
 	}
