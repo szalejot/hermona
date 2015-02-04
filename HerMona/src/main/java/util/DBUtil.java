@@ -44,6 +44,12 @@ public class DBUtil {
 		return kat;
 	}
 	
+	public Kategoria saveCategory(Kategoria kat) {
+		session.save(kat);
+		session.flush();
+		return kat;
+	}
+	
 	public void deleteCategory(Kategoria k) {
 		session.delete(k);;
 		session.flush();

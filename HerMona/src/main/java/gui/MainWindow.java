@@ -50,6 +50,14 @@ public class MainWindow extends JFrame {
 				new CategoryDeleteWindow();
 			}
 		});
+		JMenuItem catEdit = new JMenuItem("Edytuj kategorie");
+		catMenu.add(catEdit);
+		catEdit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new CategoryEditWindow();
+			}
+		});
 		
 		JMenu techMenu = new JMenu("Techniki");
 		menubar.add(techMenu);
