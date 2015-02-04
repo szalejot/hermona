@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import util.ToString;
+
 @Entity
 @Table(name = "technika")
 public class Technika {
@@ -47,5 +49,18 @@ public class Technika {
 	@Override
 	public String toString() {
 		return "Technika [nazwa=" + nazwa + "]";
+	}
+	
+	public static ToString getStringRenderer() {
+		return new ToString() {
+		    public String toString(final Object object) {
+		        final Technika value = (Technika) object;
+		        if (value == null) {
+		        	return "";
+		        } else {
+		        	return value.getNazwa();
+		        }
+		    }
+		};
 	}
 }
