@@ -45,6 +45,11 @@ public class DBUtil {
 		return kat;
 	}
 	
+	public void deleteCategory(Kategoria k) {
+		session.delete(k);;
+		session.flush();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Kategoria> getCategories() {
 		String hql = "From Kategoria K";
@@ -75,6 +80,11 @@ public class DBUtil {
 		return tech;
 	}
 	
+	public void deleteTechnique(Technika t) {
+		session.delete(t);
+		session.flush();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Technika> getTechniques() {
 		String hql = "From Technika T";
@@ -103,6 +113,11 @@ public class DBUtil {
 		session.save(teka);
 		session.flush();
 		return teka;
+	}
+	
+	public void deleteTeka(Teka t) {
+		session.delete(t);
+		session.flush();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -138,6 +153,11 @@ public class DBUtil {
 		return g;
 	}
 	
+	public void deleteGrafika(Grafika g) {
+		session.delete(g);
+		session.flush();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Grafika> getGrafikas(String predicate) {
 		String hql = "select G from Grafika G";
@@ -151,6 +171,7 @@ public class DBUtil {
 	}
 	
 	public void shutdown() {
+		session.flush();
 		HibernateUtil.shutdown();
 	}
 

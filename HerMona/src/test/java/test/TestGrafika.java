@@ -1,5 +1,7 @@
 package test;
 
+import java.util.List;
+
 import model.Grafika;
 import model.Kategoria;
 import model.Technika;
@@ -36,6 +38,9 @@ public class TestGrafika extends TestCase {
 		System.out.println("! -->" + dbUtil.getGrafika(101, "1"));
 		System.out.println("! -->" + dbUtil.getGrafikas(null));
 		System.out.println("! -->" + dbUtil.getGrafikas("K.nazwa = 'kat2-g'"));
+		List<Grafika> gList = dbUtil.getGrafikas("K.nazwa = 'kat2-g'");
+		dbUtil.deleteGrafika(gList.get(0));
+		System.out.println("! -->" + dbUtil.getGrafikas(null));
 		System.out.println("----------------------");
 		dbUtil.shutdown();
 	}
