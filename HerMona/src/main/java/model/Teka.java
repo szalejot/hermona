@@ -7,8 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import java.sql.Date;
-
 @Entity
 @Table(name = "teka")
 public class Teka {
@@ -19,21 +17,21 @@ public class Teka {
 	@Column(unique = true)
 	private Integer numer;
 	private String tytul;
-	private Date data;
+	private Integer rok;
 
 	public Teka() { }
 	
-	public Teka(int tekaId, Integer numer, String tytul, Date data) {
+	public Teka(int tekaId, Integer numer, String tytul, Integer rok) {
 		this.tekaId = tekaId;
 		this.numer = numer;
 		this.tytul = tytul;
-		this.data = data;
+		this.rok = rok;
 	}
 
-	public Teka(Integer numer, String tytul, Date data) {
+	public Teka(Integer numer, String tytul, Integer rok) {
 		this.numer = numer;
 		this.tytul = tytul;
-		this.data = data;
+		this.rok = rok;
 	}
 
 	public int getTekaId() {
@@ -60,17 +58,17 @@ public class Teka {
 		this.tytul = tytul;
 	}
 
-	public Date getData() {
-		return data;
+	public Integer getRok() {
+		return rok;
 	}
 
-	public void setData(Date data) {
-		this.data = data;
+	public void setRok(Integer rok) {
+		this.rok = rok;
 	}
 
 	@Override
 	public String toString() {
-		return "Teka [numer=" + numer + ", tytul=" + tytul + ", data=" + data
+		return "Teka [numer=" + numer + ", tytul=" + tytul + ", data=" + rok
 				+ "]";
 	}
 }

@@ -1,7 +1,6 @@
 package util;
 
 
-import java.sql.Date;
 import java.util.List;
 
 import model.Grafika;
@@ -108,8 +107,18 @@ public class DBUtil {
 		}
 	}
 	
-	public Teka saveTeka(Integer numer, String tytul, Date data) {
-		Teka teka = new Teka(numer, tytul, data);
+	public boolean existsTekaInDb(Integer numer) {
+		String hql = "From Teka T where T.numer = " + numer;
+		Query query = session.createQuery(hql);
+		if (query.list().isEmpty()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public Teka saveTeka(Integer numer, String tytul, Integer rok) {
+		Teka teka = new Teka(numer, tytul, rok);
 		session.save(teka);
 		session.flush();
 		return teka;
