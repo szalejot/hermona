@@ -104,6 +104,14 @@ public class MainWindow extends JFrame {
 				new TekaDeleteWindow();
 			}
 		});
+		JMenuItem tekaEdit = new JMenuItem("Edytuj teki");
+		tekaMenu.add(tekaEdit);
+		tekaEdit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new TekaEditWindow();
+			}
+		});
 		
 		return menubar;
 	}
