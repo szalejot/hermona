@@ -85,6 +85,12 @@ public class DBUtil {
 		return tech;
 	}
 	
+	public Technika saveTechnique(Technika tech) {
+		session.save(tech);
+		session.flush();
+		return tech;
+	}
+	
 	public void deleteTechnique(Technika t) {
 		session.delete(t);
 		session.flush();
@@ -125,6 +131,12 @@ public class DBUtil {
 	
 	public Teka saveTeka(Integer numer, String tytul, Integer rok) {
 		Teka teka = new Teka(numer, tytul, rok);
+		session.save(teka);
+		session.flush();
+		return teka;
+	}
+	
+	public Teka saveTeka(Teka teka) {
 		session.save(teka);
 		session.flush();
 		return teka;

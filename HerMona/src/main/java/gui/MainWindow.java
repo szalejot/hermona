@@ -77,6 +77,14 @@ public class MainWindow extends JFrame {
 				new TechniqueDeleteWindow();
 			}
 		});
+		JMenuItem techEdit = new JMenuItem("Edytuj techniki");
+		techMenu.add(techEdit);
+		techEdit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new TechniqueEditWindow();
+			}
+		});
 		
 		JMenu tekaMenu = new JMenu("Teki");
 		menubar.add(tekaMenu);
