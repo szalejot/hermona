@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -10,15 +11,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import util.DBUtil;
@@ -60,11 +65,16 @@ public class CategoryEditWindow extends JFrame {
 			}
 		});
         
-        tableModel.setHiddenRenderer(table);
+        JTableHeader header = table.getTableHeader();
+        tableModel.setRendererColumnSizes(table);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         b.addActionListener(new ButtonListener());
         
-        p.add(table);
+        p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
+        p.add(header);
+        p.add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
+        p.add(Box.createRigidArea(new Dimension(0,5)));
         p.add(b);
 		add(p);
 		setVisible(true);
@@ -72,11 +82,12 @@ public class CategoryEditWindow extends JFrame {
 
 	private class InteractiveTableModel extends AbstractTableModel {
 		private static final long serialVersionUID = 4466896298699455046L;
-		public static final int NAZWA_INDEX = 0;
-		public static final int HIDDEN_INDEX = 1;
+		private static final int NAZWA_INDEX = 0;
+		private static final int HIDDEN_INDEX = 1;
+		private static final int COL_MIN_WIDTH = 200;
 
-		protected String[] columnNames;
-		protected Vector<Kategoria> dataVector;
+		private String[] columnNames;
+		private Vector<Kategoria> dataVector;
 		
 		public InteractiveTableModel(String[] columnNames, Vector<Kategoria> dataVector) {
 			List<String> list = new LinkedList<String>(Arrays.asList(columnNames));
@@ -89,7 +100,11 @@ public class CategoryEditWindow extends JFrame {
 			return columnNames[column];
 		}
 		
-		public void setHiddenRenderer(JTable table) {
+		public void setRendererColumnSizes(JTable table) {
+			for (int i = 0; i < InteractiveTableModel.HIDDEN_INDEX; i++) {
+				TableColumn col = table.getColumnModel().getColumn(i);
+				col.setMinWidth(COL_MIN_WIDTH);
+			}
 			TableColumn hidden = table.getColumnModel().getColumn(InteractiveTableModel.HIDDEN_INDEX);
 	        hidden.setMinWidth(0);
 	        hidden.setPreferredWidth(0);
@@ -183,7 +198,6 @@ public class CategoryEditWindow extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			for (int i = 0; i < table.getRowCount(); i++) {
 				Kategoria kat = tableModel.getObjectAt(i);
-				System.out.println(kat);
 				dbUtil.saveCategory(kat);
 			}
 			JOptionPane.showMessageDialog(null, "Zmiany zosta³y zapisane", "", JOptionPane.PLAIN_MESSAGE);
