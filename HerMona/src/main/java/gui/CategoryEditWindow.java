@@ -3,6 +3,11 @@ package gui;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -21,7 +26,7 @@ import model.Kategoria;
 
 public class CategoryEditWindow extends JFrame {
 	private static final long serialVersionUID = 4484009714046170060L;
-	public static final String[] columnNames = {"Nazwa kategorii", ""};
+	public static final String[] columnNames = {"Nazwa kategorii"};
 	private InteractiveTableModel tableModel;
 
 	private JPanel p = new JPanel();
@@ -42,12 +47,20 @@ public class CategoryEditWindow extends JFrame {
         table = new JTable();
         table.setModel(tableModel);
         table.setSurrendersFocusOnKeystroke(true);
+        table.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals("tableCellEditor")) {
+					if (table.isEditing()) {
+						b.setEnabled(false);
+					} else {
+						b.setEnabled(true);
+					}
+				}
+			}
+		});
         
-        TableColumn hidden = table.getColumnModel().getColumn(InteractiveTableModel.HIDDEN_INDEX);
-        hidden.setMinWidth(2);
-        hidden.setPreferredWidth(2);
-        hidden.setMaxWidth(2);
-        hidden.setCellRenderer(new InteractiveRenderer(InteractiveTableModel.HIDDEN_INDEX));
+        tableModel.setHiddenRenderer(table);
 
         b.addActionListener(new ButtonListener());
         
@@ -66,12 +79,22 @@ public class CategoryEditWindow extends JFrame {
 		protected Vector<Kategoria> dataVector;
 		
 		public InteractiveTableModel(String[] columnNames, Vector<Kategoria> dataVector) {
-			this.columnNames = columnNames;
+			List<String> list = new LinkedList<String>(Arrays.asList(columnNames));
+			list.add("");
+			this.columnNames = list.toArray(new String[list.size()]);
 			this.dataVector = dataVector;
 		}
 
 		public String getColumnName(int column) {
 			return columnNames[column];
+		}
+		
+		public void setHiddenRenderer(JTable table) {
+			TableColumn hidden = table.getColumnModel().getColumn(InteractiveTableModel.HIDDEN_INDEX);
+	        hidden.setMinWidth(0);
+	        hidden.setPreferredWidth(0);
+	        hidden.setMaxWidth(0);
+	        hidden.setCellRenderer(new InteractiveRenderer(InteractiveTableModel.HIDDEN_INDEX));
 		}
 
 		public boolean isCellEditable(int row, int column) {
@@ -106,7 +129,7 @@ public class CategoryEditWindow extends JFrame {
 		}
 
 		public void setValueAt(Object value, int row, int column) {
-			Kategoria record = (Kategoria) dataVector.get(row);
+			Kategoria record = dataVector.get(row);
 			switch (column) {
 			case NAZWA_INDEX:
 				record.setNazwa((String) value);
@@ -139,16 +162,6 @@ public class CategoryEditWindow extends JFrame {
            int column)
         {
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            /*if (column == interactiveColumn && hasFocus) {
-                if ((CategoryEditWindow.this.tableModel.getRowCount() - 1) == row &&
-                   !CategoryEditWindow.this.tableModel.hasEmptyRow())
-                {
-                    CategoryEditWindow.this.tableModel.addEmptyRow();
-                }
-
-                highlightLastRow(row);
-            }*/
-
             return c;
         }
     }
@@ -158,7 +171,6 @@ public class CategoryEditWindow extends JFrame {
             if (evt.getType() == TableModelEvent.UPDATE) {
                 int column = evt.getColumn();
                 int row = evt.getFirstRow();
-                //System.out.println("row: " + row + " column: " + column);
                 table.setColumnSelectionInterval(column + 1, column + 1);
                 table.setRowSelectionInterval(row, row);
             }
@@ -171,6 +183,7 @@ public class CategoryEditWindow extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			for (int i = 0; i < table.getRowCount(); i++) {
 				Kategoria kat = tableModel.getObjectAt(i);
+				System.out.println(kat);
 				dbUtil.saveCategory(kat);
 			}
 			JOptionPane.showMessageDialog(null, "Zmiany zosta³y zapisane", "", JOptionPane.PLAIN_MESSAGE);
