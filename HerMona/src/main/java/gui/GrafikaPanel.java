@@ -25,6 +25,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
+import org.hibernate.hql.ast.QuerySyntaxException;
+
 import util.DBUtil;
 import model.Grafika;
 
@@ -33,8 +35,8 @@ public class GrafikaPanel extends JPanel {
 	public static final String[] columnNames = {"Teka", "Numer inwentarza", "Tytul", "Seria",
 		"Technika", "Wymiary", "Projekatant", "Rytownik", "Wydawca", "Sygnatury", "Rok od",
 		"Rok do", "Miejsce wydania", "Opis", "Inskrypcje", "Bibliografia", "Uwagi", "Kategorie", "Œcie¿ka ilustracji"};
+	
 	private InteractiveTableModel tableModel;
-
 	private JButton bSave = new JButton("Zapisz zmiany");
 	private JButton bFilter = new JButton("Filtruj");
 	private JTable table;
@@ -65,13 +67,15 @@ public class GrafikaPanel extends JPanel {
         tableModel.setRendererColumnSizes(table);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        bSave.addActionListener(new ButtonListener());
+        bSave.addActionListener(new ButtonSaveListener());
+        bFilter.addActionListener(new ButtonFilterListener());
         
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         add(header);
         add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
         add(Box.createRigidArea(new Dimension(0,5)));
         add(bSave);
+        add(bFilter);
 	}
 
 	private class InteractiveTableModel extends AbstractTableModel {
@@ -108,8 +112,12 @@ public class GrafikaPanel extends JPanel {
 			this.dataVector = dataVector;
 		}
 		
-		public void ChangeData(Vector<Grafika> dataVector) {
-			this.dataVector = dataVector;
+		public void changeData(Vector<Grafika> dataVector) {
+			int before = getRowCount() - 1;
+			this.dataVector.clear();
+			fireTableRowsDeleted(0, before);
+			this.dataVector.addAll(dataVector);
+			fireTableRowsInserted(0, this.dataVector.size() - 1);
 		}
 
 		public String getColumnName(int column) {
@@ -319,7 +327,7 @@ public class GrafikaPanel extends JPanel {
         }
     }
 	
-    private class ButtonListener implements ActionListener {
+    private class ButtonSaveListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -331,5 +339,31 @@ public class GrafikaPanel extends JPanel {
 		}
 		
 	}
+    
+    private class ButtonFilterListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			String s = (String)JOptionPane.showInputDialog(
+                    table,
+                    "Wpisz warunek filtrowania:",
+                    "Wybierz filtr",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    null,
+                    "");
+			if ((s != null)) {
+				Vector<Grafika> grafVec = null;
+				try {
+					grafVec = new Vector<Grafika>(dbUtil.getGrafikas(s));
+				} catch (QuerySyntaxException e) {
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³ad sk³adni zapytania:\n" + e.getMessage(), "B£¥D", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				tableModel.changeData(grafVec);
+            }
+		}
+    	
+    }
 
 }

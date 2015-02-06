@@ -187,13 +187,14 @@ public class DBUtil {
 	
 	@SuppressWarnings("unchecked")
 	public List<Grafika> getGrafikas(String predicate) {
-		String hql = "select G from Grafika G";
+		String hql = "select Grafika from Grafika Grafika";
 		if (predicate != null && predicate.length() > 0) {
-			hql += " join G.teka T"
-					+ " join G.kategorie K"
+			hql += " join Grafika.teka Teka"
+					+ " left join Grafika.technika Technika"
+					+ " left join Grafika.kategorie Kategoria"
 					+ " where " + predicate;
 		}
-		hql+= " order by G.numerInwentarza";
+		hql+= " order by Grafika.numerInwentarza";
 		Query query = session.createQuery(hql);
 		return query.list();
 	}
