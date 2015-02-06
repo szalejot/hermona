@@ -25,7 +25,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
-import org.hibernate.hql.ast.QuerySyntaxException;
+import org.hibernate.HibernateException;
 
 import util.DBUtil;
 import model.Grafika;
@@ -356,7 +356,7 @@ public class GrafikaPanel extends JPanel {
 				Vector<Grafika> grafVec = null;
 				try {
 					grafVec = new Vector<Grafika>(dbUtil.getGrafikas(s));
-				} catch (QuerySyntaxException e) {
+				} catch (HibernateException e) {
 					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³ad sk³adni zapytania:\n" + e.getMessage(), "B£¥D", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
