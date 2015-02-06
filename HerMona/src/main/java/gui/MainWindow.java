@@ -13,8 +13,6 @@ public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = -2278436951424873713L;
 	
-	private JPanel p = new JPanel();
-	
 	public MainWindow() {
 		super("HerMona");
 		
@@ -24,7 +22,8 @@ public class MainWindow extends JFrame {
 		
 		setJMenuBar(initializeMenuBar());
 		
-		add(p);
+		GrafikaPanel gPanel = new GrafikaPanel();
+		setContentPane(gPanel);
 		
 		setVisible(true);
 	}
