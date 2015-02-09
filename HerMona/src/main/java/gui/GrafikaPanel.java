@@ -1,7 +1,9 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -9,26 +11,36 @@ import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
 import org.hibernate.HibernateException;
 
 import util.DBUtil;
 import model.Grafika;
+import model.Kategoria;
+import model.Technika;
+import model.Teka;
 
 public class GrafikaPanel extends JPanel {
 	private static final long serialVersionUID = 4484009714046170060L;
@@ -63,15 +75,13 @@ public class GrafikaPanel extends JPanel {
 			}
 		});
         
-        JTableHeader header = table.getTableHeader();
-        tableModel.setRendererColumnSizes(table);
+        tableModel.setUpColumns(table);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         bSave.addActionListener(new ButtonSaveListener());
         bFilter.addActionListener(new ButtonFilterListener());
         
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        add(header);
         add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
         add(Box.createRigidArea(new Dimension(0,5)));
         add(bSave);
@@ -119,12 +129,43 @@ public class GrafikaPanel extends JPanel {
 			this.dataVector.addAll(dataVector);
 			fireTableRowsInserted(0, this.dataVector.size() - 1);
 		}
+		
+		public void setUpColumns(JTable table) {
+			setUpTekaColumn(table);
+			setUpTechnikaColumn(table);
+			setUpKategorieColumn(table);
+			
+	        setRendererColumnSizes(table);
+		}
+		
+		private void setUpTekaColumn(JTable table) {
+			List<Teka> list = dbUtil.getTekas();
+			JComboBox<Teka> comboBox = new JComboBox<Teka>(list.toArray(new Teka[list.size()]));
+			table.getColumnModel().getColumn(TEKA_INDEX).setCellEditor(new DefaultCellEditor(comboBox));
+		}
+		
+		private void setUpTechnikaColumn(JTable table) {
+			List<Technika> list = dbUtil.getTechniques();
+			JComboBox<Technika> comboBox = new JComboBox<Technika>(list.toArray(new Technika[list.size()]));
+			table.getColumnModel().getColumn(TECHNIKA_INDEX).setCellEditor(new DefaultCellEditor(comboBox));
+		}
+		
+		private void setUpKategorieColumn(JTable table) {
+			List<Kategoria> list = dbUtil.getCategories();
+			JList<Kategoria> jList = new JList<Kategoria>(list.toArray(new Kategoria[list.size()]));
+			jList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+			
+			table.getColumnModel().getColumn(KATEGORIE_INDEX).setCellEditor(new KategorieCellEditor());
+			
+			//JComboBox<Technika> comboBox = new JComboBox<Technika>(list.toArray(new Technika[list.size()]));
+			//table.getColumnModel().getColumn(TECHNIKA_INDEX).setCellEditor(new DefaultCellEditor(comboBox));
+		}
 
 		public String getColumnName(int column) {
 			return columnNames[column];
 		}
 		
-		public void setRendererColumnSizes(JTable table) {
+		private void setRendererColumnSizes(JTable table) {
 			for (int i = 0; i < InteractiveTableModel.HIDDEN_INDEX; i++) {
 				TableColumn col = table.getColumnModel().getColumn(i);
 				col.setMinWidth(COL_MIN_WIDTH);
@@ -146,11 +187,13 @@ public class GrafikaPanel extends JPanel {
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public Class getColumnClass(int column) {
 			switch (column) {
-			case TYTUL_INDEX:
 			case TEKA_INDEX:
+				return Teka.class;
+			case TECHNIKA_INDEX:
+				return Technika.class;
+			case TYTUL_INDEX:
 			case NUMER_INWENTARZA_INDEX:
 			case SERIA_INDEX:
-			case TECHNIKA_INDEX:
 			case WYMIARY_INDEX:
 			case PROJEKTANT_INDEX:
 			case RYTOWNIK_INDEX:
@@ -178,14 +221,14 @@ public class GrafikaPanel extends JPanel {
 			case TYTUL_INDEX:
 				return record.getTytul();
 			case TEKA_INDEX:
-				return record.getTeka().getNumer().toString();
+				return record.getTeka();
 			case NUMER_INWENTARZA_INDEX:
 				return record.getNumerInwentarza();
 			case SERIA_INDEX:
 				return record.getSeria();
 			case TECHNIKA_INDEX:
 				if (record.getTechnika() != null) {
-					return record.getTechnika().getNazwa();
+					return record.getTechnika();
 				} else return null;
 			case WYMIARY_INDEX:
 				return record.getWymiary();
@@ -212,7 +255,7 @@ public class GrafikaPanel extends JPanel {
 			case UWAGI_INDEX:
 				return record.getUwagi();
 			case KATEGORIE_INDEX:
-				return "To be implemented";
+				return record.getKategorieString();
 			case ILUSTRACJA_PATH_INDEX:
 				return record.getIlustracjaPath();
 			default:
@@ -231,7 +274,7 @@ public class GrafikaPanel extends JPanel {
 				record.setTytul((String)value);
 				break;
 			case TEKA_INDEX:
-				//TODO
+				record.setTeka((Teka)value);
 				break;
 			case NUMER_INWENTARZA_INDEX:
 				record.setNumerInwentarza((String)value);
@@ -240,7 +283,7 @@ public class GrafikaPanel extends JPanel {
 				record.setSeria((String)value);
 				break;
 			case TECHNIKA_INDEX:
-				//TODO
+				record.setTechnika((Technika)value);
 				break;
 			case WYMIARY_INDEX:
 				record.setWymiary((String)value);
@@ -364,6 +407,42 @@ public class GrafikaPanel extends JPanel {
             }
 		}
     	
+    }
+    
+    private class KategorieCellEditor extends DefaultCellEditor {
+		private static final long serialVersionUID = -1463545753241064548L;
+		private static final int CLICK_COUNT_TO_START = 2;
+		private JButton button;
+		private Set<Kategoria> kategorie;
+		JList<Kategoria> jList;
+		
+		public KategorieCellEditor() {
+			super(new JTextField());
+			setClickCountToStart(CLICK_COUNT_TO_START);
+			
+			// Using a JButton as the editor component
+	        button = new JButton();
+	        button.setBackground(Color.white);
+	        button.setFont(button.getFont().deriveFont(Font.PLAIN));
+	        button.setBorder(null);
+	        
+	        List<Kategoria> list = dbUtil.getCategories();
+			jList = new JList<Kategoria>(list.toArray(new Kategoria[list.size()]));
+			jList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		}
+		
+		@Override
+	    public Object getCellEditorValue() {
+	        return kategorie;
+	    }
+
+	    @Override
+	    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+	        
+	    	button.setText(value.toString());
+	    	
+	        return button;
+	    }
     }
 
 }

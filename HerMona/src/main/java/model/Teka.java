@@ -70,8 +70,11 @@ public class Teka {
 
 	@Override
 	public String toString() {
-		return "Teka [numer=" + numer + ", tytul=" + tytul + ", data=" + rok
-				+ "]";
+		if (getTytul() == null || getTytul().isEmpty()) {
+    		return getNumer().toString();
+    	} else {
+    		return getNumer() + " - " + getTytul();
+    	}
 	}
 	
 	public static ToString getStringRenderer() {

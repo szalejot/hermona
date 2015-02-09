@@ -48,7 +48,7 @@ public class Technika {
 
 	@Override
 	public String toString() {
-		return "Technika [nazwa=" + nazwa + "]";
+		return nazwa;
 	}
 	
 	public static ToString getStringRenderer() {

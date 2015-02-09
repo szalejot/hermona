@@ -48,7 +48,16 @@ public class Kategoria {
 
 	@Override
 	public String toString() {
-		return "Kategoria [nazwa=" + nazwa + "]";
+		return nazwa;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other == null) return false;
+	    if (other == this) return true;
+	    if (!(other instanceof Kategoria))return false;
+	    Kategoria otherKategoria = (Kategoria)other;
+	    return getNazwa().equals(otherKategoria.getNazwa());
 	}
 	
 	public static ToString getStringRenderer() {
