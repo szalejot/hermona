@@ -44,6 +44,7 @@ import model.Teka;
 
 public class GrafikaPanel extends JPanel {
 	private static final long serialVersionUID = 4484009714046170060L;
+	private static final int STATIC_COLUMNS_NUMBER = 2;
 	public static final String[] columnNames = {"Teka", "Numer inwentarza", "Tytul", "Seria",
 		"Technika", "Wymiary", "Projekatant", "Rytownik", "Wydawca", "Sygnatury", "Rok od",
 		"Rok do", "Miejsce wydania", "Opis", "Inskrypcje", "Bibliografia", "Uwagi", "Kategorie", "Œcie¿ka ilustracji"};
@@ -86,7 +87,7 @@ public class GrafikaPanel extends JPanel {
         
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        new FixedColumnTable(2, scrollPane);
+        new FixedColumnTable(STATIC_COLUMNS_NUMBER, scrollPane);
         add(scrollPane);
         add(Box.createRigidArea(new Dimension(0,5)));
         add(bSave);
@@ -329,7 +330,9 @@ public class GrafikaPanel extends JPanel {
 			default:
 				System.out.println("invalid index");
 			}
-			fireTableCellUpdated(row, column);
+			int col = column - STATIC_COLUMNS_NUMBER;
+			if (col < 0) col = 0;
+			fireTableCellUpdated(row, col);
 			if(!hasEmptyRow()) {
 				addEmptyRow();
 			}
