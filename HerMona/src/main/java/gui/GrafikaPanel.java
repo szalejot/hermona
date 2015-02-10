@@ -76,13 +76,18 @@ public class GrafikaPanel extends JPanel {
 		});
         
         tableModel.setUpColumns(table);
+        if (!tableModel.hasEmptyRow()) {
+            tableModel.addEmptyRow();
+        }
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         bSave.addActionListener(new ButtonSaveListener());
         bFilter.addActionListener(new ButtonFilterListener());
         
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
+        JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        new FixedColumnTable(2, scrollPane);
+        add(scrollPane);
         add(Box.createRigidArea(new Dimension(0,5)));
         add(bSave);
         add(bFilter);
@@ -260,6 +265,7 @@ public class GrafikaPanel extends JPanel {
 			return dataVector.get(row);
 		}
 
+		@SuppressWarnings("unchecked")
 		public void setValueAt(Object value, int row, int column) {
 			Grafika record = dataVector.get(row);
 			switch (column) {
@@ -315,7 +321,7 @@ public class GrafikaPanel extends JPanel {
 				record.setUwagi((String)value);
 				break;
 			case KATEGORIE_INDEX:
-				//TODO
+				record.setKategorie((Set<Kategoria>)value);
 				break;
 			case ILUSTRACJA_PATH_INDEX:
 				record.setIlustracjaPath((String)value);
@@ -324,6 +330,9 @@ public class GrafikaPanel extends JPanel {
 				System.out.println("invalid index");
 			}
 			fireTableCellUpdated(row, column);
+			if(!hasEmptyRow()) {
+				addEmptyRow();
+			}
 		}
 
 		public int getRowCount() {
@@ -333,24 +342,53 @@ public class GrafikaPanel extends JPanel {
 		public int getColumnCount() {
 			return columnNames.length;
 		}
+		
+		public boolean hasEmptyRow() {
+	         if (dataVector.size() == 0) return false;
+	         Grafika grafika = (Grafika)dataVector.get(dataVector.size() - 1);
+	         if (grafika.getTeka() == null ||
+	        		 grafika.getNumerInwentarza() == null ||
+	        		 grafika.getNumerInwentarza().trim().equals("")) {
+	            return true;
+	         } else {
+	        	 return false;
+	         }
+	     }
+
+	     public void addEmptyRow() {
+	         dataVector.add(new Grafika());
+	         fireTableRowsInserted(
+	            dataVector.size() - 1,
+	            dataVector.size() - 1);
+	     }
 	}
+	
+	/*public void highlightLastRow(int row) {
+        int lastrow = tableModel.getRowCount();
+        if (row == lastrow - 1) {
+            table.setRowSelectionInterval(lastrow - 1, lastrow - 1);
+        } else {
+            table.setRowSelectionInterval(row + 1, row + 1);
+        }
+        table.setColumnSelectionInterval(0, 0);
+    }*/
 	
 	class InteractiveRenderer extends DefaultTableCellRenderer {
 		private static final long serialVersionUID = -6959006446611341448L;
 		protected int interactiveColumn;
 
-        public InteractiveRenderer(int interactiveColumn) {
-            this.interactiveColumn = interactiveColumn;
-        }
+		public InteractiveRenderer(int interactiveColumn) {
+			this.interactiveColumn = interactiveColumn;
+		}
 
-        public Component getTableCellRendererComponent(JTable table,
-           Object value, boolean isSelected, boolean hasFocus, int row,
-           int column)
-        {
-            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            return c;
-        }
-    }
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			Component c = super.getTableCellRendererComponent(table, value,
+					isSelected, hasFocus, row, column);
+			return c;
+		}
+	}
 
     public class InteractiveTableModelListener implements TableModelListener {
         public void tableChanged(TableModelEvent evt) {
@@ -369,6 +407,11 @@ public class GrafikaPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			for (int i = 0; i < table.getRowCount(); i++) {
 				Grafika grafika = tableModel.getObjectAt(i);
+				if (grafika.getTeka() == null ||
+		        		 grafika.getNumerInwentarza() == null ||
+		        		 grafika.getNumerInwentarza().trim().equals("")) {
+					continue;
+				}
 				dbUtil.saveGrafika(grafika);
 			}
 			JOptionPane.showMessageDialog(null, "Zmiany zosta³y zapisane", "", JOptionPane.PLAIN_MESSAGE);
