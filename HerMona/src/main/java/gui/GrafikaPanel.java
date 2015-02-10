@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +20,7 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,12 +28,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
 import org.hibernate.HibernateException;
@@ -151,14 +151,7 @@ public class GrafikaPanel extends JPanel {
 		}
 		
 		private void setUpKategorieColumn(JTable table) {
-			List<Kategoria> list = dbUtil.getCategories();
-			JList<Kategoria> jList = new JList<Kategoria>(list.toArray(new Kategoria[list.size()]));
-			jList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			
 			table.getColumnModel().getColumn(KATEGORIE_INDEX).setCellEditor(new KategorieCellEditor());
-			
-			//JComboBox<Technika> comboBox = new JComboBox<Technika>(list.toArray(new Technika[list.size()]));
-			//table.getColumnModel().getColumn(TECHNIKA_INDEX).setCellEditor(new DefaultCellEditor(comboBox));
 		}
 
 		public String getColumnName(int column) {
@@ -255,7 +248,7 @@ public class GrafikaPanel extends JPanel {
 			case UWAGI_INDEX:
 				return record.getUwagi();
 			case KATEGORIE_INDEX:
-				return record.getKategorieString();
+				return record.getKategorie();
 			case ILUSTRACJA_PATH_INDEX:
 				return record.getIlustracjaPath();
 			default:
@@ -412,7 +405,7 @@ public class GrafikaPanel extends JPanel {
     private class KategorieCellEditor extends DefaultCellEditor {
 		private static final long serialVersionUID = -1463545753241064548L;
 		private static final int CLICK_COUNT_TO_START = 2;
-		private JButton button;
+		private JLabel label;
 		private Set<Kategoria> kategorie;
 		JList<Kategoria> jList;
 		
@@ -421,10 +414,10 @@ public class GrafikaPanel extends JPanel {
 			setClickCountToStart(CLICK_COUNT_TO_START);
 			
 			// Using a JButton as the editor component
-	        button = new JButton();
-	        button.setBackground(Color.white);
-	        button.setFont(button.getFont().deriveFont(Font.PLAIN));
-	        button.setBorder(null);
+	        label = new JLabel();
+	        label.setBackground(Color.white);
+	        label.setFont(label.getFont().deriveFont(Font.PLAIN));
+	        label.setBorder(null);
 	        
 	        List<Kategoria> list = dbUtil.getCategories();
 			jList = new JList<Kategoria>(list.toArray(new Kategoria[list.size()]));
@@ -436,12 +429,35 @@ public class GrafikaPanel extends JPanel {
 	        return kategorie;
 	    }
 
-	    @Override
+	    @SuppressWarnings("unchecked")
+		@Override
 	    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-	        
-	    	button.setText(value.toString());
+	    	jList.clearSelection();
+	    	kategorie = (Set<Kategoria>) value;
+	    	List<Integer> indices = new ArrayList<Integer>();
+	    	for (int i = 0; i < jList.getModel().getSize(); i++) {
+	    		Kategoria kat = jList.getModel().getElementAt(i);
+	    		if (kategorie.contains(kat)) {
+	    			indices.add(i);
+	    		}
+	    	}
+	    	int[] intArr = new int[indices.size()];
+	    	for (int i = 0; i < indices.size(); i++) {
+	    		intArr[i] = indices.get(i);
+	    	}
+	    	jList.setSelectedIndices(intArr);
 	    	
-	        return button;
+	    	JOptionPane.showMessageDialog(null, jList);
+	    	
+	    	kategorie.clear();
+	    	intArr = jList.getSelectedIndices();
+	    	for (int i = 0; i < intArr.length; i++) {
+	    		Kategoria kat = jList.getModel().getElementAt(intArr[i]);
+	    		kategorie.add(kat);
+	    	}
+	    	
+	    	label.setText(value.toString());
+	        return label;
 	    }
     }
 

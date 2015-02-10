@@ -253,18 +253,4 @@ public class Grafika {
 				+ ", kategorie=" + kategorie + ", ilustracjaPath="
 				+ ilustracjaPath + "]";
 	}
-	
-	public String getKategorieString() {
-		String ret = "";
-		Kategoria[] katArr =  getKategorie().toArray(new Kategoria[getKategorie().size()]);
-		
-		for (int i = 0; i < katArr.length; i++) {
-			ret += katArr[i].getNazwa();
-			if (i < katArr.length - 1) {
-				ret += ", ";
-			}
-		}
-		
-		return ret;
-	}
 }
