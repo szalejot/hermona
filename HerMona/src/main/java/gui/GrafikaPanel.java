@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
@@ -140,6 +141,10 @@ public class GrafikaPanel extends JPanel {
 			setUpTekaColumn(table);
 			setUpTechnikaColumn(table);
 			setUpKategorieColumn(table);
+			setUpSygnaturyColumn(table);
+			setUpInskrypcjeColumn(table);
+			setUpBibliografiaColumn(table);
+			setUpUwagiColumn(table);
 			
 	        setRendererColumnSizes(table);
 		}
@@ -158,6 +163,22 @@ public class GrafikaPanel extends JPanel {
 		
 		private void setUpKategorieColumn(JTable table) {
 			table.getColumnModel().getColumn(KATEGORIE_INDEX).setCellEditor(new KategorieCellEditor());
+		}
+		
+		private void setUpSygnaturyColumn(JTable table) {
+			table.getColumnModel().getColumn(SYGNATURY_INDEX).setCellEditor(new TextAreaCellEditor());
+		}
+		
+		private void setUpInskrypcjeColumn(JTable table) {
+			table.getColumnModel().getColumn(INSKRYPCJE_INDEX).setCellEditor(new TextAreaCellEditor());
+		}
+		
+		private void setUpBibliografiaColumn(JTable table) {
+			table.getColumnModel().getColumn(BIBLIOGRAFIA_INDEX).setCellEditor(new TextAreaCellEditor());
+		}
+		
+		private void setUpUwagiColumn(JTable table) {
+			table.getColumnModel().getColumn(UWAGI_INDEX).setCellEditor(new TextAreaCellEditor());
 		}
 
 		public String getColumnName(int column) {
@@ -504,6 +525,31 @@ public class GrafikaPanel extends JPanel {
 	    	
 	    	label.setText(value.toString());
 	        return label;
+	    }
+    }
+    
+    private class TextAreaCellEditor extends DefaultCellEditor {
+		private static final long serialVersionUID = -1463545753241064548L;
+		private static final int CLICK_COUNT_TO_START = 2;
+		JTextArea jArea = new JTextArea(25, 60);
+		
+		public TextAreaCellEditor() {
+			super(new JTextField());
+			setClickCountToStart(CLICK_COUNT_TO_START);
+
+		}
+		
+		@Override
+	    public Object getCellEditorValue() {
+	        return jArea.getText();
+	    }
+
+		@Override
+	    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+	    	jArea.setText((String)value);
+	    	
+	    	JOptionPane.showMessageDialog(null, jArea);
+	        return jArea;
 	    }
     }
 
