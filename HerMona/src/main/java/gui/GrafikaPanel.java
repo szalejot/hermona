@@ -45,7 +45,7 @@ import model.Teka;
 public class GrafikaPanel extends JPanel {
 	private static final long serialVersionUID = 4484009714046170060L;
 	private static final int STATIC_COLUMNS_NUMBER = 2;
-	public static final String[] columnNames = {"Teka", "Numer inwentarza", "Tytul", "Seria",
+	public static final String[] columnNames = {"Teka", "Numer inwentarza", "Temat", "Seria",
 		"Technika", "Wymiary", "Projekatant", "Rytownik", "Wydawca", "Sygnatury", "Rok od",
 		"Rok do", "Miejsce wydania", "Opis", "Inskrypcje", "Bibliografia", "Uwagi", "Kategorie", "Œcie¿ka ilustracji"};
 	
@@ -98,7 +98,7 @@ public class GrafikaPanel extends JPanel {
 		private static final long serialVersionUID = 4466896298699455046L;
 		private static final int TEKA_INDEX = 0;
 		private static final int NUMER_INWENTARZA_INDEX = 1;
-		private static final int TYTUL_INDEX = 2;
+		private static final int TEMAT_INDEX = 2;
 		private static final int SERIA_INDEX = 3;
 		private static final int TECHNIKA_INDEX = 4;
 		private static final int WYMIARY_INDEX = 5;
@@ -190,7 +190,7 @@ public class GrafikaPanel extends JPanel {
 				return Teka.class;
 			case TECHNIKA_INDEX:
 				return Technika.class;
-			case TYTUL_INDEX:
+			case TEMAT_INDEX:
 			case NUMER_INWENTARZA_INDEX:
 			case SERIA_INDEX:
 			case WYMIARY_INDEX:
@@ -217,8 +217,8 @@ public class GrafikaPanel extends JPanel {
 		public Object getValueAt(int row, int column) {
 			Grafika record = dataVector.get(row);
 			switch (column) {
-			case TYTUL_INDEX:
-				return record.getTytul();
+			case TEMAT_INDEX:
+				return record.getTemat();
 			case TEKA_INDEX:
 				return record.getTeka();
 			case NUMER_INWENTARZA_INDEX:
@@ -270,8 +270,8 @@ public class GrafikaPanel extends JPanel {
 		public void setValueAt(Object value, int row, int column) {
 			Grafika record = dataVector.get(row);
 			switch (column) {
-			case TYTUL_INDEX:
-				record.setTytul((String)value);
+			case TEMAT_INDEX:
+				record.setTemat((String)value);
 				break;
 			case TEKA_INDEX:
 				record.setTeka((Teka)value);

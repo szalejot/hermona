@@ -29,7 +29,7 @@ public class Grafika {
 	private Teka teka;
 	@Column(nullable = false)
 	private String numerInwentarza;
-	private String tytul;
+	private String temat;
 	private String seria;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "technika", nullable = true)
@@ -61,7 +61,7 @@ public class Grafika {
 		this.grafikaId = grafikaId;
 		this.teka = teka;
 		this.numerInwentarza = numerInwentarza;
-		this.tytul = tytul;
+		this.temat = tytul;
 		this.seria = seria;
 		this.technika = technika;
 		this.wymiary = wymiary;
@@ -104,12 +104,12 @@ public class Grafika {
 		this.numerInwentarza = numerInwentarza;
 	}
 
-	public String getTytul() {
-		return tytul;
+	public String getTemat() {
+		return temat;
 	}
 
-	public void setTytul(String tytul) {
-		this.tytul = tytul;
+	public void setTemat(String temat) {
+		this.temat = temat;
 	}
 
 	public String getSeria() {
@@ -243,7 +243,7 @@ public class Grafika {
 	@Override
 	public String toString() {
 		return "Grafika [teka=" + teka + ", numerInwentarza=" + numerInwentarza
-				+ ", tytul=" + tytul + ", seria=" + seria + ", technika="
+				+ ", tytul=" + temat + ", seria=" + seria + ", technika="
 				+ technika + ", wymiary=" + wymiary + ", projektant="
 				+ projektant + ", rytownik=" + rytownik + ", wydawca="
 				+ wydawca + ", sygnatury=" + sygnatury + ", rokOd=" + rokOd
