@@ -2,11 +2,17 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import util.XLSImporter;
 
 public class MainWindow extends JFrame {
 
@@ -108,6 +114,27 @@ public class MainWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new TekaEditWindow();
+			}
+		});
+		
+		JMenu importMenu = new JMenu("Importuj");
+		menubar.add(importMenu);
+		JMenuItem importXLS = new JMenuItem("Importuj z pliku XLSX");
+		importMenu.add(importXLS);
+		importXLS.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel", "xlsx");
+				fc.setFileFilter(filter);
+				int returnVal = fc.showOpenDialog(null);
+
+		        if (returnVal == JFileChooser.APPROVE_OPTION) {
+		            File file = fc.getSelectedFile();
+		            XLSImporter importer = new XLSImporter();
+		            importer.importXLS(file.getAbsolutePath());
+		            JOptionPane.showMessageDialog(null, "Import zosta³ wykonany", "", JOptionPane.PLAIN_MESSAGE);
+		        }
 			}
 		});
 		
