@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -23,8 +25,24 @@ public class MainWindow extends JFrame {
 		
 		setSize(800, 600);
 		setResizable(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent we) {
+				String ObjButtons[] = { "Yes", "No" };
+				int PromptResult = JOptionPane.showOptionDialog(null,
+						"Czy na pewno chcesz wy³¹czyæ aplikacjê?\n"
+						+ "Wszelkie niezapisane zmiany zostan¹ utracone.",
+						"HerMona",
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.WARNING_MESSAGE, null, ObjButtons,
+						ObjButtons[1]);
+				if (PromptResult == JOptionPane.YES_OPTION) {
+					System.exit(0);
+				}
+			}
+		});
+
 		setJMenuBar(initializeMenuBar());
 		
 		GrafikaPanel gPanel = new GrafikaPanel();

@@ -96,7 +96,7 @@ public class XLSImporter {
 		if (sNum == null) {
 			return null;
 		} else {
-			return dbUtil.getTeka(Integer.parseInt(sNum));
+			return dbUtil.getTeka(Integer.parseInt(sNum.trim()));
 		}
 	}
 	
@@ -105,7 +105,7 @@ public class XLSImporter {
 		if (sNum == null) {
 			return null;
 		} else {
-			return dbUtil.getTechnique(sNum);
+			return dbUtil.getTechnique(sNum.trim());
 		}
 	}
 	
@@ -115,7 +115,7 @@ public class XLSImporter {
 		if (sVal != null) {
 			String[] sNames = sVal.split(";");
 			for (String s : sNames) {
-				set.add(dbUtil.getCategory(s));
+				set.add(dbUtil.getCategory(s.trim()));
 			}
 		}
 		return set;
@@ -124,6 +124,7 @@ public class XLSImporter {
 	private Grafika setDatowanie(Grafika g, Row row, Integer pos) {
 		String sVal = getValue(row, pos);
 		if (sVal != null) {
+			sVal = sVal.trim();
 			if (sVal.length() == 4) { //np "1501"
 				g.setRokOd(Integer.parseInt(sVal));
 				g.setRokDo(Integer.parseInt(sVal));
@@ -145,9 +146,9 @@ public class XLSImporter {
 			return null;
 		} else {
 			if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-				return new Integer(new Double(cell.getNumericCellValue()).intValue()).toString();
+				return new Integer(new Double(cell.getNumericCellValue()).intValue()).toString().trim();
 			} else { // Cell.CELL_TYPE_STRING:
-				return cell.getStringCellValue();
+				return cell.getStringCellValue().trim();
 			}
 		}
 	}

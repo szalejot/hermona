@@ -58,7 +58,7 @@ public class GrafikaPanel extends JPanel {
 
 	public GrafikaPanel() {
 		
-		Vector<Grafika> grafVec= new Vector<Grafika>(dbUtil.getGrafikas(""));
+		Vector<Grafika> grafVec= new Vector<Grafika>(dbUtil.getGrafikas("1=0"));
 		tableModel = new InteractiveTableModel(columnNames, grafVec);
         tableModel.addTableModelListener(new GrafikaPanel.InteractiveTableModelListener());
         table = new JTable();
