@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -20,6 +21,7 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -31,6 +33,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -143,6 +146,7 @@ public class GrafikaPanel extends JPanel {
 			setUpKategorieColumn(table);
 			setUpSygnaturyColumn(table);
 			setUpInskrypcjeColumn(table);
+			setUpIlustracjaPathColumn(table);
 			setUpBibliografiaColumn(table);
 			setUpUwagiColumn(table);
 			
@@ -171,6 +175,10 @@ public class GrafikaPanel extends JPanel {
 		
 		private void setUpInskrypcjeColumn(JTable table) {
 			table.getColumnModel().getColumn(INSKRYPCJE_INDEX).setCellEditor(new TextAreaCellEditor());
+		}
+		
+		private void setUpIlustracjaPathColumn(JTable table) {
+			table.getColumnModel().getColumn(ILUSTRACJA_PATH_INDEX).setCellEditor(new IlustracjaPathCellEditor());
 		}
 		
 		private void setUpBibliografiaColumn(JTable table) {
@@ -545,6 +553,44 @@ public class GrafikaPanel extends JPanel {
 	    	}
 	    	
 	    	label.setText(value.toString());
+	        return label;
+	    }
+    }
+    
+    private class IlustracjaPathCellEditor extends DefaultCellEditor {
+		private static final long serialVersionUID = -1463545753241064548L;
+		private static final int CLICK_COUNT_TO_START = 2;
+		private JLabel label;
+		
+		public IlustracjaPathCellEditor() {
+			super(new JTextField());
+			setClickCountToStart(CLICK_COUNT_TO_START);
+			
+			// Using a JButton as the editor component
+	        label = new JLabel();
+	        label.setBackground(Color.white);
+	        label.setFont(label.getFont().deriveFont(Font.PLAIN));
+	        label.setBorder(null);
+	        
+		}
+		
+		@Override
+	    public Object getCellEditorValue() {
+	        return label.getText();
+	    }
+		@Override
+	    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+	    	JFileChooser fc = new JFileChooser();
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG", "png");
+			fc.setFileFilter(filter);
+			int returnVal = fc.showOpenDialog(null);
+			String sRet = value.toString();
+	        if (returnVal == JFileChooser.APPROVE_OPTION) {
+	            File file = fc.getSelectedFile();
+	            sRet = file.getAbsolutePath();
+	        }
+	    	
+	    	label.setText(sRet);
 	        return label;
 	    }
     }
