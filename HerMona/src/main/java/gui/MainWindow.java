@@ -29,7 +29,7 @@ public class MainWindow extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent we) {
-				String ObjButtons[] = { "Yes", "No" };
+				String ObjButtons[] = { "Tak", "Anuluj" };
 				int PromptResult = JOptionPane.showOptionDialog(null,
 						"Czy na pewno chcesz wy³¹czyæ aplikacjê?\n"
 						+ "Wszelkie niezapisane zmiany zostan¹ utracone.",

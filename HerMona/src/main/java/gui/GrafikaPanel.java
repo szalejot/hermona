@@ -429,16 +429,26 @@ public class GrafikaPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			for (int i = 0; i < table.getRowCount(); i++) {
-				Grafika grafika = tableModel.getObjectAt(i);
-				if (grafika.getTeka() == null ||
-		        		 grafika.getNumerInwentarza() == null ||
-		        		 grafika.getNumerInwentarza().trim().equals("")) {
-					continue;
+			String ObjButtons[] = { "Tak", "Anuluj" };
+			int PromptResult = JOptionPane.showOptionDialog(null,
+					"Czy na pewno chcesz zapisaæ zmiany?",
+					"HerMona",
+					JOptionPane.DEFAULT_OPTION,
+					JOptionPane.WARNING_MESSAGE, null, ObjButtons,
+					ObjButtons[1]);
+			if (PromptResult == JOptionPane.YES_OPTION) {
+				for (int i = 0; i < table.getRowCount(); i++) {
+					Grafika grafika = tableModel.getObjectAt(i);
+					if (grafika.getTeka() == null ||
+			        		 grafika.getNumerInwentarza() == null ||
+			        		 grafika.getNumerInwentarza().trim().equals("")) {
+						continue;
+					}
+					dbUtil.saveGrafika(grafika);
 				}
-				dbUtil.saveGrafika(grafika);
+				JOptionPane.showMessageDialog(null, "Zmiany zosta³y zapisane", "", JOptionPane.PLAIN_MESSAGE);
 			}
-			JOptionPane.showMessageDialog(null, "Zmiany zosta³y zapisane", "", JOptionPane.PLAIN_MESSAGE);
+
 		}
 		
 	}
@@ -447,24 +457,35 @@ public class GrafikaPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			String s = (String)JOptionPane.showInputDialog(
-                    table,
-                    "Wpisz warunek filtrowania:",
-                    "Wybierz filtr",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    "");
-			if ((s != null)) {
-				Vector<Grafika> grafVec = null;
-				try {
-					grafVec = new Vector<Grafika>(dbUtil.getGrafikas(s));
-				} catch (HibernateException e) {
-					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³ad sk³adni zapytania:\n" + e.getMessage(), "B£¥D", JOptionPane.WARNING_MESSAGE);
-					return;
-				}
-				tableModel.changeData(grafVec);
-            }
+			String ObjButtons[] = { "Tak", "Anuluj" };
+			int PromptResult = JOptionPane.showOptionDialog(null,
+					"Czy na pewno zmieniæ warunki filtrowania?\n"
+					+ "Wszelkie niezapisane zmiany zostan¹ utracone.",
+					"HerMona",
+					JOptionPane.DEFAULT_OPTION,
+					JOptionPane.WARNING_MESSAGE, null, ObjButtons,
+					ObjButtons[1]);
+			if (PromptResult == JOptionPane.YES_OPTION) {
+				String s = (String)JOptionPane.showInputDialog(
+	                    table,
+	                    "Wpisz warunek filtrowania:",
+	                    "Wybierz filtr",
+	                    JOptionPane.PLAIN_MESSAGE,
+	                    null,
+	                    null,
+	                    "");
+				if ((s != null)) {
+					Vector<Grafika> grafVec = null;
+					try {
+						grafVec = new Vector<Grafika>(dbUtil.getGrafikas(s));
+					} catch (HibernateException e) {
+						JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³ad sk³adni zapytania:\n" + e.getMessage(), "B£¥D", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+					tableModel.changeData(grafVec);
+	            }
+			}
+			
 		}
     	
     }
