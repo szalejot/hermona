@@ -13,6 +13,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -49,11 +50,16 @@ import model.Technika;
 import model.Teka;
 
 public class GrafikaPanel extends JPanel {
+	
 	private static final long serialVersionUID = 4484009714046170060L;
 	private static final int STATIC_COLUMNS_NUMBER = 2;
 	public static final String[] columnNames = {"teka", "numer inwentarza", "temat", "seria",
 		"technika", "wymiary", "projekatant", "rytownik", "wydawca", "sygnatury", "rok od",
 		"rok do", "miejsce wydania", "opis", "inskrypcje", "bibliografia", "uwagi", "kategorie", "œcie¿ka ilustracji"};
+	
+
+	private Set<Grafika> gSet = new HashSet<Grafika>();
+	private Set<Grafika> gSetIlu = new HashSet<Grafika>();
 	
 	private String previousPredicate = "1=0";
 	private InteractiveTableModel tableModel;
@@ -61,7 +67,7 @@ public class GrafikaPanel extends JPanel {
 	private JButton bFilter = new JButton("Filtruj");
 	private JButton bRefresh = new JButton("Odœwie¿");
 	private JTable table;
-	DBUtil dbUtil = new DBUtil();
+	private DBUtil dbUtil = new DBUtil();
 
 	public GrafikaPanel() {
 		
@@ -83,7 +89,7 @@ public class GrafikaPanel extends JPanel {
 				}
 			}
 		});
-        
+
         tableModel.setUpColumns(table);
         if (!tableModel.hasEmptyRow()) {
             tableModel.addEmptyRow();
@@ -96,7 +102,7 @@ public class GrafikaPanel extends JPanel {
         
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        new FixedColumnTable(STATIC_COLUMNS_NUMBER, scrollPane);
+        new FixedColumnTable(STATIC_COLUMNS_NUMBER, scrollPane, bSave);
         add(scrollPane);
         add(Box.createRigidArea(new Dimension(0,5)));
         Container bContainer = new Container();
@@ -147,10 +153,11 @@ public class GrafikaPanel extends JPanel {
 		public void changeData(Vector<Grafika> dataVector) {
 			int before = getRowCount() - 1;
 			this.dataVector.clear();
+			gSet.clear();
+			gSetIlu.clear();
 			fireTableRowsDeleted(0, before);
-			for (Grafika g : dataVector) {
-				this.dataVector.add(g.getClone());
-			}
+			this.dataVector.addAll(dataVector);
+			addEmptyRow();
 			fireTableRowsInserted(0, this.dataVector.size() - 1);
 		}
 		
@@ -321,6 +328,7 @@ public class GrafikaPanel extends JPanel {
 		@SuppressWarnings("unchecked")
 		public void setValueAt(Object value, int row, int column) {
 			Grafika record = dataVector.get(row);
+			gSet.add(record);
 			switch (column) {
 			case TEMAT_INDEX:
 				record.setTemat((String)value);
@@ -378,6 +386,7 @@ public class GrafikaPanel extends JPanel {
 				break;
 			case ILUSTRACJA_PATH_INDEX:
 				record.setIlustracjaPath((String)value);
+				gSetIlu.add(record);
 				break;
 			default:
 				System.out.println("invalid index");
@@ -468,18 +477,37 @@ public class GrafikaPanel extends JPanel {
 					JOptionPane.WARNING_MESSAGE, null, ObjButtons,
 					ObjButtons[1]);
 			if (PromptResult == JOptionPane.YES_OPTION) {
-				for (int i = 0; i < table.getRowCount(); i++) {
-					Grafika grafika = tableModel.getObjectAt(i);
-					if (grafika.getTeka() == null ||
-			        		 grafika.getNumerInwentarza() == null ||
-			        		 grafika.getNumerInwentarza().trim().equals("")) {
-						continue;
+				try {
+					for (Grafika grafika : gSet) {
+						if (grafika.getTeka() == null
+								|| grafika.getNumerInwentarza() == null
+								|| grafika.getNumerInwentarza().trim()
+										.equals("")) {
+							continue;
+						}
+						dbUtil.saveGrafika(grafika);
 					}
-					dbUtil.saveGrafika(grafika);
+					JOptionPane.showMessageDialog(null,
+							"Zmiany zosta³y zapisane", "",
+							JOptionPane.PLAIN_MESSAGE);
+				} catch (Exception ex) {
+					JOptionPane
+							.showMessageDialog(
+									null,
+									"Wyst¹pi³ b³ad podczas zapisu:\n"
+											+ ex.getMessage()
+											+ "\n(Prawdopodobnie duplikacja wartoœci (teka, numerInwentarza))"
+											+ "\nNie wszystkie zmiany zosta³y zapisane.",
+									"B£¥D", JOptionPane.WARNING_MESSAGE);
+					ex.printStackTrace();
+					dbUtil.resetSession();
 				}
-				JOptionPane.showMessageDialog(null, "Zmiany zosta³y zapisane", "", JOptionPane.PLAIN_MESSAGE);
 			}
-
+			for (Grafika g : gSetIlu) {
+				dbUtil.makeMiniature(g);
+			}
+			gSet.clear();
+			gSetIlu.clear();
 		}
 		
 	}

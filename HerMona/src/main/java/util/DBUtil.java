@@ -1,7 +1,21 @@
 package util;
 
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+
+
+
+
+
+
+
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 import model.Grafika;
 import model.Kategoria;
@@ -14,6 +28,8 @@ import org.hibernate.Session;
 
 public class DBUtil {
 	
+	private static final int IMG_SIZE = 300;
+	
 	private static Session session = null;
 	
 	public DBUtil() {
@@ -21,6 +37,11 @@ public class DBUtil {
 			session = HibernateUtil.getSessionFactory().openSession();
 			session.setCacheMode(CacheMode.IGNORE);
 		}
+	}
+	
+	public void resetSession() {
+		session.close();
+		session = HibernateUtil.getSessionFactory().openSession();
 	}
 	
 	/**
@@ -179,7 +200,9 @@ public class DBUtil {
 	public Grafika saveGrafika(Grafika g) {
 		if (g.getIlustracjaPath() == null || g.getIlustracjaPath().trim().equals("")) {
 			g.setIlustracjaPath(".\\" + g.getTeka().getNumer() + "\\" + g.getNumerInwentarza() + ".JPG");
+			makeMiniature(g);
 		}
+		//session.saveOrUpdate(g);
 		session.save(g);
 		session.flush();
 		return g;
@@ -201,13 +224,65 @@ public class DBUtil {
 		}
 		hql+= " order by teka.numer, grafika.numerInwentarza";
 		Query query = session.createQuery(hql);
-		session.setCacheMode(CacheMode.IGNORE);
-		return query.list();
+		List<Grafika> retList = query.list();
+		for (Grafika g : retList) {
+			session.refresh(g);
+		}
+		return retList;
 	}
 	
 	public void shutdown() {
 		session.flush();
 		HibernateUtil.shutdown();
 	}
+	
+	public void makeMiniature(Grafika g) {
+		BufferedImage originalImage = null;
+		try {
+			originalImage = ImageIO.read(new File(g.getIlustracjaPath()));
+		} catch (IOException e) {
+			JOptionPane
+			.showMessageDialog(
+					null,
+					"Nie uda³o siê otworzyæ pliku:\n"
+							+ g.getIlustracjaPath()
+							+ "\nNie wygenerowano dla niego miniatury.",
+					"B£¥D", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+		BufferedImage resizeImagePng = resizeImage(originalImage, type);
+		try {
+			ImageIO.write(resizeImagePng, "png", new File(".\\Hermona_miniatury\\" + g.getTeka().getNumer() + "_" + g.getNumerInwentarza() + ".png"));
+		} catch (Exception e) {
+			JOptionPane
+			.showMessageDialog(
+					null,
+					"Nie uda³o siê zapisaæ pliku:\n"
+							+ g.getIlustracjaPath()
+							+ "\nNie wygenerowano miniatury.",
+					"B£¥D", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+	}
+	
+	private static BufferedImage resizeImage(BufferedImage originalImage, int type) {
+		int width = 0;
+		int height = 0;
+		if (originalImage.getHeight() > originalImage.getWidth()) {
+			height = IMG_SIZE;
+			width = (originalImage.getWidth() * IMG_SIZE) / originalImage.getHeight();
+		} else {
+			width = IMG_SIZE;
+			height = (originalImage.getHeight() * IMG_SIZE) / originalImage.getWidth();
+		}
+		
+		BufferedImage resizedImage = new BufferedImage(width, height, type);
+		Graphics2D g = resizedImage.createGraphics();
+		g.drawImage(originalImage, 0, 0, width, height, null);
+		g.dispose();
+	 
+		return resizedImage;
+	    }
 
 }

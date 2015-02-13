@@ -1,6 +1,7 @@
 package gui;
 
 import java.beans.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -25,14 +26,16 @@ public class FixedColumnTable implements ChangeListener, PropertyChangeListener
 	private JTable main;
 	private JTable fixed;
 	private JScrollPane scrollPane;
+	private JButton bSave;
 
 	/*
 	 *  Specify the number of columns to be fixed and the scroll pane
 	 *  containing the table.
 	 */
-	public FixedColumnTable(int fixedColumns, JScrollPane scrollPane)
+	public FixedColumnTable(int fixedColumns, JScrollPane scrollPane, JButton bSave)
 	{
 		this.scrollPane = scrollPane;
+		this.bSave = bSave;
 
 		main = ((JTable)scrollPane.getViewport().getView());
 		main.setAutoCreateColumnsFromModel( false );
@@ -48,6 +51,19 @@ public class FixedColumnTable implements ChangeListener, PropertyChangeListener
 		fixed.setModel( main.getModel() );
 		fixed.setSelectionModel( main.getSelectionModel() );
 		fixed.setFocusable( false );
+		
+		fixed.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals("tableCellEditor")) {
+					if (fixed.isEditing()) {
+						FixedColumnTable.this.bSave.setEnabled(false);
+					} else {
+						FixedColumnTable.this.bSave.setEnabled(true);
+					}
+				}
+			}
+		});
 
 		//  Remove the fixed columns from the main table
 		//  and add them to the fixed table
