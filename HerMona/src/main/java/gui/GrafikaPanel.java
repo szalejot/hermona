@@ -2,7 +2,9 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -53,15 +55,17 @@ public class GrafikaPanel extends JPanel {
 		"technika", "wymiary", "projekatant", "rytownik", "wydawca", "sygnatury", "rok od",
 		"rok do", "miejsce wydania", "opis", "inskrypcje", "bibliografia", "uwagi", "kategorie", "œcie¿ka ilustracji"};
 	
+	private String previousPredicate = "1=0";
 	private InteractiveTableModel tableModel;
 	private JButton bSave = new JButton("Zapisz zmiany");
 	private JButton bFilter = new JButton("Filtruj");
+	private JButton bRefresh = new JButton("Odœwie¿");
 	private JTable table;
 	DBUtil dbUtil = new DBUtil();
 
 	public GrafikaPanel() {
 		
-		Vector<Grafika> grafVec= new Vector<Grafika>(dbUtil.getGrafikas("1=0"));
+		Vector<Grafika> grafVec= new Vector<Grafika>(dbUtil.getGrafikas(previousPredicate));
 		tableModel = new InteractiveTableModel(columnNames, grafVec);
         tableModel.addTableModelListener(new GrafikaPanel.InteractiveTableModelListener());
         table = new JTable();
@@ -88,14 +92,21 @@ public class GrafikaPanel extends JPanel {
 
         bSave.addActionListener(new ButtonSaveListener());
         bFilter.addActionListener(new ButtonFilterListener());
+        bRefresh.addActionListener(new ButtonRefreshListener());
         
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         new FixedColumnTable(STATIC_COLUMNS_NUMBER, scrollPane);
         add(scrollPane);
         add(Box.createRigidArea(new Dimension(0,5)));
-        add(bSave);
-        add(bFilter);
+        Container bContainer = new Container();
+        bContainer.setMaximumSize(new Dimension(400, 50));
+        FlowLayout bLayout = new FlowLayout();
+        bContainer.setLayout(bLayout);
+        bContainer.add(bSave);
+        bContainer.add(bFilter);
+        bContainer.add(bRefresh);
+        add(bContainer);
 	}
 
 	private class InteractiveTableModel extends AbstractTableModel {
@@ -137,7 +148,9 @@ public class GrafikaPanel extends JPanel {
 			int before = getRowCount() - 1;
 			this.dataVector.clear();
 			fireTableRowsDeleted(0, before);
-			this.dataVector.addAll(dataVector);
+			for (Grafika g : dataVector) {
+				this.dataVector.add(g.getClone());
+			}
 			fireTableRowsInserted(0, this.dataVector.size() - 1);
 		}
 		
@@ -500,6 +513,7 @@ public class GrafikaPanel extends JPanel {
 						JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³ad sk³adni zapytania:\n" + e.getMessage(), "B£¥D", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
+					previousPredicate = s;
 					tableModel.changeData(grafVec);
 	            }
 			}
@@ -507,6 +521,35 @@ public class GrafikaPanel extends JPanel {
 		}
     	
     }
+    
+	private class ButtonRefreshListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			String ObjButtons[] = { "Tak", "Anuluj" };
+			int PromptResult = JOptionPane.showOptionDialog(null,
+					"Czy na pewno chcesz odœwie¿yæ widok?\n"
+							+ "Wszelkie niezapisane zmiany zostan¹ utracone.",
+					"HerMona", JOptionPane.DEFAULT_OPTION,
+					JOptionPane.WARNING_MESSAGE, null, ObjButtons,
+					ObjButtons[1]);
+			if (PromptResult == JOptionPane.YES_OPTION) {
+				Vector<Grafika> grafVec = null;
+				try {
+					grafVec = new Vector<Grafika>(
+							dbUtil.getGrafikas(previousPredicate));
+				} catch (HibernateException e) {
+					JOptionPane.showMessageDialog(
+							null,
+							"Wyst¹pi³ b³ad sk³adni zapytania:\n"
+									+ e.getMessage(), "B£¥D",
+							JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				tableModel.changeData(grafVec);
+			}
+		}
+	}
+    	
     
     private class KategorieCellEditor extends DefaultCellEditor {
 		private static final long serialVersionUID = -1463545753241064548L;

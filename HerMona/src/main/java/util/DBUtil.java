@@ -8,6 +8,7 @@ import model.Kategoria;
 import model.Technika;
 import model.Teka;
 
+import org.hibernate.CacheMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -18,6 +19,7 @@ public class DBUtil {
 	public DBUtil() {
 		if (session == null) {
 			session = HibernateUtil.getSessionFactory().openSession();
+			session.setCacheMode(CacheMode.IGNORE);
 		}
 	}
 	
@@ -199,6 +201,7 @@ public class DBUtil {
 		}
 		hql+= " order by teka.numer, grafika.numerInwentarza";
 		Query query = session.createQuery(hql);
+		session.setCacheMode(CacheMode.IGNORE);
 		return query.list();
 	}
 	

@@ -19,7 +19,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "grafika",
 	uniqueConstraints = {@UniqueConstraint(columnNames = {"teka", "numerInwentarza"})})
-public class Grafika {
+public class Grafika implements Cloneable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -53,7 +53,7 @@ public class Grafika {
 	public Grafika () { }
 	
 	public Grafika(int grafikaId, Teka teka, String numerInwentarza,
-			String tytul, String seria, Technika technika, String wymiary,
+			String temat, String seria, Technika technika, String wymiary,
 			String projektant, String rytownik, String wydawca,
 			String sygnatury, Integer rokOd, Integer rokDo, String miejsceWydania,
 			String opis, String inskrypcje, String bibliografia, String uwagi,
@@ -61,7 +61,7 @@ public class Grafika {
 		this.grafikaId = grafikaId;
 		this.teka = teka;
 		this.numerInwentarza = numerInwentarza;
-		this.temat = tytul;
+		this.temat = temat;
 		this.seria = seria;
 		this.technika = technika;
 		this.wymiary = wymiary;
@@ -252,5 +252,14 @@ public class Grafika {
 				+ ", bibliografia=" + bibliografia + ", uwagi=" + uwagi
 				+ ", kategorie=" + kategorie + ", ilustracjaPath="
 				+ ilustracjaPath + "]";
+	}
+	
+	public Grafika getClone() {
+		return new Grafika(getGrafikaId(), getTeka(), getNumerInwentarza(),
+				getTemat(), getSeria(), getTechnika(), getWymiary(),
+				getProjektant(), getRytownik(), getWydawca(), getSygnatury(),
+				getRokOd(), getRokDo(), getMiejsceWydania(), getOpis(),
+				getInskrypcje(), getBibliografia(), getUwagi(), getKategorie(),
+				getIlustracjaPath());
 	}
 }
