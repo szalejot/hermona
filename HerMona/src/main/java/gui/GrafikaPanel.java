@@ -184,11 +184,11 @@ public class GrafikaPanel extends JPanel {
 		}
 		
 		private void setUpSygnaturyColumn(JTable table) {
-			table.getColumnModel().getColumn(SYGNATURY_INDEX).setCellEditor(new TextAreaCellEditor());
+			table.getColumnModel().getColumn(SYGNATURY_INDEX).setCellEditor(new TextAreaCellEditor("Sygnatury"));
 		}
 		
 		private void setUpInskrypcjeColumn(JTable table) {
-			table.getColumnModel().getColumn(INSKRYPCJE_INDEX).setCellEditor(new TextAreaCellEditor());
+			table.getColumnModel().getColumn(INSKRYPCJE_INDEX).setCellEditor(new TextAreaCellEditor("Inskrypcje"));
 		}
 		
 		private void setUpIlustracjaPathColumn(JTable table) {
@@ -196,11 +196,11 @@ public class GrafikaPanel extends JPanel {
 		}
 		
 		private void setUpBibliografiaColumn(JTable table) {
-			table.getColumnModel().getColumn(BIBLIOGRAFIA_INDEX).setCellEditor(new TextAreaCellEditor());
+			table.getColumnModel().getColumn(BIBLIOGRAFIA_INDEX).setCellEditor(new TextAreaCellEditor("Bibliografia"));
 		}
 		
 		private void setUpUwagiColumn(JTable table) {
-			table.getColumnModel().getColumn(UWAGI_INDEX).setCellEditor(new TextAreaCellEditor());
+			table.getColumnModel().getColumn(UWAGI_INDEX).setCellEditor(new TextAreaCellEditor("Uwagi"));
 		}
 
 		public String getColumnName(int column) {
@@ -634,10 +634,21 @@ public class GrafikaPanel extends JPanel {
 		@Override
 	    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 	    	JFileChooser fc = new JFileChooser();
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG", "png");
-			fc.setFileFilter(filter);
+			FileNameExtensionFilter pngFilter = new FileNameExtensionFilter("PNG", "png");
+			FileNameExtensionFilter jpgFilter = new FileNameExtensionFilter("JPG", "JPG");
+			fc.setFileFilter(jpgFilter);
+			fc.addChoosableFileFilter(pngFilter);
+			String sRet;
+			if (value == null) {
+				sRet = "";
+			} else {
+				sRet = value.toString();
+				if (sRet.lastIndexOf('\\') >= 0) {
+					File dir = new File(sRet.substring(0, sRet.lastIndexOf('\\')));
+					fc.setCurrentDirectory(dir);
+				}
+			}
 			int returnVal = fc.showOpenDialog(null);
-			String sRet = value.toString();
 	        if (returnVal == JFileChooser.APPROVE_OPTION) {
 	            File file = fc.getSelectedFile();
 	            sRet = file.getAbsolutePath();
@@ -651,12 +662,13 @@ public class GrafikaPanel extends JPanel {
     private class TextAreaCellEditor extends DefaultCellEditor {
 		private static final long serialVersionUID = -1463545753241064548L;
 		private static final int CLICK_COUNT_TO_START = 2;
-		JTextArea jArea = new JTextArea(25, 60);
+		private JTextArea jArea = new JTextArea(25, 60);
+		private String title;
 		
-		public TextAreaCellEditor() {
+		public TextAreaCellEditor(String title) {
 			super(new JTextField());
+			this.title = title;
 			setClickCountToStart(CLICK_COUNT_TO_START);
-
 		}
 		
 		@Override
@@ -668,7 +680,7 @@ public class GrafikaPanel extends JPanel {
 	    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 	    	jArea.setText((String)value);
 	    	
-	    	JOptionPane.showMessageDialog(null, jArea);
+	    	JOptionPane.showMessageDialog(null, jArea, title, JOptionPane.PLAIN_MESSAGE);
 	        return jArea;
 	    }
     }
