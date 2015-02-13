@@ -73,7 +73,7 @@ public class Teka {
 		if (getTytul() == null || getTytul().isEmpty()) {
     		return getNumer().toString();
     	} else {
-    		return getNumer() + " - " + getTytul();
+    		return getNumer() + " - " + getTytul() + " (" + getRok() + ")";
     	}
 	}
 	
@@ -87,7 +87,7 @@ public class Teka {
 		        	if (value.getTytul() == null || value.getTytul().isEmpty()) {
 		        		return value.getNumer().toString();
 		        	} else {
-		        		return value.getNumer() + " - " + value.getTytul();
+		        		return value.getNumer() + " - " + value.getTytul() + " (" + value.getRok() + ")";
 		        	}
 		        }
 		    }

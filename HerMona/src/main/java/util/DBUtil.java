@@ -176,7 +176,7 @@ public class DBUtil {
 	
 	public Grafika saveGrafika(Grafika g) {
 		if (g.getIlustracjaPath() == null || g.getIlustracjaPath().trim().equals("")) {
-			g.setIlustracjaPath(".\\" + g.getTeka().getNumer() + "\\" + g.getNumerInwentarza() + ".png");
+			g.setIlustracjaPath(".\\" + g.getTeka().getNumer() + "\\" + g.getNumerInwentarza() + ".JPG");
 		}
 		session.save(g);
 		session.flush();
@@ -190,14 +190,14 @@ public class DBUtil {
 	
 	@SuppressWarnings("unchecked")
 	public List<Grafika> getGrafikas(String predicate) {
-		String hql = "select Grafika from Grafika Grafika"
-				+ " join Grafika.teka Teka";
+		String hql = "select distinct grafika from Grafika grafika"
+				+ " join grafika.teka teka";
 		if (predicate != null && predicate.length() > 0) {
-			hql += " left join Grafika.technika Technika"
-					+ " left join Grafika.kategorie Kategoria"
+			hql += " left join grafika.technika technika"
+					+ " left join grafika.kategorie kategoria"
 					+ " where " + predicate;
 		}
-		hql+= " order by Teka.numer, Grafika.numerInwentarza";
+		hql+= " order by teka.numer, grafika.numerInwentarza";
 		Query query = session.createQuery(hql);
 		return query.list();
 	}

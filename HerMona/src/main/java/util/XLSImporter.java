@@ -34,7 +34,7 @@ public class XLSImporter {
 	private static final String INSKRYPCJE_NAME = "inskrypcje";
 	private static final String WYMIARY_NAME = "wymiary";
 	private static final String BIBLIOGRAFIA_NAME = "bibliografia";
-	private static final String SERIA_NAME = "Seria";
+	private static final String SERIA_NAME = "seria";
 	private static final String UWAGI_NAME = "uwagi";
 	private static final String KATEGORIA_NAME = "kategoria";
 	private static final String TEKA_NAME = "teka";

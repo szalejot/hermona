@@ -49,9 +49,9 @@ import model.Teka;
 public class GrafikaPanel extends JPanel {
 	private static final long serialVersionUID = 4484009714046170060L;
 	private static final int STATIC_COLUMNS_NUMBER = 2;
-	public static final String[] columnNames = {"Teka", "Numer inwentarza", "Temat", "Seria",
-		"Technika", "Wymiary", "Projekatant", "Rytownik", "Wydawca", "Sygnatury", "Rok od",
-		"Rok do", "Miejsce wydania", "Opis", "Inskrypcje", "Bibliografia", "Uwagi", "Kategorie", "Œcie¿ka ilustracji"};
+	public static final String[] columnNames = {"teka", "numer inwentarza", "temat", "seria",
+		"technika", "wymiary", "projekatant", "rytownik", "wydawca", "sygnatury", "rok od",
+		"rok do", "miejsce wydania", "opis", "inskrypcje", "bibliografia", "uwagi", "kategorie", "œcie¿ka ilustracji"};
 	
 	private InteractiveTableModel tableModel;
 	private JButton bSave = new JButton("Zapisz zmiany");
@@ -121,6 +121,7 @@ public class GrafikaPanel extends JPanel {
 		private static final int ILUSTRACJA_PATH_INDEX = 18;
 		private static final int HIDDEN_INDEX = 19;
 		private static final int COL_MIN_WIDTH = 200;
+		private static final int COL_MIN_WIDTH_IDX = 100;
 
 		private String[] columnNames;
 		private Vector<Grafika> dataVector;
@@ -194,10 +195,19 @@ public class GrafikaPanel extends JPanel {
 		}
 		
 		private void setRendererColumnSizes(JTable table) {
+			TableColumn col;
 			for (int i = 0; i < InteractiveTableModel.HIDDEN_INDEX; i++) {
-				TableColumn col = table.getColumnModel().getColumn(i);
+				col = table.getColumnModel().getColumn(i);
 				col.setMinWidth(COL_MIN_WIDTH);
 			}
+			col = table.getColumnModel().getColumn(TEKA_INDEX);
+			col.setMinWidth(COL_MIN_WIDTH_IDX);
+			col.setPreferredWidth(COL_MIN_WIDTH_IDX);
+	        //col.setMaxWidth(COL_MIN_WIDTH_IDX);
+			col = table.getColumnModel().getColumn(NUMER_INWENTARZA_INDEX);
+			col.setMinWidth(COL_MIN_WIDTH_IDX);
+			col.setPreferredWidth(COL_MIN_WIDTH_IDX);
+	        //col.setMaxWidth(COL_MIN_WIDTH_IDX/2);
 			TableColumn hidden = table.getColumnModel().getColumn(InteractiveTableModel.HIDDEN_INDEX);
 	        hidden.setMinWidth(0);
 	        hidden.setPreferredWidth(0);
