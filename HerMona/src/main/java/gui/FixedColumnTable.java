@@ -56,10 +56,16 @@ public class FixedColumnTable implements ChangeListener, PropertyChangeListener
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (evt.getPropertyName().equals("tableCellEditor")) {
-					if (fixed.isEditing()) {
-						FixedColumnTable.this.bSave.setEnabled(false);
-					} else {
-						FixedColumnTable.this.bSave.setEnabled(true);
+					synchronized (GrafikaPanel.editLock) {
+						if (fixed.isEditing()) {
+							GrafikaPanel.editLock++;
+							FixedColumnTable.this.bSave.setEnabled(false);
+						} else {
+							GrafikaPanel.editLock--;
+							if (GrafikaPanel.editLock == 0) {
+								FixedColumnTable.this.bSave.setEnabled(true);
+							}
+						}
 					}
 				}
 			}

@@ -53,6 +53,7 @@ public class GrafikaPanel extends JPanel {
 	
 	private static final long serialVersionUID = 4484009714046170060L;
 	private static final int STATIC_COLUMNS_NUMBER = 2;
+	public static Integer editLock = 0;
 	public static final String[] columnNames = {"teka", "numer inwentarza", "temat", "seria",
 		"technika", "wymiary", "projekatant", "rytownik", "wydawca", "sygnatury", "rok od",
 		"rok do", "miejsce wydania", "opis", "inskrypcje", "bibliografia", "uwagi", "kategorie", "œcie¿ka ilustracji"};
@@ -81,10 +82,16 @@ public class GrafikaPanel extends JPanel {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (evt.getPropertyName().equals("tableCellEditor")) {
-					if (table.isEditing()) {
-						bSave.setEnabled(false);
-					} else {
-						bSave.setEnabled(true);
+					synchronized (editLock) {
+						if (table.isEditing()) {
+							bSave.setEnabled(false);
+							editLock++;
+						} else {
+							editLock--;
+							if (editLock == 0) {
+								bSave.setEnabled(true);
+							}
+						}
 					}
 				}
 			}
@@ -319,10 +326,6 @@ public class GrafikaPanel extends JPanel {
 			default:
 				return new Object();
 			}
-		}
-		
-		public Grafika getObjectAt(int row) {
-			return dataVector.get(row);
 		}
 
 		@SuppressWarnings("unchecked")
