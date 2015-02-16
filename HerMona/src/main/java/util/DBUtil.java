@@ -199,7 +199,7 @@ public class DBUtil {
 	
 	public Grafika saveGrafika(Grafika g) {
 		if (g.getIlustracjaPath() == null || g.getIlustracjaPath().trim().equals("")) {
-			g.setIlustracjaPath(".\\" + g.getTeka().getNumer() + "\\" + g.getNumerInwentarza() + ".JPG");
+			g.setIlustracjaPath(System.getProperty("user.dir") + "\\" + g.getTeka().getNumer() + "\\" + g.getNumerInwentarza() + ".JPG");
 			makeMiniature(g);
 		}
 		//session.saveOrUpdate(g);

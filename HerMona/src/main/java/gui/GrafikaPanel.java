@@ -57,7 +57,6 @@ public class GrafikaPanel extends JPanel {
 	public static final String[] columnNames = {"teka", "numer inwentarza", "temat", "seria",
 		"technika", "wymiary", "projekatant", "rytownik", "wydawca", "sygnatury", "rok od",
 		"rok do", "miejsce wydania", "opis", "inskrypcje", "bibliografia", "uwagi", "kategorie", "œcie¿ka ilustracji"};
-	
 
 	private Set<Grafika> gSet = new HashSet<Grafika>();
 	private Set<Grafika> gSetIlu = new HashSet<Grafika>();
@@ -67,6 +66,7 @@ public class GrafikaPanel extends JPanel {
 	private JButton bSave = new JButton("Zapisz zmiany");
 	private JButton bFilter = new JButton("Filtruj");
 	private JButton bRefresh = new JButton("Odœwie¿");
+	private JButton bReport = new JButton("Generuj raport");
 	private JTable table;
 	private DBUtil dbUtil = new DBUtil();
 
@@ -106,6 +106,12 @@ public class GrafikaPanel extends JPanel {
         bSave.addActionListener(new ButtonSaveListener());
         bFilter.addActionListener(new ButtonFilterListener());
         bRefresh.addActionListener(new ButtonRefreshListener());
+        bReport.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ReportWindow(previousPredicate);
+			}
+		});
         
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -119,6 +125,7 @@ public class GrafikaPanel extends JPanel {
         bContainer.add(bSave);
         bContainer.add(bFilter);
         bContainer.add(bRefresh);
+        bContainer.add(bReport);
         add(bContainer);
 	}
 
@@ -479,9 +486,11 @@ public class GrafikaPanel extends JPanel {
 					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.WARNING_MESSAGE, null, ObjButtons,
 					ObjButtons[1]);
+			Grafika gTmp = null;
 			if (PromptResult == JOptionPane.YES_OPTION) {
 				try {
 					for (Grafika grafika : gSet) {
+						gTmp = grafika;
 						if (grafika.getTeka() == null
 								|| grafika.getNumerInwentarza() == null
 								|| grafika.getNumerInwentarza().trim()
@@ -503,6 +512,7 @@ public class GrafikaPanel extends JPanel {
 											+ "\nNie wszystkie zmiany zosta³y zapisane.",
 									"B£¥D", JOptionPane.WARNING_MESSAGE);
 					ex.printStackTrace();
+					System.out.println(gTmp);
 					dbUtil.resetSession();
 				}
 			}
