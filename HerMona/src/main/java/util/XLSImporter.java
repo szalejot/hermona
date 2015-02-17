@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import model.Grafika;
 import model.Kategoria;
 import model.Technika;
@@ -128,10 +130,18 @@ public class XLSImporter {
 			if (sVal.length() == 4) { //np "1501"
 				g.setRokOd(Integer.parseInt(sVal));
 				g.setRokDo(Integer.parseInt(sVal));
-			} else { // np "1501 - 1502"
+			} else if (sVal.lastIndexOf("-") > -1) { // np "1501 - 1502"
 				String[] sArr = sVal.split("-");
 				g.setRokOd(Integer.parseInt(sArr[0].trim()));
 				g.setRokDo(Integer.parseInt(sArr[1].trim()));
+			} else if (sVal.startsWith("ok")) { // np "ok. 1580"
+				String sTmp = sVal.substring(sVal.length() - 4, sVal.length() - 1);
+				g.setRokOd(Integer.parseInt(sTmp) - 9);
+				g.setRokDo(Integer.parseInt(sTmp) + 9);
+			} else { //WTF?
+				JOptionPane.showMessageDialog(null, "B³êdny format datowania: '" + sVal + "'\n"
+						+ "Dla grafiki o numerze inwentarza: " + g.getNumerInwentarza()
+						+ "\nz teki: " + g.getTeka(), "B£¥D", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 		return g;
