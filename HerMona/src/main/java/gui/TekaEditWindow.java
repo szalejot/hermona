@@ -37,7 +37,7 @@ public class TekaEditWindow extends JFrame {
 	private JPanel p = new JPanel();
 	private JButton b = new JButton("Zapisz zmiany");
 	private JTable table;
-	DBUtil dbUtil = new DBUtil();
+	private DBUtil dbUtil = new DBUtil();
 
 	public TekaEditWindow() {
 		super("Edytuj tekê");

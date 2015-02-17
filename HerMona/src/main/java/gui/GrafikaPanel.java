@@ -6,8 +6,11 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -27,8 +30,10 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -49,7 +54,7 @@ import model.Kategoria;
 import model.Technika;
 import model.Teka;
 
-public class GrafikaPanel extends JPanel {
+public class GrafikaPanel extends JPanel implements ActionListener {
 	
 	private static final long serialVersionUID = 4484009714046170060L;
 	private static final int STATIC_COLUMNS_NUMBER = 2;
@@ -69,6 +74,8 @@ public class GrafikaPanel extends JPanel {
 	private JButton bReport = new JButton("Generuj raport");
 	private JTable table;
 	private DBUtil dbUtil = new DBUtil();
+	private JPopupMenu popupMenu = new JPopupMenu();
+    private JMenuItem menuItemEdit = new JMenuItem("Edytuj grafikê");
 
 	public GrafikaPanel() {
 		
@@ -102,6 +109,11 @@ public class GrafikaPanel extends JPanel {
             tableModel.addEmptyRow();
         }
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        
+        menuItemEdit.addActionListener(this);
+        popupMenu.add(menuItemEdit);
+        table.setComponentPopupMenu(popupMenu);
+        table.addMouseListener(new TableMouseListener(table));
 
         bSave.addActionListener(new ButtonSaveListener());
         bFilter.addActionListener(new ButtonFilterListener());
@@ -127,6 +139,24 @@ public class GrafikaPanel extends JPanel {
         bContainer.add(bRefresh);
         bContainer.add(bReport);
         add(bContainer);
+	}
+	
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		JMenuItem menu = (JMenuItem) event.getSource();
+		if (menu == menuItemEdit) {
+			int selectedRow = table.getSelectedRow();
+			editGraphic(tableModel.getItemAt(selectedRow));
+		}
+	}
+	
+	private void editGraphic(Grafika g) {
+		if (g.getTeka() == null || g.getNumerInwentarza() == null) {
+			JOptionPane.showMessageDialog(null, "Aby edytowaæ grafikê musi mieæ ona nadan¹ tekê i numer inwentarza", "B£¥D", JOptionPane.WARNING_MESSAGE);
+		} else {
+			new GrafikaEditWindow(g);
+		}
 	}
 
 	private class InteractiveTableModel extends AbstractTableModel {
@@ -255,7 +285,11 @@ public class GrafikaPanel extends JPanel {
 			else
 				return true;
 		}
-
+		
+		public Grafika getItemAt(int pos) {
+			return dataVector.elementAt(pos);
+		}
+		
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public Class getColumnClass(int column) {
 			switch (column) {
@@ -724,6 +758,23 @@ public class GrafikaPanel extends JPanel {
 	    	JOptionPane.showMessageDialog(null, jArea, title, JOptionPane.PLAIN_MESSAGE);
 	        return jArea;
 	    }
+    }
+    
+    private class TableMouseListener extends MouseAdapter {
+        
+        private JTable table;
+         
+        public TableMouseListener(JTable table) {
+            this.table = table;
+        }
+         
+        @Override
+        public void mousePressed(MouseEvent event) {
+            // selects the row at which point the mouse is clicked
+            Point point = event.getPoint();
+            int currentRow = table.rowAtPoint(point);
+            table.setRowSelectionInterval(currentRow, currentRow);
+        }
     }
 
 }
