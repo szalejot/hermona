@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -14,6 +15,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import model.Grafika;
+import util.DBUtil;
 import util.XLSImporter;
 
 public class MainWindow extends JFrame {
@@ -155,9 +158,23 @@ public class MainWindow extends JFrame {
 		        }
 			}
 		});
+		JMenuItem refreshImg = new JMenuItem("Odœwie¿ miniatury");
+		importMenu.add(refreshImg);
+		refreshImg.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DBUtil dbUtil = new DBUtil();
+				List<Grafika> gList = dbUtil.getGrafikas("");
+				for (Grafika g : gList) {
+					dbUtil.makeMiniature(g);
+				}
+			}
+		});
 		
 		return menubar;
 	}
+	
+	
 	
 	public static void main(String[] args){
 		new MainWindow();
