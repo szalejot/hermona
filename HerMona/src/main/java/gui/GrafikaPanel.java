@@ -57,7 +57,7 @@ import model.Teka;
 public class GrafikaPanel extends JPanel implements ActionListener {
 	
 	private static final long serialVersionUID = 4484009714046170060L;
-	private static final int STATIC_COLUMNS_NUMBER = 2;
+	private static final int STATIC_COLUMNS_NUMBER = 3;
 	public static Integer editLock = 0;
 	public static final String[] columnNames = {"teka", "numer inwentarza", "temat", "seria",
 		"technika", "wymiary", "projekatant", "rytownik", "wydawca", "sygnatury", "rok od",

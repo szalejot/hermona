@@ -28,7 +28,7 @@ import org.hibernate.Session;
 
 public class DBUtil {
 	
-	public static final int IMG_SIZE = 300;
+	public static final int IMG_SIZE = 400;
 	
 	private static Session session = null;
 	

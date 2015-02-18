@@ -10,7 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -18,11 +21,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -30,6 +35,7 @@ import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
 
 import model.Grafika;
+import model.Kategoria;
 import model.Technika;
 import model.Teka;
 import util.DBUtil;
@@ -59,6 +65,9 @@ public class GrafikaEditWindow extends JFrame {
 	private JTextArea uwagiTA;
 	private JTextArea inskrypcjeTA;
 	private JTextArea bibliografiaTA;
+	private JList<Kategoria> kategorieJL;
+	private JButton kategorieB;
+	private Set<Kategoria> katS;
 
 	public GrafikaEditWindow(Grafika g) {
 		super("Edytuj grafikê");
@@ -105,6 +114,7 @@ public class GrafikaEditWindow extends JFrame {
 		leftContainer.add(getMiejsceWydaniaContainer());
 		leftContainer.add(getRokOdContainer());
 		leftContainer.add(getRokDoContainer());
+		leftContainer.add(getKategorieContainer());
 		
 		p.setLayout(new BorderLayout());
 		p.add(leftContainer, BorderLayout.LINE_START);
@@ -154,7 +164,7 @@ public class GrafikaEditWindow extends JFrame {
 	}
 	
 	private Container getSeriaContainer() {
-		seriaTF = new JTextField(grafika.getSeria(), 20);
+		seriaTF = new JTextField(grafika.getSeria(), 35);
 		Container container = new Container();
 		container.setLayout(new FlowLayout());
 		container.add(new JLabel("seria"));
@@ -247,6 +257,46 @@ public class GrafikaEditWindow extends JFrame {
 		container.setLayout(new FlowLayout());
 		container.add(new JLabel("rok do"));
 		container.add(rokDoTF);
+		return container;
+	}
+	
+	private Container getKategorieContainer() {
+		List<Kategoria> list = dbUtil.getCategories();
+		kategorieJL = new JList<Kategoria>(list.toArray(new Kategoria[list.size()]));
+		kategorieJL.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		List<Integer> indices = new ArrayList<Integer>();
+    	for (int i = 0; i < kategorieJL.getModel().getSize(); i++) {
+    		Kategoria kat = kategorieJL.getModel().getElementAt(i);
+    		if (grafika.getKategorie().contains(kat)) {
+    			indices.add(i);
+    		}
+    	}
+    	int[] intArr = new int[indices.size()];
+    	for (int i = 0; i < indices.size(); i++) {
+    		intArr[i] = indices.get(i);
+    	}
+    	kategorieJL.setSelectedIndices(intArr);
+    	katS = new HashSet<Kategoria>();
+    	
+    	kategorieB = new JButton(grafika.getKategorie().toString());
+    	kategorieB.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, kategorieJL);
+		    	
+				katS.clear();
+				int[] intArr = kategorieJL.getSelectedIndices();
+		    	for (int i = 0; i < intArr.length; i++) {
+		    		Kategoria kat = kategorieJL.getModel().getElementAt(intArr[i]);
+		    		katS.add(kat);
+		    	}
+		    	kategorieB.setText(katS.toString());
+			}
+		});
+		Container container = new Container();
+		container.setLayout(new FlowLayout());
+		container.add(new JLabel("kategorie"));
+		container.add(kategorieB);
 		return container;
 	}
 	
@@ -376,6 +426,7 @@ public class GrafikaEditWindow extends JFrame {
 			g.setUwagi(uwagiTA.getText());
 			g.setInskrypcje(inskrypcjeTA.getText());
 			g.setBibliografia(bibliografiaTA.getText());
+			g.setKategorie(katS);
 		}
 
 	}
