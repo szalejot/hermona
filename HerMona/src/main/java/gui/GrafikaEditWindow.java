@@ -76,7 +76,7 @@ public class GrafikaEditWindow extends JFrame {
 								null,
 								"Czy na pewno chcesz zamkn¹æ okno?\n"
 										+ "Wszelkie niezapisane zmiany zostan¹ utracone.",
-								"HerMona", JOptionPane.DEFAULT_OPTION,
+								"", JOptionPane.DEFAULT_OPTION,
 								JOptionPane.WARNING_MESSAGE, null, ObjButtons,
 								ObjButtons[1]);
 				if (PromptResult == JOptionPane.YES_OPTION) {
@@ -327,7 +327,7 @@ public class GrafikaEditWindow extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			String ObjButtons[] = { "Tak", "Anuluj" };
 			int PromptResult = JOptionPane.showOptionDialog(null,
-					"Czy na pewno chcesz zapisaæ zmiany?", "HerMona",
+					"Czy na pewno chcesz zapisaæ zmiany?", "",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
 					null, ObjButtons, ObjButtons[1]);
 			Grafika gTmp = GrafikaEditWindow.this.grafika;

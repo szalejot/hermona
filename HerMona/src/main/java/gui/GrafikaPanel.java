@@ -516,7 +516,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 			String ObjButtons[] = { "Tak", "Anuluj" };
 			int PromptResult = JOptionPane.showOptionDialog(null,
 					"Czy na pewno chcesz zapisaæ zmiany?",
-					"HerMona",
+					"",
 					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.WARNING_MESSAGE, null, ObjButtons,
 					ObjButtons[1]);
@@ -567,7 +567,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 			int PromptResult = JOptionPane.showOptionDialog(null,
 					"Czy na pewno zmieniæ warunki filtrowania?\n"
 					+ "Wszelkie niezapisane zmiany zostan¹ utracone.",
-					"HerMona",
+					"",
 					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.WARNING_MESSAGE, null, ObjButtons,
 					ObjButtons[1]);
@@ -604,7 +604,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 			int PromptResult = JOptionPane.showOptionDialog(null,
 					"Czy na pewno chcesz odœwie¿yæ widok?\n"
 							+ "Wszelkie niezapisane zmiany zostan¹ utracone.",
-					"HerMona", JOptionPane.DEFAULT_OPTION,
+					"", JOptionPane.DEFAULT_OPTION,
 					JOptionPane.WARNING_MESSAGE, null, ObjButtons,
 					ObjButtons[1]);
 			if (PromptResult == JOptionPane.YES_OPTION) {

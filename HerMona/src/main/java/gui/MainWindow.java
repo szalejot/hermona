@@ -21,7 +21,7 @@ public class MainWindow extends JFrame {
 	private static final long serialVersionUID = -2278436951424873713L;
 	
 	public MainWindow() {
-		super("HerMona");
+		super("Kolekcja grafiki Jana Ponêtowskiego");
 		
 		setSize(800, 600);
 		setResizable(true);
@@ -33,7 +33,7 @@ public class MainWindow extends JFrame {
 				int PromptResult = JOptionPane.showOptionDialog(null,
 						"Czy na pewno chcesz wy³¹czyæ aplikacjê?\n"
 						+ "Wszelkie niezapisane zmiany zostan¹ utracone.",
-						"HerMona",
+						"",
 						JOptionPane.DEFAULT_OPTION,
 						JOptionPane.WARNING_MESSAGE, null, ObjButtons,
 						ObjButtons[1]);
