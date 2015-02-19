@@ -251,7 +251,7 @@ public class DBUtil {
 			return;
 		}
 		int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
-		BufferedImage resizeImagePng = resizeImage(originalImage, type);
+		BufferedImage resizeImagePng = resizeImage(originalImage, type, IMG_SIZE);
 		try {
 			ImageIO.write(resizeImagePng, "png", new File(".\\Hermona_miniatury\\" + g.getTeka().getNumer() + "_" + g.getNumerInwentarza() + ".png"));
 		} catch (Exception e) {
@@ -266,15 +266,15 @@ public class DBUtil {
 		}
 	}
 	
-	private static BufferedImage resizeImage(BufferedImage originalImage, int type) {
+	public static BufferedImage resizeImage(BufferedImage originalImage, int type, int imgSize) {
 		int width = 0;
 		int height = 0;
 		if (originalImage.getHeight() > originalImage.getWidth()) {
-			height = IMG_SIZE;
-			width = (originalImage.getWidth() * IMG_SIZE) / originalImage.getHeight();
+			height = imgSize;
+			width = (originalImage.getWidth() * imgSize) / originalImage.getHeight();
 		} else {
-			width = IMG_SIZE;
-			height = (originalImage.getHeight() * IMG_SIZE) / originalImage.getWidth();
+			width = imgSize;
+			height = (originalImage.getHeight() * imgSize) / originalImage.getWidth();
 		}
 		
 		BufferedImage resizedImage = new BufferedImage(width, height, type);
