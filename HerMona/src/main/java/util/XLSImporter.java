@@ -83,7 +83,9 @@ public class XLSImporter {
                 g.setKategorie(getKategorie(row, headerMap.get(KATEGORIA_NAME)));
                 setDatowanie(g, row, headerMap.get(DATOWANIE_NAME));
                 
-                dbUtil.saveGrafika(g);
+                if (g.getTeka() != null && g.getTeka().getNumer() != null && g.getNumerInwentarza() != null) {
+                	dbUtil.saveGrafika(g);
+                }
             }
             file.close();
         }
@@ -125,7 +127,8 @@ public class XLSImporter {
 	
 	private Grafika setDatowanie(Grafika g, Row row, Integer pos) {
 		String sVal = getValue(row, pos);
-		if (sVal != null) {
+		try {
+		if (sVal != null && sVal.trim().length() > 0) {
 			sVal = sVal.trim();
 			if (sVal.length() == 4) { //np "1501"
 				g.setRokOd(Integer.parseInt(sVal));
@@ -143,6 +146,12 @@ public class XLSImporter {
 						+ "Dla grafiki o numerze inwentarza: " + g.getNumerInwentarza()
 						+ "\nz teki: " + g.getTeka(), "B£¥D", JOptionPane.WARNING_MESSAGE);
 			}
+		}
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "B³êdny format liczbowy datowania: '" + sVal + "'\n"
+					+ e.getMessage() + "\n"
+					+ "Dla grafiki o numerze inwentarza: " + g.getNumerInwentarza()
+					+ "\nz teki: " + g.getTeka(), "B£¥D", JOptionPane.WARNING_MESSAGE);
 		}
 		return g;
 	}

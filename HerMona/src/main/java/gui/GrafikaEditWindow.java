@@ -5,7 +5,10 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -42,6 +45,8 @@ import util.DBUtil;
 
 public class GrafikaEditWindow extends JFrame {
 	private static final long serialVersionUID = 1113700118119705921L;
+	private static final Insets WEST_INSETS = new Insets(1, 0, 1, 1);
+	private static final Insets EAST_INSETS = new Insets(1, 1, 1, 0);
 	private static final Dimension taMin = new Dimension(400, 40);
 	private JPanel p = new JPanel();
 	private JButton bSave = new JButton("Zapisz");
@@ -96,25 +101,37 @@ public class GrafikaEditWindow extends JFrame {
 		});
 		bSave.addActionListener(new ButtonSaveListener());
 
-		JPanel leftContainer = new JPanel();
-		BoxLayout bLayout = new BoxLayout(leftContainer, BoxLayout.PAGE_AXIS);
-		leftContainer.setLayout(bLayout);
+		JPanel leftContainer = new JPanel(new GridBagLayout());
 		leftContainer.setMaximumSize(new Dimension(500, 480));
 		leftContainer.setSize(new Dimension(500, 480));
-		leftContainer.add(getTekaContainer());
-		leftContainer.add(getNumerInewntarzaContainer());
-		leftContainer.add(getTematContainer());
-		leftContainer.add(getSygnaturyContainer());
-		leftContainer.add(getSeriaContainer());
-		leftContainer.add(getProjektantContainer());
-		leftContainer.add(getRytownikContainer());
-		leftContainer.add(getWydawcaContainer());
-		leftContainer.add(getTechnikaContainer());
-		leftContainer.add(getWymiaryContainer());
-		leftContainer.add(getMiejsceWydaniaContainer());
-		leftContainer.add(getRokOdContainer());
-		leftContainer.add(getRokDoContainer());
-		leftContainer.add(getKategorieContainer());
+		leftContainer.add(new JLabel("teka"), createGbc(0, 0));
+		leftContainer.add(getTekaContainer(), createGbc(1, 0));
+		leftContainer.add(new JLabel("numer inwentarza"), createGbc(0, 1));
+		leftContainer.add(getNumerInewntarzaContainer(), createGbc(1, 1));
+		leftContainer.add(new JLabel("temat"), createGbc(0, 2));
+		leftContainer.add(getTematContainer(), createGbc(1, 2));
+		leftContainer.add(new JLabel("sygmatury"), createGbc(0, 3));
+		leftContainer.add(getSygnaturyContainer(), createGbc(1, 3));
+		leftContainer.add(new JLabel("seria"), createGbc(0, 4));
+		leftContainer.add(getSeriaContainer(), createGbc(1, 4));
+		leftContainer.add(new JLabel("projektant"), createGbc(0, 5));
+		leftContainer.add(getProjektantContainer(), createGbc(1, 5));
+		leftContainer.add(new JLabel("rytownik"), createGbc(0, 6));
+		leftContainer.add(getRytownikContainer(), createGbc(1, 6));
+		leftContainer.add(new JLabel("wydawca"), createGbc(0, 7));
+		leftContainer.add(getWydawcaContainer(), createGbc(1, 7));
+		leftContainer.add(new JLabel("technika"), createGbc(0, 8));
+		leftContainer.add(getTechnikaContainer(), createGbc(1, 8));
+		leftContainer.add(new JLabel("wymiary"), createGbc(0, 9));
+		leftContainer.add(getWymiaryContainer(), createGbc(1, 9));
+		leftContainer.add(new JLabel("miejsce wydania"), createGbc(0, 10));
+		leftContainer.add(getMiejsceWydaniaContainer(), createGbc(1, 10));
+		leftContainer.add(new JLabel("rok od"), createGbc(0, 11));
+		leftContainer.add(getRokOdContainer(), createGbc(1, 11));
+		leftContainer.add(new JLabel("rok do"), createGbc(0, 12));
+		leftContainer.add(getRokDoContainer(), createGbc(1, 12));
+		leftContainer.add(new JLabel("kategorie"), createGbc(0, 13));
+		leftContainer.add(getKategorieContainer(), createGbc(1, 13));
 		
 		p.setLayout(new BorderLayout());
 		p.add(leftContainer, BorderLayout.LINE_START);
@@ -134,13 +151,29 @@ public class GrafikaEditWindow extends JFrame {
 		setVisible(true);
 	}
 	
+	private GridBagConstraints createGbc(int x, int y) {
+	      GridBagConstraints gbc = new GridBagConstraints();
+	      gbc.gridx = x;
+	      gbc.gridy = y;
+	      gbc.gridwidth = 1;
+	      gbc.gridheight = 1;
+
+	      gbc.anchor = (x == 0) ? GridBagConstraints.WEST : GridBagConstraints.EAST;
+	      gbc.fill = (x == 0) ? GridBagConstraints.BOTH
+	            : GridBagConstraints.HORIZONTAL;
+
+	      gbc.insets = (x == 0) ? WEST_INSETS : EAST_INSETS;
+	      gbc.weightx = (x == 0) ? 0.1 : 1.0;
+	      gbc.weighty = 1.0;
+	      return gbc;
+	   }
+	
 	private Container getTekaContainer() {
 		List<Teka> list = dbUtil.getTekas();
 		tekaCB = new JComboBox<Teka>(list.toArray(new Teka[list.size()]));
 		tekaCB.setSelectedItem(grafika.getTeka());
-		Container container = new Container();
-		container.setLayout(new FlowLayout());
-		container.add(new JLabel("teka"));
+		Container container = new JPanel();
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(tekaCB);
 		return container;
 	}
@@ -148,8 +181,7 @@ public class GrafikaEditWindow extends JFrame {
 	private Container getNumerInewntarzaContainer() {
 		numerInwentarzaTF = new JTextField(grafika.getNumerInwentarza(), 12);
 		Container container = new Container();
-		container.setLayout(new FlowLayout());
-		container.add(new JLabel("numer inwentarza"));
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(numerInwentarzaTF);
 		return container;
 	}
@@ -157,8 +189,7 @@ public class GrafikaEditWindow extends JFrame {
 	private Container getTematContainer() {
 		tematTF = new JTextField(grafika.getTemat(), 20);
 		Container container = new Container();
-		container.setLayout(new FlowLayout());
-		container.add(new JLabel("temat"));
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(tematTF);
 		return container;
 	}
@@ -166,17 +197,15 @@ public class GrafikaEditWindow extends JFrame {
 	private Container getSeriaContainer() {
 		seriaTF = new JTextField(grafika.getSeria(), 35);
 		Container container = new Container();
-		container.setLayout(new FlowLayout());
-		container.add(new JLabel("seria"));
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(seriaTF);
 		return container;
 	}
 	
 	private Container getSygnaturyContainer() {
-		sygnaturyTA = new JTextArea(grafika.getSygnatury(), 4, 30);
+		sygnaturyTA = new JTextArea(grafika.getSygnatury(), 4, 20);
 		Container container = new Container();
 		container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
-		container.add(new JLabel("sygnatury"));
 		container.add(new JScrollPane (sygnaturyTA, 
 				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS));
 		return container;
@@ -185,8 +214,7 @@ public class GrafikaEditWindow extends JFrame {
 	private Container getProjektantContainer() {
 		projektantTF = new JTextField(grafika.getProjektant(), 20);
 		Container container = new Container();
-		container.setLayout(new FlowLayout());
-		container.add(new JLabel("projektant"));
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(projektantTF);
 		return container;
 	}
@@ -194,8 +222,7 @@ public class GrafikaEditWindow extends JFrame {
 	private Container getRytownikContainer() {
 		rytownikTF = new JTextField(grafika.getRytownik(), 20);
 		Container container = new Container();
-		container.setLayout(new FlowLayout());
-		container.add(new JLabel("projektant"));
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(rytownikTF);
 		return container;
 	}
@@ -203,8 +230,7 @@ public class GrafikaEditWindow extends JFrame {
 	private Container getWydawcaContainer() {
 		wydawcaTF = new JTextField(grafika.getWydawca(), 20);
 		Container container = new Container();
-		container.setLayout(new FlowLayout());
-		container.add(new JLabel("wydawca"));
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(wydawcaTF);
 		return container;
 	}
@@ -214,8 +240,7 @@ public class GrafikaEditWindow extends JFrame {
 		technikaCB = new JComboBox<Technika>(list.toArray(new Technika[list.size()]));
 		technikaCB.setSelectedItem(grafika.getTechnika());
 		Container container = new Container();
-		container.setLayout(new FlowLayout());
-		container.add(new JLabel("technika"));
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(technikaCB);
 		return container;
 	}
@@ -223,8 +248,7 @@ public class GrafikaEditWindow extends JFrame {
 	private Container getWymiaryContainer() {
 		wymiaryTF = new JTextField(grafika.getWymiary(), 20);
 		Container container = new Container();
-		container.setLayout(new FlowLayout());
-		container.add(new JLabel("wymiary"));
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(wymiaryTF);
 		return container;
 	}
@@ -232,8 +256,7 @@ public class GrafikaEditWindow extends JFrame {
 	private Container getMiejsceWydaniaContainer() {
 		miejsceWydaniaTF = new JTextField(grafika.getMiejsceWydania(), 20);
 		Container container = new Container();
-		container.setLayout(new FlowLayout());
-		container.add(new JLabel("miejsce wydania"));
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(miejsceWydaniaTF);
 		return container;
 	}
@@ -243,8 +266,7 @@ public class GrafikaEditWindow extends JFrame {
 		PlainDocument doc = (PlainDocument) rokOdTF.getDocument();
 	    doc.setDocumentFilter(new MyIntFilter());
 		Container container = new Container();
-		container.setLayout(new FlowLayout());
-		container.add(new JLabel("rok od"));
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(rokOdTF);
 		return container;
 	}
@@ -254,8 +276,7 @@ public class GrafikaEditWindow extends JFrame {
 		PlainDocument doc = (PlainDocument) rokDoTF.getDocument();
 	    doc.setDocumentFilter(new MyIntFilter());
 		Container container = new Container();
-		container.setLayout(new FlowLayout());
-		container.add(new JLabel("rok do"));
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(rokDoTF);
 		return container;
 	}
@@ -294,8 +315,7 @@ public class GrafikaEditWindow extends JFrame {
 			}
 		});
 		Container container = new Container();
-		container.setLayout(new FlowLayout());
-		container.add(new JLabel("kategorie"));
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(kategorieB);
 		return container;
 	}
