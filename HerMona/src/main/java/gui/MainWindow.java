@@ -26,7 +26,7 @@ public class MainWindow extends JFrame {
 	public MainWindow() {
 		super("Kolekcja grafiki Jana Ponêtowskiego");
 		
-		setSize(800, 600);
+		setSize(1000, 700);
 		setResizable(true);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {

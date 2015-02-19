@@ -737,12 +737,14 @@ public class GrafikaPanel extends JPanel implements ActionListener {
     private class TextAreaCellEditor extends DefaultCellEditor {
 		private static final long serialVersionUID = -1463545753241064548L;
 		private static final int CLICK_COUNT_TO_START = 2;
-		private JTextArea jArea = new JTextArea(25, 60);
+		private JTextArea jArea = new JTextArea();
 		private String title;
 		
 		public TextAreaCellEditor(String title) {
 			super(new JTextField());
 			this.title = title;
+			jArea.setLineWrap(true);
+			jArea.setWrapStyleWord(true);
 			setClickCountToStart(CLICK_COUNT_TO_START);
 		}
 		
@@ -754,8 +756,13 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 		@Override
 	    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 	    	jArea.setText((String)value);
-	    	
-	    	JOptionPane.showMessageDialog(null, jArea, title, JOptionPane.PLAIN_MESSAGE);
+	    	JScrollPane scrollPane = new JScrollPane (jArea, 
+					   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	    	scrollPane.setMaximumSize(new Dimension(600, 400));
+	    	scrollPane.setMinimumSize(new Dimension(600, 400));
+	    	scrollPane.setPreferredSize(new Dimension(600, 400));
+	    	scrollPane.setSize(new Dimension(600, 400));
+	    	JOptionPane.showMessageDialog(null, scrollPane, title, JOptionPane.PLAIN_MESSAGE);
 	        return jArea;
 	    }
     }

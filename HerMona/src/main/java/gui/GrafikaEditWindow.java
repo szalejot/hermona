@@ -11,6 +11,8 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -54,6 +56,7 @@ public class GrafikaEditWindow extends JFrame {
 	private static final Insets WEST_INSETS = new Insets(1, 0, 1, 1);
 	private static final Insets EAST_INSETS = new Insets(1, 1, 1, 0);
 	private static final Dimension taMin = new Dimension(400, 40);
+	private static final Dimension taMax = new Dimension(400, 200);
 	private static final int IMG_BIG_SIZE = 800;
 	private JPanel p = new JPanel();
 	private JButton bSave = new JButton("Zapisz");
@@ -85,7 +88,7 @@ public class GrafikaEditWindow extends JFrame {
 		super("Edytuj grafikê");
 
 		grafika = g;
-		setSize(900, 700);
+		setSize(1000, 700);
 		setResizable(true);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
@@ -107,6 +110,10 @@ public class GrafikaEditWindow extends JFrame {
 			}
 		});
 		bSave.addActionListener(new ButtonSaveListener());
+		bSave.setMaximumSize(new Dimension(100, 35));
+		bSave.setMinimumSize(new Dimension(100, 35));
+		bSave.setPreferredSize(new Dimension(100, 35));
+		bSave.setSize(new Dimension(100, 35));
 
 		JPanel leftContainer = new JPanel(new GridBagLayout());
 		leftContainer.setMaximumSize(new Dimension(500, 480));
@@ -145,12 +152,19 @@ public class GrafikaEditWindow extends JFrame {
 		p.add(getImageContainer(), BorderLayout.LINE_END);
 
 		Container bottomContainer = new Container();
-		bottomContainer.setLayout(new BoxLayout(bottomContainer, BoxLayout.PAGE_AXIS));
-		bottomContainer.add(getOpisContainer());
-		bottomContainer.add(getUwagiContainer());
-		bottomContainer.add(getInskrypcjeContainer());
-		bottomContainer.add(getBibliografiaContainer());
-		bottomContainer.add(bSave);
+		bottomContainer.setLayout(new GridBagLayout());
+		bottomContainer.add(new JLabel("opis"), createGbc(0, 0));
+		bottomContainer.add(getOpisContainer(), createGbc(0, 1));
+		bottomContainer.add(new JLabel("uwagi"), createGbc(0, 2));
+		bottomContainer.add(getUwagiContainer(), createGbc(0, 3));
+		bottomContainer.add(new JLabel("inskrypcje"), createGbc(0, 4));
+		bottomContainer.add(getInskrypcjeContainer(), createGbc(0, 5));
+		bottomContainer.add(new JLabel("bibliografia"), createGbc(0, 6));
+		bottomContainer.add(getBibliografiaContainer(), createGbc(0, 7));
+		GridBagConstraints buttonGBC = new GridBagConstraints();
+		buttonGBC.gridx = 0;
+		buttonGBC.gridy = 8;
+		bottomContainer.add(bSave, buttonGBC);
 		p.add(bottomContainer, BorderLayout.PAGE_END);
 
 		JScrollPane thePane = new JScrollPane(p);
@@ -194,7 +208,7 @@ public class GrafikaEditWindow extends JFrame {
 	}
 	
 	private Container getTematContainer() {
-		tematTF = new JTextField(grafika.getTemat(), 20);
+		tematTF = new JTextField(grafika.getTemat(), 40);
 		Container container = new Container();
 		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(tematTF);
@@ -202,7 +216,7 @@ public class GrafikaEditWindow extends JFrame {
 	}
 	
 	private Container getSeriaContainer() {
-		seriaTF = new JTextField(grafika.getSeria(), 35);
+		seriaTF = new JTextField(grafika.getSeria(), 40);
 		Container container = new Container();
 		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(seriaTF);
@@ -211,10 +225,12 @@ public class GrafikaEditWindow extends JFrame {
 	
 	private Container getSygnaturyContainer() {
 		sygnaturyTA = new JTextArea(grafika.getSygnatury(), 4, 20);
+		sygnaturyTA.setLineWrap(true);
+		sygnaturyTA.setWrapStyleWord(true);
 		Container container = new Container();
 		container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
 		container.add(new JScrollPane (sygnaturyTA, 
-				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS));
+				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 		return container;
 	}
 	
@@ -364,62 +380,138 @@ public class GrafikaEditWindow extends JFrame {
 	
 	private Container getOpisContainer() {
 		opisTA = new JTextArea(grafika.getOpis());
-		final Container container = new Container();
-		container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
-		container.add(new JLabel("opis"));
+		opisTA.setLineWrap(true);
+		opisTA.setWrapStyleWord(true);
 		final JScrollPane scrollPane = new JScrollPane (opisTA, 
-				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setMinimumSize(taMin);
+		scrollPane.setMaximumSize(taMin);
 		scrollPane.setPreferredSize(taMin);
-		ComponentResizer cr = new ComponentResizer();
-		cr.setSnapSize(new Dimension(10, 10));
-		cr.registerComponent(scrollPane);
-		container.add(scrollPane);
-		return container;
+		scrollPane.setSize(taMin);
+		opisTA.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				scrollPane.setMinimumSize(taMin);
+				scrollPane.setMaximumSize(taMin);
+				scrollPane.setPreferredSize(taMin);
+				scrollPane.setSize(taMin);
+				GrafikaEditWindow.this.revalidate();
+				GrafikaEditWindow.this.repaint();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				scrollPane.setMinimumSize(taMax);
+				scrollPane.setMaximumSize(taMax);
+				scrollPane.setPreferredSize(taMax);
+				scrollPane.setSize(taMax);
+				GrafikaEditWindow.this.revalidate();
+				GrafikaEditWindow.this.repaint();
+			}
+		});
+		return scrollPane;
 	}
 	
 	private Container getInskrypcjeContainer() {
 		inskrypcjeTA = new JTextArea(grafika.getInskrypcje());
-		final Container container = new Container();
-		container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
-		container.add(new JLabel("inskrypcje"));
+		inskrypcjeTA.setLineWrap(true);
+		inskrypcjeTA.setWrapStyleWord(true);
 		final JScrollPane scrollPane = new JScrollPane (inskrypcjeTA, 
-				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setMinimumSize(taMin);
+		scrollPane.setMaximumSize(taMin);
 		scrollPane.setPreferredSize(taMin);
-		ComponentResizer cr = new ComponentResizer();
-		cr.setSnapSize(new Dimension(10, 10));
-		cr.registerComponent(scrollPane);
-		container.add(scrollPane);
-		return container;
+		scrollPane.setSize(taMin);
+		inskrypcjeTA.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				scrollPane.setMinimumSize(taMin);
+				scrollPane.setMaximumSize(taMin);
+				scrollPane.setPreferredSize(taMin);
+				scrollPane.setSize(taMin);
+				GrafikaEditWindow.this.revalidate();
+				GrafikaEditWindow.this.repaint();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				scrollPane.setMinimumSize(taMax);
+				scrollPane.setMaximumSize(taMax);
+				scrollPane.setPreferredSize(taMax);
+				scrollPane.setSize(taMax);
+				GrafikaEditWindow.this.revalidate();
+				GrafikaEditWindow.this.repaint();
+			}
+		});
+		return scrollPane;
 	}
 	
 	private Container getUwagiContainer() {
 		uwagiTA = new JTextArea(grafika.getUwagi());
-		final Container container = new Container();
-		container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
-		container.add(new JLabel("uwagi"));
+		uwagiTA.setLineWrap(true);
+		uwagiTA.setWrapStyleWord(true);
 		final JScrollPane scrollPane = new JScrollPane (uwagiTA, 
-				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setMinimumSize(taMin);
+		scrollPane.setMaximumSize(taMin);
 		scrollPane.setPreferredSize(taMin);
-		ComponentResizer cr = new ComponentResizer();
-		cr.setSnapSize(new Dimension(10, 10));
-		cr.registerComponent(scrollPane);
-		container.add(scrollPane);
-		return container;
+		scrollPane.setSize(taMin);
+		uwagiTA.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				scrollPane.setMinimumSize(taMin);
+				scrollPane.setMaximumSize(taMin);
+				scrollPane.setPreferredSize(taMin);
+				scrollPane.setSize(taMin);
+				GrafikaEditWindow.this.revalidate();
+				GrafikaEditWindow.this.repaint();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				scrollPane.setMinimumSize(taMax);
+				scrollPane.setMaximumSize(taMax);
+				scrollPane.setPreferredSize(taMax);
+				scrollPane.setSize(taMax);
+				GrafikaEditWindow.this.revalidate();
+				GrafikaEditWindow.this.repaint();
+			}
+		});
+		return scrollPane;
 	}
 	
 	private Container getBibliografiaContainer() {
 		bibliografiaTA = new JTextArea(grafika.getBibliografia());
-		final Container container = new Container();
-		container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
-		container.add(new JLabel("bibliografia"));
+		bibliografiaTA.setLineWrap(true);
+		bibliografiaTA.setWrapStyleWord(true);
 		final JScrollPane scrollPane = new JScrollPane (bibliografiaTA, 
-				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setMinimumSize(taMin);
+		scrollPane.setMaximumSize(taMin);
 		scrollPane.setPreferredSize(taMin);
-		ComponentResizer cr = new ComponentResizer();
-		cr.setSnapSize(new Dimension(10, 10));
-		cr.registerComponent(scrollPane);
-		container.add(scrollPane);
-		return container;
+		scrollPane.setSize(taMin);
+		bibliografiaTA.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				scrollPane.setMinimumSize(taMin);
+				scrollPane.setMaximumSize(taMin);
+				scrollPane.setPreferredSize(taMin);
+				scrollPane.setSize(taMin);
+				GrafikaEditWindow.this.revalidate();
+				GrafikaEditWindow.this.repaint();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				scrollPane.setMinimumSize(taMax);
+				scrollPane.setMaximumSize(taMax);
+				scrollPane.setPreferredSize(taMax);
+				scrollPane.setSize(taMax);
+				GrafikaEditWindow.this.revalidate();
+				GrafikaEditWindow.this.repaint();
+			}
+		});
+		return scrollPane;
 	}
 
 	private class ButtonSaveListener implements ActionListener {
