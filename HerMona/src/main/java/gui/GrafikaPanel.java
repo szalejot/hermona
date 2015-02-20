@@ -62,6 +62,8 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 	public static final String[] columnNames = {"teka", "numer inwentarza", "temat", "seria",
 		"technika", "wymiary", "projekatant", "rytownik", "wydawca", "sygnatury", "rok od",
 		"rok do", "miejsce wydania", "opis", "inskrypcje", "bibliografia", "uwagi", "kategorie", "œcie¿ka ilustracji"};
+	
+	private MainWindow mainWindow;
 
 	private Set<Grafika> gSet = new HashSet<Grafika>();
 	private Set<Grafika> gSetIlu = new HashSet<Grafika>();
@@ -77,7 +79,8 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 	private JPopupMenu popupMenu = new JPopupMenu();
     private JMenuItem menuItemEdit = new JMenuItem("Edytuj grafikê");
 
-	public GrafikaPanel() {
+	public GrafikaPanel(MainWindow mainWindow) {
+		this.mainWindow = mainWindow;
 		
 		Vector<Grafika> grafVec= new Vector<Grafika>(dbUtil.getGrafikas(previousPredicate));
 		tableModel = new InteractiveTableModel(columnNames, grafVec);
@@ -192,6 +195,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 			list.add("");
 			this.columnNames = list.toArray(new String[list.size()]);
 			this.dataVector = dataVector;
+			setWindowTitle();
 		}
 		
 		public void changeData(Vector<Grafika> dataVector) {
@@ -203,6 +207,11 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 			this.dataVector.addAll(dataVector);
 			addEmptyRow();
 			fireTableRowsInserted(0, this.dataVector.size() - 1);
+			setWindowTitle();
+		}
+		
+		private void setWindowTitle() {
+			GrafikaPanel.this.mainWindow.setTitle(MainWindow.mainTitle + " | Liczba wierszy: " + (dataVector.size() == 0 ? dataVector.size() : dataVector.size() - 1));
 		}
 		
 		public void setUpColumns(JTable table) {
@@ -440,6 +449,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 			fireTableCellUpdated(row, col);
 			if(!hasEmptyRow()) {
 				addEmptyRow();
+				setWindowTitle();
 			}
 		}
 

@@ -22,9 +22,10 @@ import util.XLSImporter;
 public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = -2278436951424873713L;
+	public static final String mainTitle = "Kolekcja grafiki Jana Ponêtowskiego";
 	
 	public MainWindow() {
-		super("Kolekcja grafiki Jana Ponêtowskiego");
+		super(mainTitle);
 		
 		setSize(1000, 700);
 		setResizable(true);
@@ -48,7 +49,7 @@ public class MainWindow extends JFrame {
 
 		setJMenuBar(initializeMenuBar());
 		
-		GrafikaPanel gPanel = new GrafikaPanel();
+		GrafikaPanel gPanel = new GrafikaPanel(this);
 		setContentPane(gPanel);
 		
 		setVisible(true);
