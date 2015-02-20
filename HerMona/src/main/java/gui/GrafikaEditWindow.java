@@ -4,10 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,15 +15,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -50,6 +44,7 @@ import model.Kategoria;
 import model.Technika;
 import model.Teka;
 import util.DBUtil;
+import util.ImageImplement;
 
 public class GrafikaEditWindow extends JFrame {
 	private static final long serialVersionUID = 1113700118119705921L;
@@ -57,7 +52,6 @@ public class GrafikaEditWindow extends JFrame {
 	private static final Insets EAST_INSETS = new Insets(1, 1, 1, 0);
 	private static final Dimension taMin = new Dimension(400, 40);
 	private static final Dimension taMax = new Dimension(400, 200);
-	private static final int IMG_BIG_SIZE = 800;
 	private JPanel p = new JPanel();
 	private JButton bSave = new JButton("Zapisz");
 	private DBUtil dbUtil = new DBUtil();
@@ -363,16 +357,7 @@ public class GrafikaEditWindow extends JFrame {
 			public void mouseEntered(MouseEvent arg0) { }
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				BufferedImage originalImage = null;
-				try {
-					originalImage = ImageIO.read(new File(grafika.getIlustracjaPath()));
-				} catch (IOException e) {
-					return;
-				}
-				int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
-				BufferedImage resizeImagePng = DBUtil.resizeImage(originalImage, type, IMG_BIG_SIZE);
-				ImageImplement imgPanel = new ImageImplement(resizeImagePng);
-				JOptionPane.showMessageDialog(null, imgPanel, "Grafika", JOptionPane.PLAIN_MESSAGE);
+				new GrafikaShowWindow(grafika.getIlustracjaPath());
 			}
 		});
 		return container;
@@ -632,25 +617,5 @@ public class GrafikaEditWindow extends JFrame {
 
 		   }
 		}
-
-	private class ImageImplement extends JPanel {
-		private static final long serialVersionUID = 4115161325532051904L;
-		private Image img;
-
-		public ImageImplement(Image img) {
-			this.img = img;
-			Dimension size = new Dimension(img.getWidth(null),
-					img.getHeight(null));
-			setPreferredSize(size);
-			setMinimumSize(size);
-			setMaximumSize(size);
-			setSize(size);
-			setLayout(null);
-		}
-
-		public void paintComponent(Graphics g) {
-			g.drawImage(img, 0, 0, null);
-		}
-	}
 
 }
