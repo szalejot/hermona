@@ -78,7 +78,7 @@ public class XLSImporter {
                 g.setSeria(getValue(row, headerMap.get(SERIA_NAME)));
                 g.setUwagi(getValue(row, headerMap.get(UWAGI_NAME)));
                 g.setTeka(getTeka(row, headerMap.get(TEKA_NAME)));
-                g.setTechnika(getTechnika(row, headerMap.get(TECHNIKA_NAME)));
+                g.setTechniki(getTechniki(row, headerMap.get(TECHNIKA_NAME)));
                 g.setTeka(getTeka(row, headerMap.get(TEKA_NAME)));
                 g.setKategorie(getKategorie(row, headerMap.get(KATEGORIA_NAME)));
                 setDatowanie(g, row, headerMap.get(DATOWANIE_NAME));
@@ -104,15 +104,6 @@ public class XLSImporter {
 		}
 	}
 	
-	private Technika getTechnika(Row row, Integer pos) {
-		String sNum = getValue(row, pos);
-		if (sNum == null) {
-			return null;
-		} else {
-			return dbUtil.getTechnique(sNum.trim());
-		}
-	}
-	
 	private Set<Kategoria> getKategorie(Row row, Integer pos) {
 		Set<Kategoria> set = new HashSet<Kategoria>();
 		String sVal = getValue(row, pos);
@@ -120,6 +111,18 @@ public class XLSImporter {
 			String[] sNames = sVal.split(";");
 			for (String s : sNames) {
 				set.add(dbUtil.getCategory(s.trim()));
+			}
+		}
+		return set;
+	}
+	
+	private Set<Technika> getTechniki(Row row, Integer pos) {
+		Set<Technika> set = new HashSet<Technika>();
+		String sVal = getValue(row, pos);
+		if (sVal != null) {
+			String[] sNames = sVal.split(",");
+			for (String s : sNames) {
+				set.add(dbUtil.getTechnique(s.trim()));
 			}
 		}
 		return set;

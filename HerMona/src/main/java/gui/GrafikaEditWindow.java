@@ -64,7 +64,9 @@ public class GrafikaEditWindow extends JFrame {
 	private JTextField projektantTF;
 	private JTextField rytownikTF;
 	private JTextField wydawcaTF;
-	private JComboBox<Technika> technikaCB;
+	private JList<Technika> technikiJL;
+	private JButton technikiB;
+	private Set<Technika> techS;
 	private JTextField wymiaryTF;
 	private JTextField miejsceWydaniaTF;
 	private JTextField rokOdTF;
@@ -254,11 +256,40 @@ public class GrafikaEditWindow extends JFrame {
 	
 	private Container getTechnikaContainer() {
 		List<Technika> list = dbUtil.getTechniques();
-		technikaCB = new JComboBox<Technika>(list.toArray(new Technika[list.size()]));
-		technikaCB.setSelectedItem(grafika.getTechnika());
+		technikiJL = new JList<Technika>(list.toArray(new Technika[list.size()]));
+		technikiJL.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		List<Integer> indices = new ArrayList<Integer>();
+    	for (int i = 0; i < technikiJL.getModel().getSize(); i++) {
+    		Technika tech = technikiJL.getModel().getElementAt(i);
+    		if (grafika.getTechniki().contains(tech)) {
+    			indices.add(i);
+    		}
+    	}
+    	int[] intArr = new int[indices.size()];
+    	for (int i = 0; i < indices.size(); i++) {
+    		intArr[i] = indices.get(i);
+    	}
+    	technikiJL.setSelectedIndices(intArr);
+    	techS = new HashSet<Technika>();
+    	
+    	technikiB = new JButton(grafika.getTechniki().toString());
+    	technikiB.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, technikiJL, "Wybierz techniki", JOptionPane.PLAIN_MESSAGE);
+		    	
+				techS.clear();
+				int[] intArr = technikiJL.getSelectedIndices();
+		    	for (int i = 0; i < intArr.length; i++) {
+		    		Technika tech = technikiJL.getModel().getElementAt(intArr[i]);
+		    		techS.add(tech);
+		    	}
+		    	technikiB.setText(techS.toString());
+			}
+		});
 		Container container = new Container();
 		container.setLayout(new FlowLayout(FlowLayout.LEFT));
-		container.add(technikaCB);
+		container.add(technikiB);
 		return container;
 	}
 	
@@ -320,7 +351,7 @@ public class GrafikaEditWindow extends JFrame {
     	kategorieB.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, kategorieJL);
+				JOptionPane.showMessageDialog(null, kategorieJL, "Wybierz kategorie", JOptionPane.PLAIN_MESSAGE);
 		    	
 				katS.clear();
 				int[] intArr = kategorieJL.getSelectedIndices();
@@ -540,7 +571,7 @@ public class GrafikaEditWindow extends JFrame {
 			g.setProjektant(projektantTF.getText());
 			g.setRytownik(rytownikTF.getText());
 			g.setWydawca(wydawcaTF.getText());
-			g.setTechnika((Technika) technikaCB.getSelectedItem());
+			g.setTechniki(techS);
 			g.setWymiary(wymiaryTF.getText());
 			g.setMiejsceWydania(miejsceWydaniaTF.getText());
 			if (!rokOdTF.getText().isEmpty()) {

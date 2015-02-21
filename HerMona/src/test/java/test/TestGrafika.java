@@ -25,8 +25,8 @@ public class TestGrafika extends TestCase {
 		
 		g1.setTeka(teka);
 		g2.setTeka(teka);
-		g1.setTechnika(tech);
-		g2.setTechnika(tech);
+		g1.getTechniki().add(tech);
+		g2.getTechniki().add(tech);
 		g1.setNumerInwentarza("1");
 		g2.setNumerInwentarza("2");
 		g1.getKategorie().add(kat1);

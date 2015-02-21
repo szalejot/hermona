@@ -218,7 +218,7 @@ public class DBUtil {
 		String hql = "select distinct grafika from Grafika grafika"
 				+ " join grafika.teka teka";
 		if (predicate != null && predicate.length() > 0) {
-			hql += " left join grafika.technika technika"
+			hql += " left join grafika.techniki technika"
 					+ " left join grafika.kategorie kategoria"
 					+ " where " + predicate;
 		}

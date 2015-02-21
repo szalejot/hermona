@@ -31,9 +31,8 @@ public class Grafika implements Cloneable {
 	private String numerInwentarza;
 	private String temat;
 	private String seria;
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "technika", nullable = true)
-	private Technika technika;
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	private Set<Technika> techniki = new HashSet<Technika>();
 	private String wymiary;
 	private String projektant;
 	private String rytownik;
@@ -53,7 +52,7 @@ public class Grafika implements Cloneable {
 	public Grafika () { }
 	
 	public Grafika(int grafikaId, Teka teka, String numerInwentarza,
-			String temat, String seria, Technika technika, String wymiary,
+			String temat, String seria, Set<Technika> techniki, String wymiary,
 			String projektant, String rytownik, String wydawca,
 			String sygnatury, Integer rokOd, Integer rokDo, String miejsceWydania,
 			String opis, String inskrypcje, String bibliografia, String uwagi,
@@ -63,7 +62,7 @@ public class Grafika implements Cloneable {
 		this.numerInwentarza = numerInwentarza;
 		this.temat = temat;
 		this.seria = seria;
-		this.technika = technika;
+		this.techniki = techniki;
 		this.wymiary = wymiary;
 		this.projektant = projektant;
 		this.rytownik = rytownik;
@@ -120,12 +119,12 @@ public class Grafika implements Cloneable {
 		this.seria = seria;
 	}
 
-	public Technika getTechnika() {
-		return technika;
+	public Set<Technika> getTechniki() {
+		return techniki;
 	}
 
-	public void setTechnika(Technika technika) {
-		this.technika = technika;
+	public void setTechniki(Set<Technika> techniki) {
+		this.techniki = techniki;
 	}
 
 	public String getWymiary() {
@@ -244,7 +243,7 @@ public class Grafika implements Cloneable {
 	public String toString() {
 		return "Grafika [teka=" + teka + ", numerInwentarza=" + numerInwentarza
 				+ ", tytul=" + temat + ", seria=" + seria + ", technika="
-				+ technika + ", wymiary=" + wymiary + ", projektant="
+				+ techniki + ", wymiary=" + wymiary + ", projektant="
 				+ projektant + ", rytownik=" + rytownik + ", wydawca="
 				+ wydawca + ", sygnatury=" + sygnatury + ", rokOd=" + rokOd
 				+ ", rokDo=" + rokDo + ", miejsceWydania=" + miejsceWydania
@@ -256,7 +255,7 @@ public class Grafika implements Cloneable {
 	
 	public Grafika getClone() {
 		return new Grafika(getGrafikaId(), getTeka(), getNumerInwentarza(),
-				getTemat(), getSeria(), getTechnika(), getWymiary(),
+				getTemat(), getSeria(), getTechniki(), getWymiary(),
 				getProjektant(), getRytownik(), getWydawca(), getSygnatury(),
 				getRokOd(), getRokDo(), getMiejsceWydania(), getOpis(),
 				getInskrypcje(), getBibliografia(), getUwagi(), getKategorie(),

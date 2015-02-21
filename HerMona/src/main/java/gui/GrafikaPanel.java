@@ -234,9 +234,10 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 		}
 		
 		private void setUpTechnikaColumn(JTable table) {
-			List<Technika> list = dbUtil.getTechniques();
-			JComboBox<Technika> comboBox = new JComboBox<Technika>(list.toArray(new Technika[list.size()]));
-			table.getColumnModel().getColumn(TECHNIKA_INDEX).setCellEditor(new DefaultCellEditor(comboBox));
+			//List<Technika> list = dbUtil.getTechniques();
+			//JComboBox<Technika> comboBox = new JComboBox<Technika>(list.toArray(new Technika[list.size()]));
+			//table.getColumnModel().getColumn(TECHNIKA_INDEX).setCellEditor(new DefaultCellEditor(comboBox));
+			table.getColumnModel().getColumn(TECHNIKA_INDEX).setCellEditor(new TechnikiCellEditor());
 		}
 		
 		private void setUpKategorieColumn(JTable table) {
@@ -342,9 +343,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 			case SERIA_INDEX:
 				return record.getSeria();
 			case TECHNIKA_INDEX:
-				if (record.getTechnika() != null) {
-					return record.getTechnika();
-				} else return null;
+				return record.getTechniki();
 			case WYMIARY_INDEX:
 				return record.getWymiary();
 			case PROJEKTANT_INDEX:
@@ -396,7 +395,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 				record.setSeria((String)value);
 				break;
 			case TECHNIKA_INDEX:
-				record.setTechnika((Technika)value);
+				record.setTechniki((Set<Technika>)value);
 				break;
 			case WYMIARY_INDEX:
 				record.setWymiary((String)value);
@@ -681,13 +680,72 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 	    	}
 	    	jList.setSelectedIndices(intArr);
 	    	
-	    	JOptionPane.showMessageDialog(null, jList);
+	    	JOptionPane.showMessageDialog(null, jList, "Wybierz kategorie", JOptionPane.PLAIN_MESSAGE);
 	    	
 	    	kategorie.clear();
 	    	intArr = jList.getSelectedIndices();
 	    	for (int i = 0; i < intArr.length; i++) {
 	    		Kategoria kat = jList.getModel().getElementAt(intArr[i]);
 	    		kategorie.add(kat);
+	    	}
+	    	
+	    	label.setText(value.toString());
+	        return label;
+	    }
+    }
+    
+    private class TechnikiCellEditor extends DefaultCellEditor {
+		private static final long serialVersionUID = -1463545753241064548L;
+		private static final int CLICK_COUNT_TO_START = 2;
+		private JLabel label;
+		private Set<Technika> techniki;
+		JList<Technika> jList;
+		
+		public TechnikiCellEditor() {
+			super(new JTextField());
+			setClickCountToStart(CLICK_COUNT_TO_START);
+			
+			// Using a JButton as the editor component
+	        label = new JLabel();
+	        label.setBackground(Color.white);
+	        label.setFont(label.getFont().deriveFont(Font.PLAIN));
+	        label.setBorder(null);
+	        
+	        List<Technika> list = dbUtil.getTechniques();
+			jList = new JList<Technika>(list.toArray(new Technika[list.size()]));
+			jList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		}
+		
+		@Override
+	    public Object getCellEditorValue() {
+	        return techniki;
+	    }
+
+	    @SuppressWarnings("unchecked")
+		@Override
+	    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+	    	jList.clearSelection();
+	    	techniki = (Set<Technika>) value;
+	    	List<Integer> indices = new ArrayList<Integer>();
+	    	for (int i = 0; i < jList.getModel().getSize(); i++) {
+	    		Technika kat = jList.getModel().getElementAt(i);
+	    		if (techniki.contains(kat)) {
+	    			indices.add(i);
+	    		}
+	    	}
+	    	int[] intArr = new int[indices.size()];
+	    	for (int i = 0; i < indices.size(); i++) {
+	    		intArr[i] = indices.get(i);
+	    	}
+	    	jList.setSelectedIndices(intArr);
+	    	
+	    	JOptionPane.showMessageDialog(null, jList, "Wybierz techniki", JOptionPane.PLAIN_MESSAGE);
+	    	
+	    	techniki.clear();
+	    	intArr = jList.getSelectedIndices();
+	    	for (int i = 0; i < intArr.length; i++) {
+	    		Technika kat = jList.getModel().getElementAt(intArr[i]);
+	    		techniki.add(kat);
 	    	}
 	    	
 	    	label.setText(value.toString());

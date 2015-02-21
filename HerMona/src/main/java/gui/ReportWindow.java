@@ -162,7 +162,7 @@ public class ReportWindow extends JFrame {
 			case "seria":
 				return getNullableString(g.getSeria(), isHtml);
 			case "technika":
-				return getNullableString(g.getTechnika(), isHtml);
+				return getNullableString(g.getTechniki().toString(), isHtml);
 			case "wymiary":
 				return getNullableString(g.getWymiary(), isHtml);
 			case "projekatant":
