@@ -259,10 +259,12 @@ public class GrafikaEditWindow extends JFrame {
 		technikiJL = new JList<Technika>(list.toArray(new Technika[list.size()]));
 		technikiJL.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		List<Integer> indices = new ArrayList<Integer>();
+		techS = new HashSet<Technika>();
     	for (int i = 0; i < technikiJL.getModel().getSize(); i++) {
     		Technika tech = technikiJL.getModel().getElementAt(i);
     		if (grafika.getTechniki().contains(tech)) {
     			indices.add(i);
+    			techS.add(tech);
     		}
     	}
     	int[] intArr = new int[indices.size()];
@@ -270,7 +272,6 @@ public class GrafikaEditWindow extends JFrame {
     		intArr[i] = indices.get(i);
     	}
     	technikiJL.setSelectedIndices(intArr);
-    	techS = new HashSet<Technika>();
     	
     	technikiB = new JButton(grafika.getTechniki().toString());
     	technikiB.addActionListener(new ActionListener() {
@@ -333,11 +334,13 @@ public class GrafikaEditWindow extends JFrame {
 		List<Kategoria> list = dbUtil.getCategories();
 		kategorieJL = new JList<Kategoria>(list.toArray(new Kategoria[list.size()]));
 		kategorieJL.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		katS = new HashSet<Kategoria>();
 		List<Integer> indices = new ArrayList<Integer>();
     	for (int i = 0; i < kategorieJL.getModel().getSize(); i++) {
     		Kategoria kat = kategorieJL.getModel().getElementAt(i);
     		if (grafika.getKategorie().contains(kat)) {
     			indices.add(i);
+    			katS.add(kat);
     		}
     	}
     	int[] intArr = new int[indices.size()];
@@ -345,7 +348,6 @@ public class GrafikaEditWindow extends JFrame {
     		intArr[i] = indices.get(i);
     	}
     	kategorieJL.setSelectedIndices(intArr);
-    	katS = new HashSet<Kategoria>();
     	
     	kategorieB = new JButton(grafika.getKategorie().toString());
     	kategorieB.addActionListener(new ActionListener() {
