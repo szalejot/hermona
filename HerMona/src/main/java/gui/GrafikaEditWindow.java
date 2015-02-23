@@ -45,6 +45,7 @@ import model.Technika;
 import model.Teka;
 import util.DBUtil;
 import util.ImageImplement;
+import util.InteractiveTableModel;
 
 public class GrafikaEditWindow extends JFrame {
 	private static final long serialVersionUID = 1113700118119705921L;
@@ -52,10 +53,14 @@ public class GrafikaEditWindow extends JFrame {
 	private static final Insets EAST_INSETS = new Insets(1, 1, 1, 0);
 	private static final Dimension taMin = new Dimension(400, 40);
 	private static final Dimension taMax = new Dimension(400, 200);
-	private JPanel p = new JPanel();
+	private JPanel p;
 	private JButton bSave = new JButton("Zapisz");
+	private JButton bPrev = new JButton("< Poprzednia");
+	private JButton bNext = new JButton("Nastêpna >");
 	private DBUtil dbUtil = new DBUtil();
 	private Grafika grafika;
+	private InteractiveTableModel tableModel;
+	private int selectedRow;
 	
 	private JComboBox<Teka> tekaCB;
 	private JTextField numerInwentarzaTF;
@@ -80,10 +85,12 @@ public class GrafikaEditWindow extends JFrame {
 	private JButton kategorieB;
 	private Set<Kategoria> katS;
 
-	public GrafikaEditWindow(Grafika g) {
+	public GrafikaEditWindow(Grafika g, InteractiveTableModel tableModel, int selectedRow) {
 		super("Edytuj grafikê");
 
-		grafika = g;
+		this.tableModel = tableModel;
+		this.grafika = g;
+		this.selectedRow = selectedRow;
 		setSize(1000, 700);
 		setResizable(true);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -110,7 +117,17 @@ public class GrafikaEditWindow extends JFrame {
 		bSave.setMinimumSize(new Dimension(100, 35));
 		bSave.setPreferredSize(new Dimension(100, 35));
 		bSave.setSize(new Dimension(100, 35));
+		bNext.addActionListener(new ButtonNextListener());
+		bPrev.addActionListener(new ButtonPrevListener());
+		
+		revalidateGui();
 
+		setVisible(true);
+	}
+	
+	private void revalidateGui() {
+		getContentPane().removeAll();
+		setLayout(new BorderLayout());
 		JPanel leftContainer = new JPanel(new GridBagLayout());
 		leftContainer.setMaximumSize(new Dimension(500, 480));
 		leftContainer.setSize(new Dimension(500, 480));
@@ -143,6 +160,7 @@ public class GrafikaEditWindow extends JFrame {
 		leftContainer.add(new JLabel("kategorie"), createGbc(0, 13));
 		leftContainer.add(getKategorieContainer(), createGbc(1, 13));
 		
+		p = new JPanel();
 		p.setLayout(new BorderLayout());
 		p.add(leftContainer, BorderLayout.LINE_START);
 		p.add(getImageContainer(), BorderLayout.LINE_END);
@@ -160,12 +178,29 @@ public class GrafikaEditWindow extends JFrame {
 		GridBagConstraints buttonGBC = new GridBagConstraints();
 		buttonGBC.gridx = 0;
 		buttonGBC.gridy = 8;
-		bottomContainer.add(bSave, buttonGBC);
+		//bottomContainer.add(bCont, buttonGBC);
 		p.add(bottomContainer, BorderLayout.PAGE_END);
-
-		JScrollPane thePane = new JScrollPane(p);
-		add(thePane);
-		setVisible(true);
+		
+		if (this.selectedRow == 0) {
+			bPrev.setEnabled(false);
+		} else {
+			bPrev.setEnabled(true);
+		}
+		if (this.selectedRow == this.tableModel.getRowCount() - 2) { // -2 bo jest jeden pusty wiersz na koncu
+			bNext.setEnabled(false);
+		} else {
+			bNext.setEnabled(true);
+		}
+		
+		add(new JScrollPane(p), BorderLayout.CENTER);
+		Container bCont = new Container();
+		bCont.setLayout(new FlowLayout());
+		bCont.add(bPrev);
+		bCont.add(bSave);
+		bCont.add(bNext);
+		add(bCont, BorderLayout.PAGE_END);
+		this.revalidate();
+		this.repaint();
 	}
 	
 	private GridBagConstraints createGbc(int x, int y) {
@@ -589,6 +624,24 @@ public class GrafikaEditWindow extends JFrame {
 			g.setKategorie(katS);
 		}
 
+	}
+	
+	private class ButtonNextListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			selectedRow++;
+			grafika = tableModel.getItemAt(selectedRow);
+			revalidateGui();
+		}
+	}
+	
+	private class ButtonPrevListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			selectedRow--;
+			grafika = tableModel.getItemAt(selectedRow);
+			revalidateGui();
+		}
 	}
 	
 	private class MyIntFilter extends DocumentFilter {

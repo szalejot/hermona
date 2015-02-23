@@ -126,15 +126,15 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 		JMenuItem menu = (JMenuItem) event.getSource();
 		if (menu == menuItemEdit) {
 			int selectedRow = table.getSelectedRow();
-			editGraphic(tableModel.getItemAt(selectedRow));
+			editGraphic(tableModel.getItemAt(selectedRow), selectedRow);
 		}
 	}
 	
-	private void editGraphic(Grafika g) {
+	private void editGraphic(Grafika g, int selectedRow) {
 		if (g.getTeka() == null || g.getNumerInwentarza() == null) {
 			JOptionPane.showMessageDialog(null, "Aby edytowaæ grafikê musi mieæ ona nadan¹ tekê i numer inwentarza", "B£¥D", JOptionPane.WARNING_MESSAGE);
 		} else {
-			new GrafikaEditWindow(g);
+			new GrafikaEditWindow(g, tableModel, selectedRow);
 		}
 	}
 
