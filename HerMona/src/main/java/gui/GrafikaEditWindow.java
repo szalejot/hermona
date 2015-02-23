@@ -140,7 +140,7 @@ public class GrafikaEditWindow extends JFrame {
 		leftContainer.add(getNumerInewntarzaContainer(), createGbc(1, 1));
 		leftContainer.add(new JLabel("temat"), createGbc(0, 2));
 		leftContainer.add(getTematContainer(), createGbc(1, 2));
-		leftContainer.add(new JLabel("sygmatury"), createGbc(0, 3));
+		leftContainer.add(new JLabel("sygnatury"), createGbc(0, 3));
 		leftContainer.add(getSygnaturyContainer(), createGbc(1, 3));
 		leftContainer.add(new JLabel("seria"), createGbc(0, 4));
 		leftContainer.add(getSeriaContainer(), createGbc(1, 4));
