@@ -28,26 +28,26 @@ public class Grafika implements Cloneable {
 	@JoinColumn(name = "teka", nullable = false)
 	private Teka teka;
 	@Column(nullable = false)
-	private String numerInwentarza;
-	private String temat;
-	private String seria;
+	private String numerInwentarza = "";
+	private String temat = "";
+	private String seria = "";
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	private Set<Technika> techniki = new HashSet<Technika>();
-	private String wymiary;
-	private String projektant;
-	private String rytownik;
-	private String wydawca;
-	private String sygnatury;
+	private String wymiary = "";
+	private String projektant = "";
+	private String rytownik = "";
+	private String wydawca = "";
+	private String sygnatury = "";
 	private Integer rokOd;
 	private Integer rokDo;
-	private String miejsceWydania;
-	private String opis;
-	private String inskrypcje;
-	private String bibliografia;
-	private String uwagi;
+	private String miejsceWydania = "";
+	private String opis = "";
+	private String inskrypcje = "";
+	private String bibliografia = "";
+	private String uwagi = "";
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	private Set<Kategoria> kategorie = new HashSet<Kategoria>(0);
-	private String ilustracjaPath;
+	private String ilustracjaPath = "";
 
 	public Grafika () { }
 	

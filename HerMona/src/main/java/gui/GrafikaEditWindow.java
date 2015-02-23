@@ -98,14 +98,17 @@ public class GrafikaEditWindow extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent we) {
 				String ObjButtons[] = { "Tak", "Anuluj" };
-				int PromptResult = JOptionPane
-						.showOptionDialog(
-								null,
-								"Czy na pewno chcesz zamkn¹æ okno?\n"
-										+ "Wszelkie niezapisane zmiany zostan¹ utracone.",
-								"", JOptionPane.DEFAULT_OPTION,
-								JOptionPane.WARNING_MESSAGE, null, ObjButtons,
-								ObjButtons[1]);
+				int PromptResult = JOptionPane.YES_OPTION;
+				if (hadUserMadeChanges()) {
+					PromptResult = JOptionPane
+							.showOptionDialog(
+									null,
+									"Czy na pewno chcesz zamkn¹æ okno?\n"
+											+ "Wszelkie niezapisane zmiany zostan¹ utracone.",
+									"", JOptionPane.DEFAULT_OPTION,
+									JOptionPane.WARNING_MESSAGE, null, ObjButtons,
+									ObjButtons[1]);
+				}
 				if (PromptResult == JOptionPane.YES_OPTION) {
 					GrafikaEditWindow.this.setVisible(false);
 					GrafikaEditWindow.this.dispose();
@@ -566,6 +569,47 @@ public class GrafikaEditWindow extends JFrame {
 		});
 		return scrollPane;
 	}
+	
+	private boolean hadUserMadeChanges() {
+		if( !tekaCB.getSelectedItem().equals(grafika.getTeka()) ||
+				!numerInwentarzaTF.getText().equals(grafika.getNumerInwentarza()) ||
+				!tematTF.getText().equals(grafika.getTemat()) ||
+				!sygnaturyTA.getText().equals(grafika.getSygnatury()) ||
+				!seriaTF.getText().equals(grafika.getSeria()) ||
+				!projektantTF.getText().equals(grafika.getProjektant()) ||
+				!rytownikTF.getText().equals(grafika.getRytownik()) ||
+				!wydawcaTF.getText().equals(grafika.getWydawca()) ||
+				!wymiaryTF.getText().equals(grafika.getWymiary()) ||
+				!miejsceWydaniaTF.getText().equals(grafika.getMiejsceWydania()) ||
+				!opisTA.getText().equals(grafika.getOpis()) ||
+				!uwagiTA.getText().equals(grafika.getUwagi()) ||
+				!inskrypcjeTA.getText().equals(grafika.getInskrypcje()) ||
+				!bibliografiaTA.getText().equals(grafika.getBibliografia()) ||
+				!katS.equals(grafika.getKategorie()) ||
+				!techS.equals(grafika.getTechniki())) {
+			return true;
+		}
+		if (!rokOdTF.getText().isEmpty()) {
+			if (!(new Integer(Integer.parseInt(rokOdTF.getText()))).equals(grafika.getRokOd())) {
+				return true;
+			}
+		} else {
+			if (grafika.getRokOd() != null) {
+				return true;
+			}
+		}
+		if (!rokDoTF.getText().isEmpty()) {
+			if (!(new Integer(Integer.parseInt(rokDoTF.getText()))).equals(grafika.getRokDo())) {
+				return true;
+			}
+		} else {
+			if (grafika.getRokDo() != null) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 	private class ButtonSaveListener implements ActionListener {
 		@Override
@@ -629,18 +673,46 @@ public class GrafikaEditWindow extends JFrame {
 	private class ButtonNextListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			selectedRow++;
-			grafika = tableModel.getItemAt(selectedRow);
-			revalidateGui();
+			String ObjButtons[] = { "Tak", "Anuluj" };
+			int PromptResult = JOptionPane.YES_OPTION;
+			if (hadUserMadeChanges()) {
+				PromptResult = JOptionPane
+						.showOptionDialog(
+								null,
+								"Czy na pewno chcesz przejœæ do nastêpnej grafiki?\n"
+										+ "Wszelkie niezapisane zmiany zostan¹ utracone.",
+								"", JOptionPane.DEFAULT_OPTION,
+								JOptionPane.WARNING_MESSAGE, null, ObjButtons,
+								ObjButtons[1]);
+			}
+			if (PromptResult == JOptionPane.YES_OPTION) {
+				selectedRow++;
+				grafika = tableModel.getItemAt(selectedRow);
+				revalidateGui();
+			}
 		}
 	}
 	
 	private class ButtonPrevListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			selectedRow--;
-			grafika = tableModel.getItemAt(selectedRow);
-			revalidateGui();
+			String ObjButtons[] = { "Tak", "Anuluj" };
+			int PromptResult = JOptionPane.YES_OPTION;
+			if (hadUserMadeChanges()) {
+				PromptResult = JOptionPane
+						.showOptionDialog(
+								null,
+								"Czy na pewno chcesz przejœæ do poprzedniej grafiki?\n"
+										+ "Wszelkie niezapisane zmiany zostan¹ utracone.",
+								"", JOptionPane.DEFAULT_OPTION,
+								JOptionPane.WARNING_MESSAGE, null, ObjButtons,
+								ObjButtons[1]);
+			}
+			if (PromptResult == JOptionPane.YES_OPTION) {
+				selectedRow--;
+				grafika = tableModel.getItemAt(selectedRow);
+				revalidateGui();
+			}
 		}
 	}
 	
