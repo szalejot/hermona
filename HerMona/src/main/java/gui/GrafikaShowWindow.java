@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 import util.DBUtil;
+import util.HandScrollListener;
 import util.ImageImplement;
 
 public class GrafikaShowWindow extends JFrame {
@@ -69,6 +70,9 @@ public class GrafikaShowWindow extends JFrame {
 		imgPanel = new ImageImplement(originalImage);
 		scrollPane = new JScrollPane (imgPanel, 
 				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		HandScrollListener scrollListener = new HandScrollListener(imgPanel);
+		scrollPane.getViewport().addMouseMotionListener(scrollListener);
+		scrollPane.getViewport().addMouseListener(scrollListener);
 		add(scrollPane);
 		setVisible(true);
 	}
@@ -81,6 +85,9 @@ public class GrafikaShowWindow extends JFrame {
 		this.remove(scrollPane);
 		scrollPane = new JScrollPane (imgPanel, 
 				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		HandScrollListener scrollListener = new HandScrollListener(imgPanel);
+		scrollPane.getViewport().addMouseMotionListener(scrollListener);
+		scrollPane.getViewport().addMouseListener(scrollListener);
 		this.add(scrollPane);
 		this.revalidate();
 		this.repaint();
