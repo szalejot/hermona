@@ -120,6 +120,39 @@ public class GrafikaPanel extends JPanel implements ActionListener {
         add(bContainer);
 	}
 	
+	public void findBytext() {
+		String ObjButtons[] = { "Tak", "Anuluj" };
+		int PromptResult = JOptionPane.showOptionDialog(null,
+				"Czy na pewno zmienić warunki filtrowania?\n"
+				+ "Wszelkie niezapisane zmiany zostaną utracone.",
+				"",
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.WARNING_MESSAGE, null, ObjButtons,
+				ObjButtons[1]);
+		if (PromptResult == JOptionPane.YES_OPTION) {
+			String s = (String)JOptionPane.showInputDialog(
+                    table,
+                    "Wpisz tekst do wyszukania:",
+                    "",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    null,
+                    "");
+			if ((s != null)) {
+				Vector<Grafika> grafVec = null;
+				try {
+					grafVec = new Vector<Grafika>(dbUtil.getGrafikas(dbUtil.createPredicateByText(s)));
+				} catch (HibernateException e) {
+					JOptionPane.showMessageDialog(null, "Wystąpił błąd składni zapytania:\n" + e.getMessage(), "BŁĄD", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				previousPredicate = dbUtil.createPredicateByText(s);
+				tableModel.changeData(grafVec);
+            }
+		}
+		
+	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent event) {

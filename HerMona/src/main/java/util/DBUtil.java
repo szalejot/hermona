@@ -231,6 +231,24 @@ public class DBUtil {
 		return retList;
 	}
 	
+	public String createPredicateByText(String text) {
+		return "    lower(grafika.numerInwentarza) like '%" + text + "%'"
+				+ " or lower(grafika.temat) like '%" + text + "%'"
+				+ " or lower(grafika.seria) like '%" + text + "%'"
+				+ " or lower(grafika.wymiary) like '%" + text + "%'"
+				+ " or lower(grafika.projektant) like '%" + text + "%'"
+				+ " or lower(grafika.rytownik) like '%" + text + "%'"
+				+ " or lower(grafika.sygnatury) like '%" + text + "%'"
+				+ " or lower(grafika.miejsceWydania) like '%" + text + "%'"
+				+ " or lower(grafika.opis) like '%" + text + "%'"
+				+ " or lower(grafika.inskrypcje) like '%" + text + "%'"
+				+ " or lower(grafika.bibliografia) like '%" + text + "%'"
+				+ " or lower(grafika.uwagi) like '%" + text + "%'"
+				+ " or lower(kategoria.nazwa) like '%" + text + "%'"
+				+ " or lower(technika.nazwa) like '%" + text + "%'"
+				+ " or lower(teka.tytul) like '%" + text + "%'";
+	}
+	
 	public void shutdown() {
 		session.flush();
 		HibernateUtil.shutdown();

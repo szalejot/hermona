@@ -24,6 +24,8 @@ public class MainWindow extends JFrame {
 	private static final long serialVersionUID = -2278436951424873713L;
 	public static final String mainTitle = "Kolekcja grafiki Jana Ponętowskiego";
 	
+	private GrafikaPanel grafikaPanel;
+	
 	public MainWindow() {
 		super(mainTitle);
 		
@@ -49,8 +51,8 @@ public class MainWindow extends JFrame {
 
 		setJMenuBar(initializeMenuBar());
 		
-		GrafikaPanel gPanel = new GrafikaPanel(this);
-		setContentPane(gPanel);
+		grafikaPanel = new GrafikaPanel(this);
+		setContentPane(grafikaPanel);
 		
 		setVisible(true);
 	}
@@ -172,9 +174,19 @@ public class MainWindow extends JFrame {
 			}
 		});
 		
+		JMenu extrasMenu = new JMenu("Dodatki");
+		menubar.add(extrasMenu);
+		JMenuItem findByText = new JMenuItem("Wyszukaj tekst");
+		extrasMenu.add(findByText);
+		findByText.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				grafikaPanel.findBytext();
+			}
+		});
+		
 		return menubar;
 	}
-	
 	
 	
 	public static void main(String[] args){
