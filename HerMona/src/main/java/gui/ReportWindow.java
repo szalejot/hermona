@@ -52,7 +52,7 @@ public class ReportWindow extends JFrame {
 		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
 		p.add(new JLabel("Wybierz pola dla raportu:"));
 		p.add(jList);
-		p.add(new JLabel("Podaj nazwÍ pliku raportu:"));
+		p.add(new JLabel("Podaj nazwƒô pliku raportu:"));
 		p.add(tytulTextField);
 		p.add(typeComboBox);
 		p.add(b);
@@ -65,7 +65,7 @@ public class ReportWindow extends JFrame {
 		List<String> valList = jList.getSelectedValuesList();
 		boolean isHtml = typeComboBox.getSelectedItem().toString().toLowerCase().equals("html");
 		if (valList.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Nie wybrano kolumn do raportu", "B£•D", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Nie wybrano kolumn do raportu", "B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 		try {
@@ -111,11 +111,11 @@ public class ReportWindow extends JFrame {
 			}
 			char_output.close();
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "B≥πd podczas generowania raportu:\n" + e.getMessage(), "B£•D", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "B≈ÇƒÖd podczas generowania raportu:\n" + e.getMessage(), "B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();
 			return;
 		}
-		JOptionPane.showMessageDialog(null, "ZakoÒczono generowanie raportu", "", JOptionPane.PLAIN_MESSAGE);
+		JOptionPane.showMessageDialog(null, "Zako≈Ñczono generowanie raportu", "", JOptionPane.PLAIN_MESSAGE);
 	}
 	
 	private String getHTMLBeginning(){

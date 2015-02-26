@@ -16,19 +16,19 @@ public class TekaAddWindow extends JFrame {
 	private static final long serialVersionUID = -4241568839154938869L;
 
 	private JPanel p = new JPanel();
-	private JButton b = new JButton("Dodaj tekÍ");
+	private JButton b = new JButton("Dodaj tekƒô");
 	private JTextField textNumer = new JTextField(6);
 	private JTextField textTytul = new JTextField(20);
 	private JTextField textRok = new JTextField(6);
 	
 	public TekaAddWindow() {
-		super("Dodaj tekÍ");
+		super("Dodaj tekƒô");
 		
 		setSize(300, 165);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		JLabel l1 = new JLabel("Podaj numer nowej teki:");
-		JLabel l2 = new JLabel("Podaj tytu≥ nowej teki:");
+		JLabel l2 = new JLabel("Podaj tytu≈Ç nowej teki:");
 		JLabel l3 = new JLabel("Podaj rok nowej teki:");
 		b.addActionListener(new ButtonListener());
 		p.add(l1);
@@ -47,7 +47,7 @@ public class TekaAddWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (textNumer.getText().isEmpty()) {
-				JOptionPane.showMessageDialog(null, "Nie podano numeru teki!", "B£•D", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Nie podano numeru teki!", "B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 			Integer rok;
@@ -56,7 +56,7 @@ public class TekaAddWindow extends JFrame {
 
 				numer = Integer.parseInt(textNumer.getText().trim());
 			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(null, "Podana wartoúÊ dla numeru nie jest liczbπ ca≥kowitπ!", "B£•D", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Podana warto≈õƒá dla numeru nie jest liczbƒÖ ca≈ÇkowitƒÖ!", "B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 			try {
@@ -66,18 +66,18 @@ public class TekaAddWindow extends JFrame {
 					rok = Integer.parseInt(textRok.getText().trim());
 				}
 			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(null, "Podana wartoúÊ dla roku nie jest liczbπ ca≥kowitπ!", "B£•D", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Podana warto≈õƒá dla roku nie jest liczbƒÖ ca≈ÇkowitƒÖ!", "B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 			
 			DBUtil dbUtil = new DBUtil();
 			if (dbUtil.existsTekaInDb(numer)) {
-				JOptionPane.showMessageDialog(null, "Teka o numerze " + numer + " jest juø w bazie!", "B£•D", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Teka o numerze " + numer + " jest ju≈º w bazie!", "B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 			
 			dbUtil.saveTeka(numer, textTytul.getText(), rok);
-			JOptionPane.showMessageDialog(null, "Teka o numerze " + textNumer.getText() + " zosta≥a dodana", "", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Teka o numerze " + textNumer.getText() + " zosta≈Ça dodana", "", JOptionPane.PLAIN_MESSAGE);
 		}
 		
 	}

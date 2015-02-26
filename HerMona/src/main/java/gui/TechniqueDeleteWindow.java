@@ -19,18 +19,18 @@ public class TechniqueDeleteWindow extends JFrame {
 	private static final long serialVersionUID = -4241568839154938869L;
 
 	private JPanel p = new JPanel();
-	private JButton b = new JButton("Usuñ technikê");
+	private JButton b = new JButton("UsuÅ„ technikÄ™");
 	private JComboBox<Technika> comboBox;
 	
 	@SuppressWarnings("unchecked")
 	public TechniqueDeleteWindow() {
-		super("Usuñ technikê");
+		super("UsuÅ„ technikÄ™");
 		DBUtil dbUtil = new DBUtil();
 		
 		setSize(300, 130);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		JLabel l = new JLabel("Wybierz technikê do usuniêcia:");
+		JLabel l = new JLabel("Wybierz technikÄ™ do usuniÄ™cia:");
 		List<Technika> tList = dbUtil.getTechniques();
 		comboBox = new JComboBox<Technika>(tList.toArray(new Technika[tList.size()]));
 		if (comboBox.getItemCount() == 0) {
@@ -59,7 +59,7 @@ public class TechniqueDeleteWindow extends JFrame {
 			if (comboBox.getItemCount() == 0) {
 				b.setEnabled(false);
 			}
-			JOptionPane.showMessageDialog(null, "Technika '" + tech.getNazwa() + "' zosta³a usuniêta", "", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Technika '" + tech.getNazwa() + "' zostaÅ‚a usuniÄ™ta", "", JOptionPane.PLAIN_MESSAGE);
 		}
 		
 	}

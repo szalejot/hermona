@@ -56,7 +56,7 @@ public class GrafikaEditWindow extends JFrame {
 	private JPanel p;
 	private JButton bSave = new JButton("Zapisz");
 	private JButton bPrev = new JButton("< Poprzednia");
-	private JButton bNext = new JButton("NastÍpna >");
+	private JButton bNext = new JButton("Nastƒôpna >");
 	private DBUtil dbUtil = new DBUtil();
 	private Grafika grafika;
 	private InteractiveTableModel tableModel;
@@ -86,7 +86,7 @@ public class GrafikaEditWindow extends JFrame {
 	private Set<Kategoria> katS;
 
 	public GrafikaEditWindow(Grafika g, InteractiveTableModel tableModel, int selectedRow) {
-		super("Edytuj grafikÍ");
+		super("Edytuj grafikƒô");
 
 		this.tableModel = tableModel;
 		this.grafika = g;
@@ -103,8 +103,8 @@ public class GrafikaEditWindow extends JFrame {
 					PromptResult = JOptionPane
 							.showOptionDialog(
 									null,
-									"Czy na pewno chcesz zamknπÊ okno?\n"
-											+ "Wszelkie niezapisane zmiany zostanπ utracone.",
+									"Czy na pewno chcesz zamknƒÖƒá okno?\n"
+											+ "Wszelkie niezapisane zmiany zostanƒÖ utracone.",
 									"", JOptionPane.DEFAULT_OPTION,
 									JOptionPane.WARNING_MESSAGE, null, ObjButtons,
 									ObjButtons[1]);
@@ -616,7 +616,7 @@ public class GrafikaEditWindow extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			String ObjButtons[] = { "Tak", "Anuluj" };
 			int PromptResult = JOptionPane.showOptionDialog(null,
-					"Czy na pewno chcesz zapisaÊ zmiany?", "",
+					"Czy na pewno chcesz zapisaƒá zmiany?", "",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
 					null, ObjButtons, ObjButtons[1]);
 			Grafika gTmp = GrafikaEditWindow.this.grafika;
@@ -625,17 +625,17 @@ public class GrafikaEditWindow extends JFrame {
 				try {
 					dbUtil.saveGrafika(grafika);
 					JOptionPane.showMessageDialog(null,
-							"Zmiany zosta≥y zapisane", "",
+							"Zmiany zosta≈Çy zapisane", "",
 							JOptionPane.PLAIN_MESSAGE);
 				} catch (Exception ex) {
 					JOptionPane
 							.showMessageDialog(
 									null,
-									"Wystπpi≥ b≥ad podczas zapisu:\n"
+									"WystƒÖpi≈Ç bƒÖad podczas zapisu:\n"
 											+ ex.getMessage()
-											+ "\n(Prawdopodobnie duplikacja wartoúci (teka, numerInwentarza))"
-											+ "\nNie wszystkie zmiany zosta≥y zapisane.",
-									"B£•D", JOptionPane.WARNING_MESSAGE);
+											+ "\n(Prawdopodobnie duplikacja warto≈õci (teka, numerInwentarza))"
+											+ "\nNie wszystkie zmiany zosta≈õy zapisane.",
+									"B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 					ex.printStackTrace();
 					System.out.println(gTmp);
 					dbUtil.resetSession();
@@ -679,8 +679,8 @@ public class GrafikaEditWindow extends JFrame {
 				PromptResult = JOptionPane
 						.showOptionDialog(
 								null,
-								"Czy na pewno chcesz przejúÊ do nastÍpnej grafiki?\n"
-										+ "Wszelkie niezapisane zmiany zostanπ utracone.",
+								"Czy na pewno chcesz przej≈õƒá do nastƒôpnej grafiki?\n"
+										+ "Wszelkie niezapisane zmiany zostanƒÖ utracone.",
 								"", JOptionPane.DEFAULT_OPTION,
 								JOptionPane.WARNING_MESSAGE, null, ObjButtons,
 								ObjButtons[1]);
@@ -702,8 +702,8 @@ public class GrafikaEditWindow extends JFrame {
 				PromptResult = JOptionPane
 						.showOptionDialog(
 								null,
-								"Czy na pewno chcesz przejúÊ do poprzedniej grafiki?\n"
-										+ "Wszelkie niezapisane zmiany zostanπ utracone.",
+								"Czy na pewno chcesz przej≈õƒá do poprzedniej grafiki?\n"
+										+ "Wszelkie niezapisane zmiany zostanƒÖ utracone.",
 								"", JOptionPane.DEFAULT_OPTION,
 								JOptionPane.WARNING_MESSAGE, null, ObjButtons,
 								ObjButtons[1]);

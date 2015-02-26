@@ -45,7 +45,7 @@ public class DBUtil {
 	}
 	
 	/**
-	 * Pobiera Kategoriê. Jak nie ma w bazie o takiej nazwie to tworzy now¹.
+	 * Pobiera KategoriÄ™. Jak nie ma w bazie o takiej nazwie to tworzy nowÄ….
 	 * 
 	 * @param nazwa
 	 * @return
@@ -86,7 +86,7 @@ public class DBUtil {
 	}
 	
 	/**
-	 * Pobiera Technikê. Jak nie ma w bazie o takiej nazwie to tworzy now¹.
+	 * Pobiera TechnikÄ™. Jak nie ma w bazie o takiej nazwie to tworzy nowÄ….
 	 * 
 	 * @param nazwa
 	 * @return
@@ -127,7 +127,7 @@ public class DBUtil {
 	}
 	
 	/**
-	 * Pobiera Tekê. Jak nie ma w bazie o takiej nazwie to tworzy now¹.
+	 * Pobiera TekÄ™. Jak nie ma w bazie o takiej nazwie to tworzy nowÄ….
 	 * 
 	 * @param nazwa
 	 * @return
@@ -178,7 +178,7 @@ public class DBUtil {
 	}
 	
 	/**
-	 * Pobiera Grafikê.
+	 * Pobiera GrafikÄ™.
 	 * 
 	 * @param nazwa
 	 * @return
@@ -244,10 +244,10 @@ public class DBUtil {
 			JOptionPane
 			.showMessageDialog(
 					null,
-					"Nie uda³o siê otworzyæ pliku:\n"
+					"Nie udaÅ‚o siÄ… otworzyÄ‡ pliku:\n"
 							+ g.getIlustracjaPath()
 							+ "\nNie wygenerowano dla niego miniatury.",
-					"B£¥D", JOptionPane.WARNING_MESSAGE);
+					"BÅÄ„D", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 		int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
@@ -258,10 +258,10 @@ public class DBUtil {
 			JOptionPane
 			.showMessageDialog(
 					null,
-					"Nie uda³o siê zapisaæ pliku:\n"
+					"Nie udaÅ‚o siÄ™ zapisaÄ‡ pliku:\n"
 							+ g.getIlustracjaPath()
 							+ "\nNie wygenerowano miniatury.",
-					"B£¥D", JOptionPane.WARNING_MESSAGE);
+					"BÅÄ„D", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 	}

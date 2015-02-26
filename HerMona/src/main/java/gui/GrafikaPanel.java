@@ -40,7 +40,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 	public static Integer editLock = 0;
 	public static final String[] columnNames = {"teka", "numer inwentarza", "temat", "seria",
 		"technika", "wymiary", "projekatant", "rytownik", "wydawca", "sygnatury", "rok od",
-		"rok do", "miejsce wydania", "opis", "inskrypcje", "bibliografia", "uwagi", "kategorie", "úcieøka ilustracji"};
+		"rok do", "miejsce wydania", "opis", "inskrypcje", "bibliografia", "uwagi", "kategorie", "≈õcie≈ºka ilustracji"};
 	
 
 	private Set<Grafika> gSet = new HashSet<Grafika>();
@@ -50,12 +50,12 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 	private InteractiveTableModel tableModel;
 	private JButton bSave = new JButton("Zapisz zmiany");
 	private JButton bFilter = new JButton("Filtruj");
-	private JButton bRefresh = new JButton("Odúwieø");
+	private JButton bRefresh = new JButton("Od≈õwie≈º");
 	private JButton bReport = new JButton("Generuj raport");
 	private JTable table;
 	private DBUtil dbUtil = new DBUtil();
 	private JPopupMenu popupMenu = new JPopupMenu();
-    private JMenuItem menuItemEdit = new JMenuItem("Edytuj grafikÍ");
+    private JMenuItem menuItemEdit = new JMenuItem("Edytuj grafikƒô");
 
 	public GrafikaPanel(MainWindow mainWindow) {
 		Vector<Grafika> grafVec= new Vector<Grafika>(dbUtil.getGrafikas(previousPredicate));
@@ -132,7 +132,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 	
 	private void editGraphic(Grafika g, int selectedRow) {
 		if (g.getTeka() == null || g.getNumerInwentarza() == null) {
-			JOptionPane.showMessageDialog(null, "Aby edytowaÊ grafikÍ musi mieÊ ona nadanπ tekÍ i numer inwentarza", "B£•D", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Aby edytowaƒá grafikƒô musi mieƒá ona nadanƒÖ tekƒô i numer inwentarza", "B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 		} else {
 			new GrafikaEditWindow(g, tableModel, selectedRow);
 		}
@@ -155,7 +155,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			String ObjButtons[] = { "Tak", "Anuluj" };
 			int PromptResult = JOptionPane.showOptionDialog(null,
-					"Czy na pewno chcesz zapisaÊ zmiany?",
+					"Czy na pewno chcesz zapisaƒá zmiany?",
 					"",
 					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.WARNING_MESSAGE, null, ObjButtons,
@@ -174,17 +174,17 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 						dbUtil.saveGrafika(grafika);
 					}
 					JOptionPane.showMessageDialog(null,
-							"Zmiany zosta≥y zapisane", "",
+							"Zmiany zosta≈Çy zapisane", "",
 							JOptionPane.PLAIN_MESSAGE);
 				} catch (Exception ex) {
 					JOptionPane
 							.showMessageDialog(
 									null,
-									"Wystπpi≥ b≥ad podczas zapisu:\n"
+									"WystƒÖpi≈Ç bƒÖad podczas zapisu:\n"
 											+ ex.getMessage()
-											+ "\n(Prawdopodobnie duplikacja wartoúci (teka, numerInwentarza))"
-											+ "\nNie wszystkie zmiany zosta≥y zapisane.",
-									"B£•D", JOptionPane.WARNING_MESSAGE);
+											+ "\n(Prawdopodobnie duplikacja warto≈õci (teka, numerInwentarza))"
+											+ "\nNie wszystkie zmiany zosta≈Çy zapisane.",
+									"B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 					ex.printStackTrace();
 					System.out.println(gTmp);
 					dbUtil.resetSession();
@@ -205,8 +205,8 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			String ObjButtons[] = { "Tak", "Anuluj" };
 			int PromptResult = JOptionPane.showOptionDialog(null,
-					"Czy na pewno zmieniÊ warunki filtrowania?\n"
-					+ "Wszelkie niezapisane zmiany zostanπ utracone.",
+					"Czy na pewno zmieniƒá warunki filtrowania?\n"
+					+ "Wszelkie niezapisane zmiany zostanƒÖ utracone.",
 					"",
 					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.WARNING_MESSAGE, null, ObjButtons,
@@ -225,7 +225,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 					try {
 						grafVec = new Vector<Grafika>(dbUtil.getGrafikas(s));
 					} catch (HibernateException e) {
-						JOptionPane.showMessageDialog(null, "Wystπpi≥ b≥ad sk≥adni zapytania:\n" + e.getMessage(), "B£•D", JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null, "WystƒÖpi≈Ç b≈ÇƒÖd sk≈Çadni zapytania:\n" + e.getMessage(), "B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 					previousPredicate = s;
@@ -242,8 +242,8 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			String ObjButtons[] = { "Tak", "Anuluj" };
 			int PromptResult = JOptionPane.showOptionDialog(null,
-					"Czy na pewno chcesz odúwieøyÊ widok?\n"
-							+ "Wszelkie niezapisane zmiany zostanπ utracone.",
+					"Czy na pewno chcesz od≈õwie≈ºyƒá widok?\n"
+							+ "Wszelkie niezapisane zmiany zostanƒÖ utracone.",
 					"", JOptionPane.DEFAULT_OPTION,
 					JOptionPane.WARNING_MESSAGE, null, ObjButtons,
 					ObjButtons[1]);
@@ -255,8 +255,8 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 				} catch (HibernateException e) {
 					JOptionPane.showMessageDialog(
 							null,
-							"Wystπpi≥ b≥ad sk≥adni zapytania:\n"
-									+ e.getMessage(), "B£•D",
+							"WystƒÖpi≈Ç b≈Çad sk≈Çadni zapytania:\n"
+									+ e.getMessage(), "B≈ÅƒÑD",
 							JOptionPane.WARNING_MESSAGE);
 					return;
 				}

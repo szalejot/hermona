@@ -145,16 +145,16 @@ public class XLSImporter {
 				g.setRokOd(Integer.parseInt(sTmp) - 9);
 				g.setRokDo(Integer.parseInt(sTmp) + 9);
 			} else { //WTF?
-				JOptionPane.showMessageDialog(null, "B≥Ídny format datowania: '" + sVal + "'\n"
+				JOptionPane.showMessageDialog(null, "B≈Çƒôdny format datowania: '" + sVal + "'\n"
 						+ "Dla grafiki o numerze inwentarza: " + g.getNumerInwentarza()
-						+ "\nz teki: " + g.getTeka(), "B£•D", JOptionPane.WARNING_MESSAGE);
+						+ "\nz teki: " + g.getTeka(), "B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "B≥Ídny format liczbowy datowania: '" + sVal + "'\n"
+			JOptionPane.showMessageDialog(null, "B≈Çƒôdny format liczbowy datowania: '" + sVal + "'\n"
 					+ e.getMessage() + "\n"
 					+ "Dla grafiki o numerze inwentarza: " + g.getNumerInwentarza()
-					+ "\nz teki: " + g.getTeka(), "B£•D", JOptionPane.WARNING_MESSAGE);
+					+ "\nz teki: " + g.getTeka(), "B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 		}
 		return g;
 	}

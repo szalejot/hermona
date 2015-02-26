@@ -31,7 +31,7 @@ import model.Teka;
 
 public class TekaEditWindow extends JFrame {
 	private static final long serialVersionUID = 4484009714046170060L;
-	public static final String[] columnNames = {"Numer teki", "Tytu³ teki", "Rok"};
+	public static final String[] columnNames = {"Numer teki", "TytuÅ‚ teki", "Rok"};
 	private InteractiveTableModel tableModel;
 
 	private JPanel p = new JPanel();
@@ -40,7 +40,7 @@ public class TekaEditWindow extends JFrame {
 	private DBUtil dbUtil = new DBUtil();
 
 	public TekaEditWindow() {
-		super("Edytuj tekê");
+		super("Edytuj tekÄ™");
 
 		setSize(700, 300);
 		setResizable(true);
@@ -215,7 +215,7 @@ public class TekaEditWindow extends JFrame {
 				Teka teka = tableModel.getObjectAt(i);
 				dbUtil.saveTeka(teka);
 			}
-			JOptionPane.showMessageDialog(null, "Zmiany zosta³y zapisane", "", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Zmiany zostaÅ‚y zapisane", "", JOptionPane.PLAIN_MESSAGE);
 		}
 		
 	}

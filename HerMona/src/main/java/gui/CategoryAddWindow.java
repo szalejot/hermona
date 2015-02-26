@@ -16,16 +16,16 @@ public class CategoryAddWindow extends JFrame {
 	private static final long serialVersionUID = -4241568839154938869L;
 
 	private JPanel p = new JPanel();
-	private JButton b = new JButton("Dodaj kategoriÍ");
+	private JButton b = new JButton("Dodaj kategoriƒô");
 	private JTextField text = new JTextField(20);
 	
 	public CategoryAddWindow() {
-		super("Dodaj kategoriÍ");
+		super("Dodaj kategoriƒô");
 		
 		setSize(300, 130);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		JLabel l = new JLabel("Podaj nazwÍ nowej kategorii:");
+		JLabel l = new JLabel("Podaj nazwƒô nowej kategorii:");
 		b.addActionListener(new ButtonListener());
 		p.add(l);
 		p.add(text);
@@ -39,12 +39,12 @@ public class CategoryAddWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (text.getText().isEmpty()) {
-				JOptionPane.showMessageDialog(null, "Nie podano nazwy kategorii!", "B£•D", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Nie podano nazwy kategorii!", "B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 			DBUtil dbUtil = new DBUtil();
 			dbUtil.getCategory(text.getText());
-			JOptionPane.showMessageDialog(null, "Kategoria '" + text.getText() + "' zosta≥a dodana", "", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Kategoria '" + text.getText() + "' zosta≈Ça dodana", "", JOptionPane.PLAIN_MESSAGE);
 		}
 		
 	}

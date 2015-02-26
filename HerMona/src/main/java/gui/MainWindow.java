@@ -22,7 +22,7 @@ import util.XLSImporter;
 public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = -2278436951424873713L;
-	public static final String mainTitle = "Kolekcja grafiki Jana Ponêtowskiego";
+	public static final String mainTitle = "Kolekcja grafiki Jana PonÄ™towskiego";
 	
 	public MainWindow() {
 		super(mainTitle);
@@ -35,8 +35,8 @@ public class MainWindow extends JFrame {
 			public void windowClosing(WindowEvent we) {
 				String ObjButtons[] = { "Tak", "Anuluj" };
 				int PromptResult = JOptionPane.showOptionDialog(null,
-						"Czy na pewno chcesz wy³¹czyæ aplikacjê?\n"
-						+ "Wszelkie niezapisane zmiany zostan¹ utracone.",
+						"Czy na pewno chcesz wyÅ‚Ä…czyÄ‡ aplikacjÄ™?\n"
+						+ "Wszelkie niezapisane zmiany zostanÄ… utracone.",
 						"",
 						JOptionPane.DEFAULT_OPTION,
 						JOptionPane.WARNING_MESSAGE, null, ObjButtons,
@@ -68,7 +68,7 @@ public class MainWindow extends JFrame {
 				new CategoryAddWindow();	
 			}
 		});
-		JMenuItem catDel = new JMenuItem("Usuñ kategorie");
+		JMenuItem catDel = new JMenuItem("UsuÅ„ kategorie");
 		catMenu.add(catDel);
 		catDel.addActionListener(new ActionListener() {
 			@Override
@@ -95,7 +95,7 @@ public class MainWindow extends JFrame {
 				new TechniqueAddWindow();	
 			}
 		});
-		JMenuItem techDel = new JMenuItem("Usuñ techniki");
+		JMenuItem techDel = new JMenuItem("UsuÅ„ techniki");
 		techMenu.add(techDel);
 		techDel.addActionListener(new ActionListener() {
 			@Override
@@ -122,7 +122,7 @@ public class MainWindow extends JFrame {
 				new TekaAddWindow();	
 			}
 		});
-		JMenuItem tekaDel = new JMenuItem("Usuñ teki");
+		JMenuItem tekaDel = new JMenuItem("UsuÅ„ teki");
 		tekaMenu.add(tekaDel);
 		tekaDel.addActionListener(new ActionListener() {
 			@Override
@@ -155,11 +155,11 @@ public class MainWindow extends JFrame {
 		            File file = fc.getSelectedFile();
 		            XLSImporter importer = new XLSImporter();
 		            importer.importXLS(file.getAbsolutePath());
-		            JOptionPane.showMessageDialog(null, "Import zosta³ wykonany", "", JOptionPane.PLAIN_MESSAGE);
+		            JOptionPane.showMessageDialog(null, "Import zostaÅ‚ wykonany", "", JOptionPane.PLAIN_MESSAGE);
 		        }
 			}
 		});
-		JMenuItem refreshImg = new JMenuItem("Odœwie¿ miniatury");
+		JMenuItem refreshImg = new JMenuItem("OdÅ›wieÅ¼ miniatury");
 		importMenu.add(refreshImg);
 		refreshImg.addActionListener(new ActionListener() {
 			@Override

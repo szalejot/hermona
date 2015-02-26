@@ -40,7 +40,7 @@ public class TechniqueEditWindow extends JFrame {
 	DBUtil dbUtil = new DBUtil();
 
 	public TechniqueEditWindow() {
-		super("Edytuj technikê");
+		super("Edytuj technikÄ™");
 
 		setSize(300, 300);
 		setResizable(true);
@@ -200,7 +200,7 @@ public class TechniqueEditWindow extends JFrame {
 				Technika tech = tableModel.getObjectAt(i);
 				dbUtil.saveTechnique(tech);
 			}
-			JOptionPane.showMessageDialog(null, "Zmiany zosta³y zapisane", "", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Zmiany zostaÅ‚y zapisane", "", JOptionPane.PLAIN_MESSAGE);
 		}
 		
 	}

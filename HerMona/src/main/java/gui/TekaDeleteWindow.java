@@ -19,18 +19,18 @@ public class TekaDeleteWindow extends JFrame {
 	private static final long serialVersionUID = -4241568839154938869L;
 
 	private JPanel p = new JPanel();
-	private JButton b = new JButton("Usuñ tekê");
+	private JButton b = new JButton("UsuÅ„ tekÄ™");
 	private JComboBox<Teka> comboBox;
 	
 	@SuppressWarnings("unchecked")
 	public TekaDeleteWindow() {
-		super("Usuñ tekê");
+		super("UsuÅ„ tekÄ™");
 		DBUtil dbUtil = new DBUtil();
 		
 		setSize(300, 130);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		JLabel l = new JLabel("Wybierz tekê do usuniêcia:");
+		JLabel l = new JLabel("Wybierz tekÄ™ do usuniÄ™cia:");
 		List<Teka> tList = dbUtil.getTekas();
 		comboBox = new JComboBox<Teka>(tList.toArray(new Teka[tList.size()]));
 		if (comboBox.getItemCount() == 0) {
@@ -59,7 +59,7 @@ public class TekaDeleteWindow extends JFrame {
 			if (comboBox.getItemCount() == 0) {
 				b.setEnabled(false);
 			}
-			JOptionPane.showMessageDialog(null, "Teka o numerze " + teka.getNumer() + " zosta³a usuniêta", "", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Teka o numerze " + teka.getNumer() + " zostaÅ‚a usuniÄ™ta", "", JOptionPane.PLAIN_MESSAGE);
 		}
 		
 	}

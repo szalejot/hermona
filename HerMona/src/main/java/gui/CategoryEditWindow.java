@@ -200,7 +200,7 @@ public class CategoryEditWindow extends JFrame {
 				Kategoria kat = tableModel.getObjectAt(i);
 				dbUtil.saveCategory(kat);
 			}
-			JOptionPane.showMessageDialog(null, "Zmiany zosta≥y zapisane", "", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Zmiany zosta≈Çy zapisane", "", JOptionPane.PLAIN_MESSAGE);
 		}
 		
 	}

@@ -26,20 +26,20 @@ public class GrafikaShowWindow extends JFrame {
 	private JScrollPane scrollPane;
 	
 	public GrafikaShowWindow(String imgPath) {
-		super("Podglπd grafiki");
+		super("PodglƒÖd grafiki");
 		setResizable(true);
 		setSize(1000, 700);
 		
 		try {
 			originalImage = ImageIO.read(new File(imgPath));
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Nie moøna odczytaÊ pliku: " + imgPath, "B£•D", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Nie mo≈ºna odczytaƒá pliku: " + imgPath, "B≈ÅƒÑD", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 		
 		JMenuBar menubar = new JMenuBar();
 		
-		JMenu resizeMenu = new JMenu("ZmieÒ rozmiar");
+		JMenu resizeMenu = new JMenu("Zmie≈Ñ rozmiar");
 		menubar.add(resizeMenu);
 		JMenuItem size025 = new JMenuItem("25%");
 		resizeMenu.add(size025);
