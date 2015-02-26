@@ -232,6 +232,7 @@ public class DBUtil {
 	}
 	
 	public String createPredicateByText(String text) {
+		text = text.toLowerCase();
 		return "    lower(grafika.numerInwentarza) like '%" + text + "%'"
 				+ " or lower(grafika.temat) like '%" + text + "%'"
 				+ " or lower(grafika.seria) like '%" + text + "%'"
