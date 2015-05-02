@@ -165,7 +165,7 @@ public class ReportWindow extends JFrame {
 				return getNullableString(g.getTechniki().toString(), isHtml);
 			case "wymiary":
 				return getNullableString(g.getWymiary(), isHtml);
-			case "projekatant":
+			case "projektant":
 				return getNullableString(g.getProjektant(), isHtml);
 			case "rytownik":
 				return getNullableString(g.getRytownik(), isHtml);
@@ -199,7 +199,7 @@ public class ReportWindow extends JFrame {
 	
 	private void initializeList() {
 		jList = new JList<String>(new String[]{"teka", "numer inwentarza", "temat", "seria",
-				"technika", "wymiary", "projekatant", "rytownik", "wydawca", "sygnatury", "rok od",
+				"technika", "wymiary", "projektant", "rytownik", "wydawca", "sygnatury", "rok od",
 				"rok do", "miejsce wydania", "opis", "inskrypcje", "bibliografia", "uwagi", "kategorie", "ilustracja"});
 	}
 	

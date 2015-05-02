@@ -39,7 +39,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 	public static final int STATIC_COLUMNS_NUMBER = 3;
 	public static Integer editLock = 0;
 	public static final String[] columnNames = {"teka", "numer inwentarza", "temat", "seria",
-		"technika", "wymiary", "projekatant", "rytownik", "wydawca", "sygnatury", "rok od",
+		"technika", "wymiary", "projektant", "rytownik", "wydawca", "sygnatury", "rok od",
 		"rok do", "miejsce wydania", "opis", "inskrypcje", "bibliografia", "uwagi", "kategorie", "ścieżka ilustracji"};
 	
 

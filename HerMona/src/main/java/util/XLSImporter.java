@@ -203,7 +203,7 @@ public class XLSImporter {
 			if (cell == null) {
 				continue;
 			}
-			map.put(cell.getStringCellValue(), new Integer(colIx));
+			map.put(cell.getStringCellValue().toLowerCase(), new Integer(colIx));
 		}
 
 		return map;
