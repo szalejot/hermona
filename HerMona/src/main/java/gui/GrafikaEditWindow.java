@@ -735,6 +735,9 @@ public class GrafikaEditWindow extends JFrame {
 
 		   private boolean test(String text) {
 		      try {
+		    	 if(text == null || text.length() == 0) {
+		    		 return true;
+		    	 }
 		         Integer.parseInt(text);
 		         return true;
 		      } catch (NumberFormatException e) {
