@@ -76,11 +76,13 @@ public class GrafikaEditWindow extends JFrame {
 	private JTextField miejsceWydaniaTF;
 	private JTextField rokOdTF;
 	private JTextField rokDoTF;
+	private JTextField innyAutorTF;
 	private JTextArea sygnaturyTA;
 	private JTextArea opisTA;
 	private JTextArea uwagiTA;
 	private JTextArea inskrypcjeTA;
 	private JTextArea bibliografiaTA;
+	private JTextArea katalogiTA;
 	private JList<Kategoria> kategorieJL;
 	private JButton kategorieB;
 	private Set<Kategoria> katS;
@@ -150,18 +152,20 @@ public class GrafikaEditWindow extends JFrame {
 		leftContainer.add(getRytownikContainer(), createGbc(1, 6));
 		leftContainer.add(new JLabel("wydawca"), createGbc(0, 7));
 		leftContainer.add(getWydawcaContainer(), createGbc(1, 7));
-		leftContainer.add(new JLabel("technika"), createGbc(0, 8));
-		leftContainer.add(getTechnikaContainer(), createGbc(1, 8));
-		leftContainer.add(new JLabel("wymiary"), createGbc(0, 9));
-		leftContainer.add(getWymiaryContainer(), createGbc(1, 9));
-		leftContainer.add(new JLabel("miejsce wydania"), createGbc(0, 10));
-		leftContainer.add(getMiejsceWydaniaContainer(), createGbc(1, 10));
-		leftContainer.add(new JLabel("rok od"), createGbc(0, 11));
-		leftContainer.add(getRokOdContainer(), createGbc(1, 11));
-		leftContainer.add(new JLabel("rok do"), createGbc(0, 12));
-		leftContainer.add(getRokDoContainer(), createGbc(1, 12));
-		leftContainer.add(new JLabel("kategorie"), createGbc(0, 13));
-		leftContainer.add(getKategorieContainer(), createGbc(1, 13));
+		leftContainer.add(new JLabel("inny autor"), createGbc(0, 8));
+		leftContainer.add(getInnyAutorContainer(), createGbc(1, 8));
+		leftContainer.add(new JLabel("technika"), createGbc(0, 9));
+		leftContainer.add(getTechnikaContainer(), createGbc(1, 9));
+		leftContainer.add(new JLabel("wymiary"), createGbc(0, 10));
+		leftContainer.add(getWymiaryContainer(), createGbc(1, 10));
+		leftContainer.add(new JLabel("miejsce wydania"), createGbc(0, 11));
+		leftContainer.add(getMiejsceWydaniaContainer(), createGbc(1, 11));
+		leftContainer.add(new JLabel("rok od"), createGbc(0, 12));
+		leftContainer.add(getRokOdContainer(), createGbc(1, 12));
+		leftContainer.add(new JLabel("rok do"), createGbc(0, 13));
+		leftContainer.add(getRokDoContainer(), createGbc(1, 13));
+		leftContainer.add(new JLabel("kategorie"), createGbc(0, 14));
+		leftContainer.add(getKategorieContainer(), createGbc(1, 14));
 		
 		p = new JPanel();
 		p.setLayout(new BorderLayout());
@@ -176,11 +180,13 @@ public class GrafikaEditWindow extends JFrame {
 		bottomContainer.add(getUwagiContainer(), createGbc(0, 3));
 		bottomContainer.add(new JLabel("inskrypcje"), createGbc(0, 4));
 		bottomContainer.add(getInskrypcjeContainer(), createGbc(0, 5));
-		bottomContainer.add(new JLabel("bibliografia"), createGbc(0, 6));
-		bottomContainer.add(getBibliografiaContainer(), createGbc(0, 7));
+		bottomContainer.add(new JLabel("katalogi"), createGbc(0, 6));
+		bottomContainer.add(getKatalogiContainer(), createGbc(0, 7));
+		bottomContainer.add(new JLabel("bibliografia"), createGbc(0, 8));
+		bottomContainer.add(getBibliografiaContainer(), createGbc(0, 9));
 		GridBagConstraints buttonGBC = new GridBagConstraints();
 		buttonGBC.gridx = 0;
-		buttonGBC.gridy = 8;
+		buttonGBC.gridy = 10;
 		//bottomContainer.add(bCont, buttonGBC);
 		p.add(bottomContainer, BorderLayout.PAGE_END);
 		
@@ -289,6 +295,14 @@ public class GrafikaEditWindow extends JFrame {
 		Container container = new Container();
 		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(wydawcaTF);
+		return container;
+	}
+	
+	private Container getInnyAutorContainer() {
+		innyAutorTF = new JTextField(grafika.getInnyAutor(), 20);
+		Container container = new Container();
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
+		container.add(innyAutorTF);
 		return container;
 	}
 	
@@ -502,6 +516,40 @@ public class GrafikaEditWindow extends JFrame {
 		return scrollPane;
 	}
 	
+	private Container getKatalogiContainer() {
+		katalogiTA = new JTextArea(grafika.getKatalogi());
+		katalogiTA.setLineWrap(true);
+		katalogiTA.setWrapStyleWord(true);
+		final JScrollPane scrollPane = new JScrollPane (katalogiTA, 
+				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setMinimumSize(taMin);
+		scrollPane.setMaximumSize(taMin);
+		scrollPane.setPreferredSize(taMin);
+		scrollPane.setSize(taMin);
+		katalogiTA.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				scrollPane.setMinimumSize(taMin);
+				scrollPane.setMaximumSize(taMin);
+				scrollPane.setPreferredSize(taMin);
+				scrollPane.setSize(taMin);
+				GrafikaEditWindow.this.revalidate();
+				GrafikaEditWindow.this.repaint();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				scrollPane.setMinimumSize(taMax);
+				scrollPane.setMaximumSize(taMax);
+				scrollPane.setPreferredSize(taMax);
+				scrollPane.setSize(taMax);
+				GrafikaEditWindow.this.revalidate();
+				GrafikaEditWindow.this.repaint();
+			}
+		});
+		return scrollPane;
+	}
+	
 	private Container getUwagiContainer() {
 		uwagiTA = new JTextArea(grafika.getUwagi());
 		uwagiTA.setLineWrap(true);
@@ -586,7 +634,10 @@ public class GrafikaEditWindow extends JFrame {
 				!inskrypcjeTA.getText().equals(grafika.getInskrypcje()) ||
 				!bibliografiaTA.getText().equals(grafika.getBibliografia()) ||
 				!katS.equals(grafika.getKategorie()) ||
-				!techS.equals(grafika.getTechniki())) {
+				!techS.equals(grafika.getTechniki()) ||
+				!katalogiTA.getText().equals(grafika.getKatalogi()) ||
+				!innyAutorTF.getText().equals(grafika.getInnyAutor())
+				) {
 			return true;
 		}
 		if (!rokOdTF.getText().isEmpty()) {
@@ -666,6 +717,8 @@ public class GrafikaEditWindow extends JFrame {
 			g.setInskrypcje(inskrypcjeTA.getText());
 			g.setBibliografia(bibliografiaTA.getText());
 			g.setKategorie(katS);
+			g.setKatalogi(katalogiTA.getText());
+			g.setInnyAutor(innyAutorTF.getText());
 		}
 
 	}

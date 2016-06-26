@@ -47,17 +47,19 @@ public class InteractiveTableModel extends AbstractTableModel {
 	private static final int PROJEKTANT_INDEX = 6;
 	private static final int RYTOWNIK_INDEX = 7;
 	private static final int WYDAWCA_INDEX = 8;
-	private static final int SYGNATURY_INDEX = 9;
-	private static final int ROK_OD_INDEX = 10;
-	private static final int ROK_DO_INDEX = 11;
-	private static final int MIEJSCE_WYDANIA_INDEX = 12;
-	private static final int OPIS_INDEX = 13;
-	private static final int INSKRYPCJE_INDEX = 14;
-	private static final int BIBLIOGRAFIA_INDEX = 15;
-	private static final int UWAGI_INDEX = 16;
-	private static final int KATEGORIE_INDEX = 17;
-	private static final int ILUSTRACJA_PATH_INDEX = 18;
-	private static final int HIDDEN_INDEX = 19;
+	private static final int INNY_AUTOR_INDEX = 9;
+	private static final int SYGNATURY_INDEX = 10;
+	private static final int ROK_OD_INDEX = 11;
+	private static final int ROK_DO_INDEX = 12;
+	private static final int MIEJSCE_WYDANIA_INDEX = 13;
+	private static final int OPIS_INDEX = 14;
+	private static final int INSKRYPCJE_INDEX = 15;
+	private static final int KATALOGI_INDEX = 16;
+	private static final int BIBLIOGRAFIA_INDEX = 17;
+	private static final int UWAGI_INDEX = 18;
+	private static final int KATEGORIE_INDEX = 19;
+	private static final int ILUSTRACJA_PATH_INDEX = 20;
+	private static final int HIDDEN_INDEX = 21;
 	private static final int COL_MIN_WIDTH = 200;
 	private static final int COL_MIN_WIDTH_IDX = 100;
 
@@ -104,6 +106,8 @@ public class InteractiveTableModel extends AbstractTableModel {
 		setUpIlustracjaPathColumn(table);
 		setUpBibliografiaColumn(table);
 		setUpUwagiColumn(table);
+		setUpInnyAutorColumn(table);
+		setUpKatalogiColumn(table);
 		
         setRendererColumnSizes(table);
 	}
@@ -143,6 +147,14 @@ public class InteractiveTableModel extends AbstractTableModel {
 	
 	private void setUpUwagiColumn(JTable table) {
 		table.getColumnModel().getColumn(UWAGI_INDEX).setCellEditor(new TextAreaCellEditor("Uwagi"));
+	}
+	
+	private void setUpInnyAutorColumn(JTable table) {
+		table.getColumnModel().getColumn(KATALOGI_INDEX).setCellEditor(new TextAreaCellEditor("Katalogi"));
+	}
+	
+	private void setUpKatalogiColumn(JTable table) {
+		table.getColumnModel().getColumn(INNY_AUTOR_INDEX).setCellEditor(new TextAreaCellEditor("Inny autor"));
 	}
 
 	public String getColumnName(int column) {
@@ -203,6 +215,8 @@ public class InteractiveTableModel extends AbstractTableModel {
 		case UWAGI_INDEX:
 		case KATEGORIE_INDEX:
 		case ILUSTRACJA_PATH_INDEX:
+		case KATALOGI_INDEX:
+		case INNY_AUTOR_INDEX:
 			return String.class;
 		case ROK_OD_INDEX:
 		case ROK_DO_INDEX:
@@ -253,6 +267,10 @@ public class InteractiveTableModel extends AbstractTableModel {
 			return record.getKategorie();
 		case ILUSTRACJA_PATH_INDEX:
 			return record.getIlustracjaPath();
+		case KATALOGI_INDEX:
+			return record.getKatalogi();
+		case INNY_AUTOR_INDEX:
+			return record.getInnyAutor();
 		default:
 			return new Object();
 		}
@@ -317,6 +335,11 @@ public class InteractiveTableModel extends AbstractTableModel {
 		case KATEGORIE_INDEX:
 			record.setKategorie((Set<Kategoria>)value);
 			break;
+		case KATALOGI_INDEX:
+			record.setKatalogi((String)value);
+			break;
+		case INNY_AUTOR_INDEX:
+			record.setInnyAutor((String)value);
 		case ILUSTRACJA_PATH_INDEX:
 			record.setIlustracjaPath((String)value);
 			gSetIlu.add(record);

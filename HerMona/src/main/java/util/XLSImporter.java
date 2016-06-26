@@ -41,6 +41,8 @@ public class XLSImporter {
 	private static final String KATEGORIA_NAME = "kategoria";
 	private static final String TEKA_NAME = "teka";
 	private static final String TECHNIKA_NAME = "technika";
+	private static final String KATALOGI_NAME = "katalogi";
+	private static final String INNY_AUTOR_NAME = "inny autor";
 
 	private DBUtil dbUtil = new DBUtil();
 	
@@ -81,6 +83,8 @@ public class XLSImporter {
                 g.setTechniki(getTechniki(row, headerMap.get(TECHNIKA_NAME)));
                 g.setTeka(getTeka(row, headerMap.get(TEKA_NAME)));
                 g.setKategorie(getKategorie(row, headerMap.get(KATEGORIA_NAME)));
+                g.setKatalogi(getValue(row, headerMap.get(KATALOGI_NAME)));
+                g.setInnyAutor(getValue(row, headerMap.get(INNY_AUTOR_NAME)));
                 setDatowanie(g, row, headerMap.get(DATOWANIE_NAME));
                 
                 if (g.getTeka() != null && g.getTeka().getNumer() != null && g.getNumerInwentarza() != null) {
@@ -195,6 +199,8 @@ public class XLSImporter {
 		map.put(KATEGORIA_NAME, -1);
 		map.put(TEKA_NAME, -1);
 		map.put(TECHNIKA_NAME, -1);
+		map.put(KATALOGI_NAME, -1);
+		map.put(INNY_AUTOR_NAME, -1);
 
 		short minColIx = row.getFirstCellNum();
 		short maxColIx = row.getLastCellNum();

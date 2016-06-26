@@ -48,6 +48,8 @@ public class Grafika implements Cloneable {
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	private Set<Kategoria> kategorie = new HashSet<Kategoria>(0);
 	private String ilustracjaPath = "";
+	private String katalogi = "";
+	private String innyAutor = "";
 
 	public Grafika () { }
 	
@@ -56,7 +58,7 @@ public class Grafika implements Cloneable {
 			String projektant, String rytownik, String wydawca,
 			String sygnatury, Integer rokOd, Integer rokDo, String miejsceWydania,
 			String opis, String inskrypcje, String bibliografia, String uwagi,
-			Set<Kategoria> kategorie, String ilustracjaPath) {
+			Set<Kategoria> kategorie, String ilustracjaPath, String katalogi, String innyAutor) {
 		this.grafikaId = grafikaId;
 		this.teka = teka;
 		this.numerInwentarza = numerInwentarza;
@@ -77,6 +79,8 @@ public class Grafika implements Cloneable {
 		this.uwagi = uwagi;
 		this.kategorie = kategorie;
 		this.ilustracjaPath = ilustracjaPath;
+		this.katalogi = katalogi;
+		this.innyAutor = innyAutor;
 	}
 
 	public int getGrafikaId() {
@@ -259,6 +263,22 @@ public class Grafika implements Cloneable {
 				getProjektant(), getRytownik(), getWydawca(), getSygnatury(),
 				getRokOd(), getRokDo(), getMiejsceWydania(), getOpis(),
 				getInskrypcje(), getBibliografia(), getUwagi(), getKategorie(),
-				getIlustracjaPath());
+				getIlustracjaPath(), getKatalogi(), getInnyAutor());
+	}
+
+	public String getKatalogi() {
+		return katalogi;
+	}
+
+	public void setKatalogi(String katalogi) {
+		this.katalogi = katalogi;
+	}
+
+	public String getInnyAutor() {
+		return innyAutor;
+	}
+
+	public void setInnyAutor(String innyAutor) {
+		this.innyAutor = innyAutor;
 	}
 }

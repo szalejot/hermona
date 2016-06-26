@@ -39,8 +39,8 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 	public static final int STATIC_COLUMNS_NUMBER = 3;
 	public static Integer editLock = 0;
 	public static final String[] columnNames = {"teka", "numer inwentarza", "temat", "seria",
-		"technika", "wymiary", "projektant", "rytownik", "wydawca", "sygnatury", "rok od",
-		"rok do", "miejsce wydania", "opis", "inskrypcje", "bibliografia", "uwagi", "kategorie", "ścieżka ilustracji"};
+		"technika", "wymiary", "projektant", "rytownik", "wydawca", "inny autor", "sygnatury", "rok od",
+		"rok do", "miejsce wydania", "opis", "inskrypcje", "katalogi", "bibliografia", "uwagi", "kategorie", "ścieżka ilustracji"};
 	
 
 	private Set<Grafika> gSet = new HashSet<Grafika>();
@@ -213,7 +213,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 					JOptionPane
 							.showMessageDialog(
 									null,
-									"Wystąpił bąad podczas zapisu:\n"
+									"Wystąpił błąd podczas zapisu:\n"
 											+ ex.getMessage()
 											+ "\n(Prawdopodobnie duplikacja wartości (teka, numerInwentarza))"
 											+ "\nNie wszystkie zmiany zostały zapisane.",

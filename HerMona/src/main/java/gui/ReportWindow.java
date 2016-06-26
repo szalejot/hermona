@@ -189,6 +189,10 @@ public class ReportWindow extends JFrame {
 				return getNullableString(g.getUwagi(), isHtml);
 			case "kategorie":
 				return getNullableString(g.getKategorie().toString(), isHtml);
+			case "inny autor":
+				return getNullableString(g.getInnyAutor().toString(), isHtml);
+			case "katalogi":
+				return getNullableString(g.getKatalogi().toString(), isHtml);
 			case "ilustracja":
 				return "<a href=\"file:///" + getNullableString(g.getIlustracjaPath(), isHtml) + "\">" +
 					"<img border=\"0\" src=\"file:///" + System.getProperty("user.dir") + "\\Hermona_miniatury\\" + getNullableString(g.getTeka().getNumer(), isHtml) + "_" + getNullableString(g.getNumerInwentarza(), isHtml) +  ".png\"></a>";
@@ -199,8 +203,8 @@ public class ReportWindow extends JFrame {
 	
 	private void initializeList() {
 		jList = new JList<String>(new String[]{"teka", "numer inwentarza", "temat", "seria",
-				"technika", "wymiary", "projektant", "rytownik", "wydawca", "sygnatury", "rok od",
-				"rok do", "miejsce wydania", "opis", "inskrypcje", "bibliografia", "uwagi", "kategorie", "ilustracja"});
+				"technika", "wymiary", "projektant", "rytownik", "wydawca", "inny autor", "sygnatury", "rok od",
+				"rok do", "miejsce wydania", "opis", "inskrypcje", "katalogi", "bibliografia", "uwagi", "kategorie", "ilustracja"});
 	}
 	
 	private String getNullableString(Object obj, boolean isHtml) {
