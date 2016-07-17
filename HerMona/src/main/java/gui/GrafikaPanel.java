@@ -110,7 +110,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
         add(scrollPane);
         add(Box.createRigidArea(new Dimension(0,5)));
         Container bContainer = new Container();
-        bContainer.setMaximumSize(new Dimension(400, 50));
+        bContainer.setMaximumSize(new Dimension(800, 50));
         FlowLayout bLayout = new FlowLayout();
         bContainer.setLayout(bLayout);
         bContainer.add(bSave);

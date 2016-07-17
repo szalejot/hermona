@@ -149,11 +149,11 @@ public class InteractiveTableModel extends AbstractTableModel {
 		table.getColumnModel().getColumn(UWAGI_INDEX).setCellEditor(new TextAreaCellEditor("Uwagi"));
 	}
 	
-	private void setUpInnyAutorColumn(JTable table) {
+	private void setUpKatalogiColumn(JTable table) {
 		table.getColumnModel().getColumn(KATALOGI_INDEX).setCellEditor(new TextAreaCellEditor("Katalogi"));
 	}
 	
-	private void setUpKatalogiColumn(JTable table) {
+	private void setUpInnyAutorColumn(JTable table) {
 		table.getColumnModel().getColumn(INNY_AUTOR_INDEX).setCellEditor(new TextAreaCellEditor("Inny autor"));
 	}
 
@@ -340,6 +340,7 @@ public class InteractiveTableModel extends AbstractTableModel {
 			break;
 		case INNY_AUTOR_INDEX:
 			record.setInnyAutor((String)value);
+			break;
 		case ILUSTRACJA_PATH_INDEX:
 			record.setIlustracjaPath((String)value);
 			gSetIlu.add(record);

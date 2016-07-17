@@ -682,10 +682,10 @@ public class GrafikaEditWindow extends JFrame {
 					JOptionPane
 							.showMessageDialog(
 									null,
-									"Wystąpił bąad podczas zapisu:\n"
+									"Wystąpił błąd podczas zapisu:\n"
 											+ ex.getMessage()
 											+ "\n(Prawdopodobnie duplikacja wartości (teka, numerInwentarza))"
-											+ "\nNie wszystkie zmiany zostaśy zapisane.",
+											+ "\nNie wszystkie zmiany zostały zapisane.",
 									"BŁĄD", JOptionPane.WARNING_MESSAGE);
 					ex.printStackTrace();
 					System.out.println(gTmp);

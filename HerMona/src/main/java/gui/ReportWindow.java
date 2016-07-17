@@ -37,7 +37,7 @@ public class ReportWindow extends JFrame {
 		super("Generuj raport");
 		this.predicate = predicate;
 		initializeList();
-		setSize(300, 480);
+		setSize(300, 530);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		
@@ -210,7 +210,11 @@ public class ReportWindow extends JFrame {
 	private String getNullableString(Object obj, boolean isHtml) {
 		if (obj != null) {
 			String ret = obj.toString();
-			ret = ret.replace('\n', ' ');
+			if(isHtml) {
+				ret = ret.replaceAll("\n", "<br\\>");
+			} else { //csv
+				ret = ret.replace('\n', '$');
+			}
 			return ret;
 		} else {
 			return "";
