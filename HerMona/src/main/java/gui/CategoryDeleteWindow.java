@@ -24,7 +24,7 @@ public class CategoryDeleteWindow extends JFrame {
 	
 	@SuppressWarnings("unchecked")
 	public CategoryDeleteWindow() {
-		super("Usuń kategori e");
+		super("Usuń kategorie");
 		DBUtil dbUtil = new DBUtil();
 		
 		setSize(300, 130);

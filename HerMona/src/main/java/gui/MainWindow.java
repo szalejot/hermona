@@ -185,6 +185,15 @@ public class MainWindow extends JFrame {
 			}
 		});
 		
+		JMenuItem ReplaceText = new JMenuItem("Zamień tekst");
+		extrasMenu.add(ReplaceText);
+		ReplaceText.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ReplaceWindow();
+			}
+		});
+		
 		return menubar;
 	}
 	
