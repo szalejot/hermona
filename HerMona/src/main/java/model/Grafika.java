@@ -281,4 +281,53 @@ public class Grafika implements Cloneable {
 	public void setInnyAutor(String innyAutor) {
 		this.innyAutor = innyAutor;
 	}
+	
+	public Object getFieldByName(String fieldName) {
+		switch(fieldName) {
+			case "teka":
+				return getTeka();
+			case "numerInwentarza":
+				return getNumerInwentarza();
+			case "temat":
+				return getTemat();
+			case "seria":
+				return getSeria();
+			case "techniki":
+				return getTechniki();
+			case "wymiary":
+				return getWymiary();
+			case "projektant":
+				return getProjektant();
+			case "rytownik":
+				return getRytownik();
+			case "wydawca":
+				return getWydawca();
+			case "sygnatury":
+				return getSygnatury();
+			case "rokOd":
+				return getRokOd();
+			case "rokDo":
+				return getRokDo();
+			case "miejsceWydania":
+				return getMiejsceWydania();
+			case "opis":
+				return getOpis();
+			case "inskrypcje":
+				return getInskrypcje();
+			case "bibliografia":
+				return getBibliografia();
+			case "uwagi":
+				return getUwagi();
+			case "kategorie":
+				return getKategorie();
+			case "innyAutor":
+				return getInnyAutor();
+			case "katalogi":
+				return getKatalogi();
+			case "ilustracjaPath":
+				return getIlustracjaPath();
+			default:
+				return null;
+		}
+	}
 }

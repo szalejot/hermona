@@ -5,6 +5,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import model.Grafika;
 import util.DBUtil;
 
 public class ReplaceWindow extends JFrame {
@@ -22,8 +25,8 @@ public class ReplaceWindow extends JFrame {
 	private static final Insets EAST_INSETS = new Insets(1, 1, 1, 0);
 	
 	private JPanel p = new JPanel();
-	private JLabel label1 = new JLabel("Tekst przed zmianą:");
-	private JLabel label2 = new JLabel("Tekst po zmianie:");
+	private JLabel labelBefore = new JLabel("Tekst przed zmianą:");
+	private JLabel labelAfter = new JLabel("Tekst po zmianie:");
 	private JButton bOk = new JButton("Zastosuj zmianę");
 	private JButton bNext = new JButton("Następna ->");
 	private JButton bEnd = new JButton("Zakończ");
@@ -33,18 +36,25 @@ public class ReplaceWindow extends JFrame {
 			"wymiary", "projektant", "rytownik", "wydawca", "innyAutor", "sygnatury", 
 			"miejsceWydania", "opis", "inskrypcje", "katalogi", "bibliografia", "uwagi"};
 	
+	private String selectedField;
+	private String searchString;
+	private String replaceString;
+	
+	private Grafika grafika;
+	private Iterator<Grafika> grafikaIterator;
+	
 	
 	private DBUtil dbUtil = new DBUtil();
 	
 	public ReplaceWindow() {
 		super("Zamiana tekstu");
 		
-		String selectedField = (String)JOptionPane.showInputDialog(null,
+		selectedField = (String)JOptionPane.showInputDialog(null,
 				"Wybierz pole, w którym będzie wyszukiwanie", "Wybór pola",
 				JOptionPane.INFORMATION_MESSAGE, null,
 				possibleFields, possibleFields[0]);
 		
-		String searchString = (String)JOptionPane.showInputDialog(
+		searchString = (String)JOptionPane.showInputDialog(
                 null,
                 "Wpisz tekst do wyszukania:",
                 "",
@@ -53,7 +63,7 @@ public class ReplaceWindow extends JFrame {
                 null,
                 "");
 		
-		String replaceString = (String)JOptionPane.showInputDialog(
+		replaceString = (String)JOptionPane.showInputDialog(
                 null,
                 "Wpisz tekst po zmianie:",
                 "",
@@ -74,13 +84,24 @@ public class ReplaceWindow extends JFrame {
 			}
 		});
 		
+		bNext.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				switchToNextGrafika();
+			}
+		});
+		
+		beforeTF.setEditable(false);
+		afterTF.setEditable(false);
+		initGrafikaSearch();
+		
 		p.setLayout(new GridBagLayout());
-		label1.setSize(200, 20);
-		p.add(label1, createGbc(0, 0, 0.0));
+		labelBefore.setSize(200, 20);
+		p.add(labelBefore, createGbc(0, 0, 0.0));
 		JScrollPane sp1 = new JScrollPane(beforeTF);
 		p.add(sp1, createGbc(0, 1));
-		label2.setSize(200, 20);
-		p.add(label2, createGbc(0, 2, 0.0));
+		labelAfter.setSize(200, 20);
+		p.add(labelAfter, createGbc(0, 2, 0.0));
 		JScrollPane sp2 = new JScrollPane(afterTF);
 		p.add(sp2, createGbc(0, 3));
 		
@@ -95,6 +116,23 @@ public class ReplaceWindow extends JFrame {
 		add(p);
 		setVisible(true);
 	}
+	
+
+	private void initGrafikaSearch() {
+		List<Grafika> list = dbUtil.getGrafikasByString(selectedField, searchString);
+		grafikaIterator = list.iterator();
+		//TODO zrobic zabezpieczenie jak nie bedzie grafik spelniajacych warunek
+		grafika = grafikaIterator.next();
+		beforeTF.setText((String)grafika.getFieldByName(selectedField));
+	}
+	
+	private void switchToNextGrafika() {
+		if (grafikaIterator.hasNext()) {
+			grafika = grafikaIterator.next();
+			beforeTF.setText((String)grafika.getFieldByName(selectedField));
+		}
+	}
+	
 	
 	private GridBagConstraints createGbc(int x, int y) {
 		return createGbc(x, y, 1.0);

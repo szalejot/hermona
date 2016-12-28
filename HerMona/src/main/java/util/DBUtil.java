@@ -7,13 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-
-
-
-
-
-
-
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
@@ -223,6 +216,18 @@ public class DBUtil {
 					+ " where " + predicate;
 		}
 		hql+= " order by teka.numer, grafika.numerInwentarza";
+		Query query = session.createQuery(hql);
+		List<Grafika> retList = query.list();
+		for (Grafika g : retList) {
+			session.refresh(g);
+		}
+		return retList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Grafika> getGrafikasByString(String columnName, String searchText) {
+		String hql = "select grafika from Grafika grafika where upper(" + columnName + ") like upper('%" + searchText
+				+ "%')";
 		Query query = session.createQuery(hql);
 		List<Grafika> retList = query.list();
 		for (Grafika g : retList) {
