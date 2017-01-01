@@ -5,8 +5,13 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,10 +28,14 @@ public class ReplaceWindow extends JFrame {
 	private static final long serialVersionUID = -5443633378890437916L;
 	private static final Insets WEST_INSETS = new Insets(1, 0, 1, 1);
 	private static final Insets EAST_INSETS = new Insets(1, 1, 1, 0);
+	private static final String TEKA_STRING = "teka: ";
+	private static final String GRAFIKA_STRING = "numer inwentarza: ";
 	
 	private JPanel p = new JPanel();
 	private JLabel labelBefore = new JLabel("Tekst przed zmianą:");
 	private JLabel labelAfter = new JLabel("Tekst po zmianie:");
+	private JLabel tekaLabel = new JLabel(TEKA_STRING);
+	private JLabel grafikaLabel = new JLabel(GRAFIKA_STRING);
 	private JButton bOk = new JButton("Zastosuj zmianę");
 	private JButton bNext = new JButton("Następna ->");
 	private JButton bEnd = new JButton("Zakończ");
@@ -39,6 +48,9 @@ public class ReplaceWindow extends JFrame {
 	private String selectedField;
 	private String searchString;
 	private String replaceString;
+	List<Integer> patternPositions = new ArrayList<Integer>();
+	int actPosition = 0;
+	
 	
 	private Grafika grafika;
 	private Iterator<Grafika> grafikaIterator;
@@ -62,6 +74,7 @@ public class ReplaceWindow extends JFrame {
                 null,
                 null,
                 "");
+		searchString = searchString.toLowerCase(Locale.ROOT);
 		
 		replaceString = (String)JOptionPane.showInputDialog(
                 null,
@@ -80,14 +93,28 @@ public class ReplaceWindow extends JFrame {
 		bOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//generateReport();
+				saveChange();
 			}
 		});
 		
 		bNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				switchToNextGrafika();
+				switchToNext();
+			}
+		});
+		
+		bEnd.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String ObjButtons[] = { "Tak", "Anuluj" };
+				int PromptResult = JOptionPane.YES_OPTION;
+				PromptResult = JOptionPane.showOptionDialog(null,
+						"Czy na pewno chcesz zamknąć okno i przerwać przeszukiwanie?", "",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+				if (PromptResult == JOptionPane.YES_OPTION) {
+					ReplaceWindow.this.dispatchEvent(new WindowEvent(ReplaceWindow.this, WindowEvent.WINDOW_CLOSING));
+				}
 			}
 		});
 		
@@ -96,14 +123,18 @@ public class ReplaceWindow extends JFrame {
 		initGrafikaSearch();
 		
 		p.setLayout(new GridBagLayout());
+		tekaLabel.setSize(200, 20);
+		p.add(tekaLabel, createGbc(0, 0, 0.0));
+		grafikaLabel.setSize(200, 20);
+		p.add(grafikaLabel, createGbc(0, 1, 0.0));
 		labelBefore.setSize(200, 20);
-		p.add(labelBefore, createGbc(0, 0, 0.0));
+		p.add(labelBefore, createGbc(0, 2, 0.0));
 		JScrollPane sp1 = new JScrollPane(beforeTF);
-		p.add(sp1, createGbc(0, 1));
+		p.add(sp1, createGbc(0, 3));
 		labelAfter.setSize(200, 20);
-		p.add(labelAfter, createGbc(0, 2, 0.0));
+		p.add(labelAfter, createGbc(0, 4, 0.0));
 		JScrollPane sp2 = new JScrollPane(afterTF);
-		p.add(sp2, createGbc(0, 3));
+		p.add(sp2, createGbc(0, 5));
 		
 		JPanel pButton = new JPanel();
 		pButton.setLayout(new GridBagLayout());
@@ -111,26 +142,63 @@ public class ReplaceWindow extends JFrame {
 		pButton.add(bNext, createGbc(1, 0));
 		pButton.add(bEnd, createGbc(2, 0));
 		
-		p.add(pButton, createGbc(0, 4, 0.0));
+		p.add(pButton, createGbc(0, 6, 0.0));
 		
 		add(p);
 		setVisible(true);
 	}
 	
-
-	private void initGrafikaSearch() {
-		List<Grafika> list = dbUtil.getGrafikasByString(selectedField, searchString);
-		grafikaIterator = list.iterator();
-		//TODO zrobic zabezpieczenie jak nie bedzie grafik spelniajacych warunek
-		grafika = grafikaIterator.next();
+	private void switchToNext() {
+		actPosition++;
+		if (actPosition >= patternPositions.size()) {
+			if (grafikaIterator.hasNext()) {
+				grafika = grafikaIterator.next();
+			} else {
+				JOptionPane.showMessageDialog(this,
+					    "Przeszukiwanie zakonczone");
+				this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+			}
+			actPosition = 0;
+			updatePatternPositions();
+			if (patternPositions.size() == 0) { //ta grafika jednak nie zawiera patternu
+				switchToNext();
+				return;
+			}
+ 		}
+		updatePatternPositions(); //mogla byc zapisana zmiana
+		tekaLabel.setText(TEKA_STRING + grafika.getTeka().getNumer() + ", " + grafika.getTeka().getTytul());
+		grafikaLabel.setText(GRAFIKA_STRING + grafika.getNumerInwentarza());
 		beforeTF.setText((String)grafika.getFieldByName(selectedField));
+		String newString = beforeTF.getText().substring(0, patternPositions.get(actPosition))
+				+ replaceString +
+				beforeTF.getText().substring(patternPositions.get(actPosition)+searchString.length());
+		afterTF.setText(newString);
 	}
 	
-	private void switchToNextGrafika() {
-		if (grafikaIterator.hasNext()) {
-			grafika = grafikaIterator.next();
-			beforeTF.setText((String)grafika.getFieldByName(selectedField));
+	private void updatePatternPositions() {
+		patternPositions.clear();
+		String stringFromGrafika = (String)grafika.getFieldByName(selectedField);
+		Matcher m = Pattern.compile(searchString).matcher(stringFromGrafika.toLowerCase(Locale.ROOT));
+		while (m.find()) {
+			patternPositions.add(m.start());
 		}
+	}
+	
+	private void saveChange() {
+		grafika.setFieldByName(selectedField, afterTF.getText());
+		dbUtil.saveGrafika(grafika);
+		switchToNext();
+	}
+	
+
+	private void initGrafikaSearch() {
+		List<Grafika> list = dbUtil.getGrafikasByString(selectedField, denationalizeString(searchString));
+		grafikaIterator = list.iterator();
+		switchToNext();
+	}
+	
+	private String denationalizeString(String input) {
+		return input.toLowerCase(Locale.ROOT).replaceAll("[ąęśćżźłó]", "_");
 	}
 	
 	

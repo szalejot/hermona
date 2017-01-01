@@ -330,4 +330,73 @@ public class Grafika implements Cloneable {
 				return null;
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public void setFieldByName(String fieldName, Object newValue) {
+		switch(fieldName) {
+			case "teka":
+				setTeka((Teka)newValue);
+				break;
+			case "numerInwentarza":
+				setNumerInwentarza((String)newValue);
+				break;
+			case "temat":
+				setTemat((String)newValue);
+				break;
+			case "seria":
+				setSeria((String)newValue);
+				break;
+			case "techniki":
+				setTechniki((Set<Technika>)newValue);
+				break;
+			case "wymiary":
+				setWymiary((String)newValue);
+				break;
+			case "projektant":
+				setProjektant((String)newValue);
+				break;
+			case "rytownik":
+				setRytownik((String)newValue);
+				break;
+			case "wydawca":
+				setWydawca((String)newValue);
+				break;
+			case "sygnatury":
+				setSygnatury((String)newValue);
+				break;
+			case "rokOd":
+				setRokOd((Integer)newValue);
+				break;
+			case "rokDo":
+				setRokDo((Integer)newValue);
+				break;
+			case "miejsceWydania":
+				setMiejsceWydania((String)newValue);
+				break;
+			case "opis":
+				setOpis((String)newValue);
+				break;
+			case "inskrypcje":
+				setInskrypcje((String)newValue);
+				break;
+			case "bibliografia":
+				setBibliografia((String)newValue);
+				break;
+			case "uwagi":
+				setUwagi((String)newValue);
+				break;
+			case "kategorie":
+				setKategorie((Set<Kategoria>)newValue);
+				break;
+			case "innyAutor":
+				setInnyAutor((String)newValue);
+				break;
+			case "katalogi":
+				setKatalogi((String)newValue);
+				break;
+			case "ilustracjaPath":
+				setIlustracjaPath((String)newValue);
+				break;
+		}
+	}
 }

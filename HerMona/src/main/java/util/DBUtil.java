@@ -227,7 +227,7 @@ public class DBUtil {
 	@SuppressWarnings("unchecked")
 	public List<Grafika> getGrafikasByString(String columnName, String searchText) {
 		String hql = "select grafika from Grafika grafika where upper(" + columnName + ") like upper('%" + searchText
-				+ "%')";
+				+ "%') order by teka, grafikaId";
 		Query query = session.createQuery(hql);
 		List<Grafika> retList = query.list();
 		for (Grafika g : retList) {
