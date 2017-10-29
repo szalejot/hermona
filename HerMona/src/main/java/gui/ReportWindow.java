@@ -194,8 +194,12 @@ public class ReportWindow extends JFrame {
 			case "katalogi":
 				return getNullableString(g.getKatalogi(), isHtml);
 			case "ilustracja":
-				return "<a href=\"file:///" + getNullableString(g.getIlustracjaPath(), isHtml) + "\">" +
-					"<img border=\"0\" src=\"file:///" + System.getProperty("user.dir") + "\\Hermona_miniatury\\" + getNullableString(g.getTeka().getNumer(), isHtml) + "_" + getNullableString(g.getNumerInwentarza(), isHtml) +  ".png\"></a>";
+				if (isHtml) {
+					return "<a href=\"file:///" + getNullableString(g.getIlustracjaPath(), isHtml) + "\">" +
+						"<img border=\"0\" src=\"file:///" + System.getProperty("user.dir") + "\\Hermona_miniatury\\" + getNullableString(g.getTeka().getNumer(), isHtml) + "_" + getNullableString(g.getNumerInwentarza(), isHtml) +  ".png\"></a>";
+				} else { //not isHtml
+					return getNullableString(g.getIlustracjaPath(), isHtml);
+				}
 			default:
 				return "";
 		}
