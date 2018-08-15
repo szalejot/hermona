@@ -50,6 +50,8 @@ public class Grafika implements Cloneable {
 	private String ilustracjaPath = "";
 	private String katalogi = "";
 	private String innyAutor = "";
+	private String numerKatalogowy = "";
+	private String datowanie = "";
 
 	public Grafika () { }
 	
@@ -58,7 +60,8 @@ public class Grafika implements Cloneable {
 			String projektant, String rytownik, String wydawca,
 			String sygnatury, Integer rokOd, Integer rokDo, String miejsceWydania,
 			String opis, String inskrypcje, String bibliografia, String uwagi,
-			Set<Kategoria> kategorie, String ilustracjaPath, String katalogi, String innyAutor) {
+			Set<Kategoria> kategorie, String ilustracjaPath, String katalogi, String innyAutor,
+			String numerKatalogowy, String datowanie) {
 		this.grafikaId = grafikaId;
 		this.teka = teka;
 		this.numerInwentarza = numerInwentarza;
@@ -81,6 +84,8 @@ public class Grafika implements Cloneable {
 		this.ilustracjaPath = ilustracjaPath;
 		this.katalogi = katalogi;
 		this.innyAutor = innyAutor;
+		this.setNumerKatalogowy(numerKatalogowy);
+		this.setDatowanie(datowanie);
 	}
 
 	public int getGrafikaId() {
@@ -253,8 +258,9 @@ public class Grafika implements Cloneable {
 				+ ", rokDo=" + rokDo + ", miejsceWydania=" + miejsceWydania
 				+ ", opis=" + opis + ", inskrypcje=" + inskrypcje
 				+ ", bibliografia=" + bibliografia + ", uwagi=" + uwagi
-				+ ", kategorie=" + kategorie + ", ilustracjaPath="
-				+ ilustracjaPath + "]";
+				+ ", kategorie=" + kategorie 
+				+ ", numerKatalogowy=" + numerKatalogowy + ", datowanie=" + datowanie
+				+ ", ilustracjaPath=" + ilustracjaPath + "]";
 	}
 	
 	public Grafika getClone() {
@@ -263,7 +269,8 @@ public class Grafika implements Cloneable {
 				getProjektant(), getRytownik(), getWydawca(), getSygnatury(),
 				getRokOd(), getRokDo(), getMiejsceWydania(), getOpis(),
 				getInskrypcje(), getBibliografia(), getUwagi(), getKategorie(),
-				getIlustracjaPath(), getKatalogi(), getInnyAutor());
+				getIlustracjaPath(), getKatalogi(), getInnyAutor(), 
+				getNumerKatalogowy(), getDatowanie());
 	}
 
 	public String getKatalogi() {
@@ -280,6 +287,22 @@ public class Grafika implements Cloneable {
 
 	public void setInnyAutor(String innyAutor) {
 		this.innyAutor = innyAutor;
+	}
+
+	public String getNumerKatalogowy() {
+		return numerKatalogowy;
+	}
+
+	public void setNumerKatalogowy(String numerKatalogowy) {
+		this.numerKatalogowy = numerKatalogowy;
+	}
+
+	public String getDatowanie() {
+		return datowanie;
+	}
+
+	public void setDatowanie(String datowanie) {
+		this.datowanie = datowanie;
 	}
 	
 	public Object getFieldByName(String fieldName) {
@@ -326,6 +349,10 @@ public class Grafika implements Cloneable {
 				return getKatalogi();
 			case "ilustracjaPath":
 				return getIlustracjaPath();
+			case "numerKatalogowy":
+				return getNumerKatalogowy();
+			case "datowanie":
+				return getDatowanie();
 			default:
 				return null;
 		}
@@ -397,6 +424,13 @@ public class Grafika implements Cloneable {
 			case "ilustracjaPath":
 				setIlustracjaPath((String)newValue);
 				break;
+			case "numerKatalogowy":
+				setNumerKatalogowy((String)newValue);
+				break;
+			case "datowanie":
+				setDatowanie((String)newValue);
+				break;
 		}
 	}
+
 }

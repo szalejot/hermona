@@ -37,7 +37,7 @@ public class ReportWindow extends JFrame {
 		super("Generuj raport");
 		this.predicate = predicate;
 		initializeList();
-		setSize(300, 530);
+		setSize(300, 550);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		
@@ -193,6 +193,10 @@ public class ReportWindow extends JFrame {
 				return getNullableString(g.getInnyAutor(), isHtml);
 			case "katalogi":
 				return getNullableString(g.getKatalogi(), isHtml);
+			case "numer katalogowy":
+				return getNullableString(g.getNumerKatalogowy(), isHtml);
+			case "datowanie":
+				return getNullableString(g.getDatowanie(), isHtml);
 			case "ilustracja":
 				if (isHtml) {
 					return "<a href=\"file:///" + getNullableString(g.getIlustracjaPath(), isHtml) + "\">" +
@@ -208,7 +212,8 @@ public class ReportWindow extends JFrame {
 	private void initializeList() {
 		jList = new JList<String>(new String[]{"teka", "numer inwentarza", "temat", "seria",
 				"technika", "wymiary", "projektant", "rytownik", "wydawca", "inny autor", "sygnatury", "rok od",
-				"rok do", "miejsce wydania", "opis", "inskrypcje", "katalogi", "bibliografia", "uwagi", "kategorie", "ilustracja"});
+				"rok do", "miejsce wydania", "opis", "inskrypcje", "katalogi", "bibliografia", "uwagi", "kategorie",
+				"numer katalogowy", "datowanie", "ilustracja"});
 	}
 	
 	private String getNullableString(Object obj, boolean isHtml) {

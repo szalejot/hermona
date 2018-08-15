@@ -30,7 +30,7 @@ public class XLSImporter {
 	private static final String RYTOWNIK_NAME = "rytownik";
 	private static final String WYDAWCA_NAME = "wydawca";
 	private static final String SYGNATURY_NAME = "sygnatury";
-	private static final String DATOWANIE_NAME = "datowanie";
+	private static final String DATA_OD_DO_NAME = "data od do";
 	private static final String MIEJSCE_WYDANIA_NAME = "miejsce wydania";
 	private static final String OPIS_NAME = "opis";
 	private static final String INSKRYPCJE_NAME = "inskrypcje";
@@ -43,6 +43,8 @@ public class XLSImporter {
 	private static final String TECHNIKA_NAME = "technika";
 	private static final String KATALOGI_NAME = "katalogi";
 	private static final String INNY_AUTOR_NAME = "inny autor";
+	private static final String NUMER_KATALOGOWY_NAME = "numer katalogowy";
+	private static final String DATOWANIE_NAME = "datowanie";
 
 	private DBUtil dbUtil = new DBUtil();
 	
@@ -85,7 +87,9 @@ public class XLSImporter {
                 g.setKategorie(getKategorie(row, headerMap.get(KATEGORIA_NAME)));
                 g.setKatalogi(getValue(row, headerMap.get(KATALOGI_NAME)));
                 g.setInnyAutor(getValue(row, headerMap.get(INNY_AUTOR_NAME)));
-                setDatowanie(g, row, headerMap.get(DATOWANIE_NAME));
+                g.setNumerKatalogowy(getValue(row, headerMap.get(NUMER_KATALOGOWY_NAME)));
+                g.setDatowanie(getValue(row, headerMap.get(DATOWANIE_NAME)));
+                setDataOdDo(g, row, headerMap.get(DATA_OD_DO_NAME));
                 
                 if (g.getTeka() != null && g.getTeka().getNumer() != null && g.getNumerInwentarza() != null) {
                 	dbUtil.saveGrafika(g);
@@ -132,7 +136,7 @@ public class XLSImporter {
 		return set;
 	}
 	
-	private Grafika setDatowanie(Grafika g, Row row, Integer pos) {
+	private Grafika setDataOdDo(Grafika g, Row row, Integer pos) {
 		String sVal = getValue(row, pos);
 		try {
 		if (sVal != null && sVal.trim().length() > 0) {
@@ -188,7 +192,7 @@ public class XLSImporter {
 		map.put(RYTOWNIK_NAME, -1);
 		map.put(WYDAWCA_NAME, -1);
 		map.put(SYGNATURY_NAME, -1);
-		map.put(DATOWANIE_NAME, -1);
+		map.put(DATA_OD_DO_NAME, -1);
 		map.put(MIEJSCE_WYDANIA_NAME, -1);
 		map.put(OPIS_NAME, -1);
 		map.put(INSKRYPCJE_NAME, -1);
@@ -201,6 +205,8 @@ public class XLSImporter {
 		map.put(TECHNIKA_NAME, -1);
 		map.put(KATALOGI_NAME, -1);
 		map.put(INNY_AUTOR_NAME, -1);
+		map.put(NUMER_KATALOGOWY_NAME, -1);
+		map.put(DATOWANIE_NAME, -1);
 
 		short minColIx = row.getFirstCellNum();
 		short maxColIx = row.getLastCellNum();

@@ -40,7 +40,8 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 	public static Integer editLock = 0;
 	public static final String[] columnNames = {"teka", "numer inwentarza", "temat", "seria",
 		"technika", "wymiary", "projektant", "rytownik", "wydawca", "inny autor", "sygnatury", "rok od",
-		"rok do", "miejsce wydania", "opis", "inskrypcje", "katalogi", "bibliografia", "uwagi", "kategorie", "ścieżka ilustracji"};
+		"rok do", "miejsce wydania", "opis", "inskrypcje", "katalogi", "bibliografia", "uwagi", "kategorie", 
+		"numer katalogowy", "datowanie", "ścieżka ilustracji"};
 	
 
 	private Set<Grafika> gSet = new HashSet<Grafika>();

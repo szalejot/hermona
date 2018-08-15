@@ -58,8 +58,10 @@ public class InteractiveTableModel extends AbstractTableModel {
 	private static final int BIBLIOGRAFIA_INDEX = 17;
 	private static final int UWAGI_INDEX = 18;
 	private static final int KATEGORIE_INDEX = 19;
-	private static final int ILUSTRACJA_PATH_INDEX = 20;
-	private static final int HIDDEN_INDEX = 21;
+	private static final int NUMER_KATALGOWY_INDEX = 20;
+	private static final int DATOWANIE_INDEX = 21;
+	private static final int ILUSTRACJA_PATH_INDEX = 22;
+	private static final int HIDDEN_INDEX = 23;
 	private static final int COL_MIN_WIDTH = 200;
 	private static final int COL_MIN_WIDTH_IDX = 100;
 
@@ -217,6 +219,8 @@ public class InteractiveTableModel extends AbstractTableModel {
 		case ILUSTRACJA_PATH_INDEX:
 		case KATALOGI_INDEX:
 		case INNY_AUTOR_INDEX:
+		case NUMER_KATALGOWY_INDEX:
+		case DATOWANIE_INDEX:
 			return String.class;
 		case ROK_OD_INDEX:
 		case ROK_DO_INDEX:
@@ -271,6 +275,10 @@ public class InteractiveTableModel extends AbstractTableModel {
 			return record.getKatalogi();
 		case INNY_AUTOR_INDEX:
 			return record.getInnyAutor();
+		case NUMER_KATALGOWY_INDEX:
+			return record.getNumerKatalogowy();
+		case DATOWANIE_INDEX:
+			return record.getDatowanie();
 		default:
 			return new Object();
 		}
@@ -344,6 +352,12 @@ public class InteractiveTableModel extends AbstractTableModel {
 		case ILUSTRACJA_PATH_INDEX:
 			record.setIlustracjaPath((String)value);
 			gSetIlu.add(record);
+			break;
+		case NUMER_KATALGOWY_INDEX:
+			record.setNumerKatalogowy((String)value);
+			break;
+		case DATOWANIE_INDEX:
+			record.setDatowanie((String)value);
 			break;
 		default:
 			System.out.println("invalid index");

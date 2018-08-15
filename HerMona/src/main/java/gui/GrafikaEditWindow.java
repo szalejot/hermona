@@ -77,6 +77,8 @@ public class GrafikaEditWindow extends JFrame {
 	private JTextField rokOdTF;
 	private JTextField rokDoTF;
 	private JTextField innyAutorTF;
+	private JTextField numerKatalogowyTF;
+	private JTextField datowanieTF;
 	private JTextArea sygnaturyTA;
 	private JTextArea opisTA;
 	private JTextArea uwagiTA;
@@ -166,6 +168,10 @@ public class GrafikaEditWindow extends JFrame {
 		leftContainer.add(getRokDoContainer(), createGbc(1, 13));
 		leftContainer.add(new JLabel("kategorie"), createGbc(0, 14));
 		leftContainer.add(getKategorieContainer(), createGbc(1, 14));
+		leftContainer.add(new JLabel("numer katalogowy"), createGbc(0, 15));
+		leftContainer.add(getNumerKatalogowyContainer(), createGbc(1, 15));
+		leftContainer.add(new JLabel("datowanie"), createGbc(0, 16));
+		leftContainer.add(getDatowanieContainer(), createGbc(1, 16));
 		
 		p = new JPanel();
 		p.setLayout(new BorderLayout());
@@ -359,6 +365,22 @@ public class GrafikaEditWindow extends JFrame {
 		Container container = new Container();
 		container.setLayout(new FlowLayout(FlowLayout.LEFT));
 		container.add(miejsceWydaniaTF);
+		return container;
+	}
+	
+	private Container getNumerKatalogowyContainer() {
+		numerKatalogowyTF = new JTextField(grafika.getNumerKatalogowy(), 20);
+		Container container = new Container();
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
+		container.add(numerKatalogowyTF);
+		return container;
+	}
+	
+	private Container getDatowanieContainer() {
+		datowanieTF = new JTextField(grafika.getDatowanie(), 20);
+		Container container = new Container();
+		container.setLayout(new FlowLayout(FlowLayout.LEFT));
+		container.add(datowanieTF);
 		return container;
 	}
 	
@@ -636,7 +658,9 @@ public class GrafikaEditWindow extends JFrame {
 				!katS.equals(grafika.getKategorie()) ||
 				!techS.equals(grafika.getTechniki()) ||
 				!katalogiTA.getText().equals(grafika.getKatalogi()) ||
-				!innyAutorTF.getText().equals(grafika.getInnyAutor())
+				!innyAutorTF.getText().equals(grafika.getInnyAutor()) ||
+				!numerKatalogowyTF.getText().equals(grafika.getNumerKatalogowy()) ||
+				!datowanieTF.getText().equals(grafika.getDatowanie())
 				) {
 			return true;
 		}
@@ -719,6 +743,8 @@ public class GrafikaEditWindow extends JFrame {
 			g.setKategorie(katS);
 			g.setKatalogi(katalogiTA.getText());
 			g.setInnyAutor(innyAutorTF.getText());
+			g.setNumerKatalogowy(numerKatalogowyTF.getText());
+			g.setDatowanie(datowanieTF.getText());
 		}
 
 	}
