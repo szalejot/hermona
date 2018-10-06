@@ -168,7 +168,7 @@ public class GrafikaPanel extends JPanel implements ActionListener {
 		if (g.getTeka() == null || g.getNumerInwentarza() == null) {
 			JOptionPane.showMessageDialog(null, "Aby edytować grafikę musi mieć ona nadaną tekę i numer inwentarza", "BŁĄD", JOptionPane.WARNING_MESSAGE);
 		} else {
-			new GrafikaEditWindow(g, tableModel, selectedRow);
+			new GrafikaEditWindow(g, new InteractiveTableModel(tableModel), selectedRow);
 		}
 	}
 

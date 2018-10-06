@@ -1,6 +1,2 @@
-/dialect/
-/gui/
-/hibernate.cfg.xml
-/log4j.properties
-/model/
 /util/
+/gui/

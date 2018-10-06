@@ -53,6 +53,7 @@ public class GrafikaEditWindow extends JFrame {
 	private static final Insets EAST_INSETS = new Insets(1, 1, 1, 0);
 	private static final Dimension taMin = new Dimension(400, 40);
 	private static final Dimension taMax = new Dimension(400, 200);
+	private static boolean isGrafikaEditWindowOpen = false;
 	private JPanel p;
 	private JButton bSave = new JButton("Zapisz");
 	private JButton bPrev = new JButton("< Poprzednia");
@@ -91,6 +92,14 @@ public class GrafikaEditWindow extends JFrame {
 
 	public GrafikaEditWindow(Grafika g, InteractiveTableModel tableModel, int selectedRow) {
 		super("Edytuj grafikę");
+		//tylko jedno okno otwarte na raz
+		if(isGrafikaEditWindowOpen) {
+			JOptionPane.showMessageDialog(null, "Tylko jedno okienko edycji grafiki może być otwarte", "BŁĄD", JOptionPane.WARNING_MESSAGE);
+			GrafikaEditWindow.this.setVisible(false);
+			GrafikaEditWindow.this.dispose();
+			return;
+		}
+		isGrafikaEditWindowOpen = true;
 
 		this.tableModel = tableModel;
 		this.grafika = g;
@@ -116,6 +125,7 @@ public class GrafikaEditWindow extends JFrame {
 				if (PromptResult == JOptionPane.YES_OPTION) {
 					GrafikaEditWindow.this.setVisible(false);
 					GrafikaEditWindow.this.dispose();
+					isGrafikaEditWindowOpen = false;
 				}
 			}
 		});

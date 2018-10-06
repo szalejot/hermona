@@ -10,6 +10,7 @@ import java.awt.Font;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -81,6 +82,14 @@ public class InteractiveTableModel extends AbstractTableModel {
 		this.columnNames = list.toArray(new String[list.size()]);
 		this.dataVector = dataVector;
 		setWindowTitle();
+	}
+	
+	public InteractiveTableModel(InteractiveTableModel src) {
+		this.mainWindow = src.mainWindow;
+		this.columnNames = src.columnNames.clone();
+		this.dataVector = new Vector<Grafika>(src.dataVector);
+		this.gSet = new HashSet<Grafika>(src.gSet);
+		this.gSetIlu = new HashSet<Grafika>(src.gSetIlu);
 	}
 	
 	public void changeData(Vector<Grafika> dataVector) {
